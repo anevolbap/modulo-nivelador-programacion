@@ -423,6 +423,18 @@ función <code>biseccion_un_paso</code>.</li>
 todas las iteraciones del método para hacer un gráfico de la
 trayectoria.</li>
 </ol>
+<pre class="r"><code>iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+    intervalo = intervalo_inicial
+    salida = FALSE
+    trace = c()
+    while (!salida) {
+        res = fun_iterar(fun, intervalo, tol)
+        intervalo = res$intervalo
+        salida = res$flag
+        trace = c(trace, mean(intervalo))
+    }
+    return(trace)
+}</code></pre>
 
 
 

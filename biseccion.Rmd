@@ -62,3 +62,18 @@ biseccion_recursiva = function(fun, intervalo, tol = 1e-4){
 ```
 
 4. Modifique la función `iterar_funcion` para registrar todas las iteraciones del método para hacer un gráfico de la trayectoria. 
+
+```r
+iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+    intervalo = intervalo_inicial
+    salida = FALSE
+    trace = c()
+    while (!salida) {
+        res = fun_iterar(fun, intervalo, tol)
+        intervalo = res$intervalo
+        salida = res$flag
+        trace = c(trace, mean(intervalo))
+    }
+    return(trace)
+}
+```

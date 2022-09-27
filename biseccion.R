@@ -48,3 +48,44 @@ biseccion_recursiva = function(fun, intervalo, tol = 1e-4){
     # Cuando termina duvuelvo el último resultado
     return(ret)
 }
+
+
+# 4. Modifique la función `iterar_funcion` para registrar todas las iteraciones # del método para hacer un gráfico de la trayectoria. 
+
+iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+    intervalo = intervalo_inicial
+    salida = FALSE
+    trace = c()
+    while (!salida) {
+        res = fun_iterar(fun, intervalo, tol)
+        intervalo = res$intervalo
+        salida = res$flag
+        trace = c(trace, c(mean(intervalo), fun(mean(intervalo))))
+    }
+    return(trace)
+}
+
+fun_verdad = function(x) {1+x-x^2+x^5}
+
+trace = iterar_funcion_track(biseccion_un_paso, fun_verdad, c(-5,10), tol = 1e-15)
+
+puntos = split(trace, 1:2)
+xs = puntos$`1`
+ys = puntos$`2`
+plot(xs, ys, col=1:length(xs), pch=19)
+curve(fun_verdad(x), min(xs), max(xs), add = TRUE)
+
+library(ggplot2)
+## En ggplot
+p <- ggplot(
+  data.frame(x=xs, y=ys, iter = 1:length(xs)), 
+  aes(x = xs, y = ys)
+  ) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  scale_color_viridis_d() +
+  scale_size(range = c(2, 12)) +
+    labs(x = "x", y = "f(x)")
+p
+
+p_anim = p + transition_time(iter) +
+    labs(title = "Iteración: {iter}")
