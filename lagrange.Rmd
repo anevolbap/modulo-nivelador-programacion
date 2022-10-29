@@ -5,10 +5,10 @@ output: html_document
 
 El objetivo de la actividad es implementar el [polinomio interpolador de Lagrange](https://es.wikipedia.org/wiki/Interpolaci%C3%B3n_polin%C3%B3mica_de_Lagrange#:~:text=En%20an%C3%A1lisis%20num%C3%A9rico%2C%20el%20polinomio,por%20Leonhard%20Euler%20en%201783.).
 
-Dados $n$ pares de puntos $(x_1,y_1), \dots, (x_n, y_n)$, el polinomio interpolador de Lagrange, es decir el único polinomio $f(x)$ de grado $k+1$ tal que $f(x_i)=y_i$ para todo $i=1,\dots,n$. Su expresión viene dada por:
+Dados $n$ pares de puntos $(x_1,y_1), \dots, (x_n, y_n)$, el polinomio interpolador de Lagrange, es decir el único polinomio $f(x)$ de grado $n+1$ tal que $f(x_i)=y_i$ para todo $i=1,\dots,n$. Su expresión viene dada por:
 $$ f(x) = y_1 \cdot p_1(x) + \dots + y_n \cdot p_n(x) $$
-donde cada $p_n$ es el j-ésimo polinomio de Lagrange:
-$$ p_j(x) = \prod_{i \neq j} \frac{x-x_i}{x_i-x_j} $$
+donde cada $p_j$ es el j-ésimo polinomio de Lagrange:
+$$ p_j(x) = \prod_{i \neq j} \frac{x-x_j}{x_i-x_j} $$
 1. Escriba una función que calcule el $j$-ésimo polinomio de Lagrange $p_j(x)$. Debe recibir,
 
 * el punto `x` donde será evaluado,

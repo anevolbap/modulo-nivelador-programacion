@@ -16,7 +16,7 @@ editor: visual
 
 Nuestra primera instrucción:
 
-``` R
+``` r
 variable <- valor
 ```
 
@@ -24,7 +24,7 @@ Almacena el valor de `valor` en algún lugar de la memoria de la computadora que
 
 ### Ejemplos
 
-``` R
+``` r
 x <- 10
 y <- x
 x <- x + y * 22 / 33
@@ -48,7 +48,7 @@ En R contamos con cuatro tipos de datos básicos, o atómicos:
 
 Una variable `logical` puede valer `TRUE` o `FALSE`, que se abrevian como `T` o `F.`
 
-``` R
+``` r
 10 == 20 # FALSE
 ```
 
@@ -56,7 +56,7 @@ Una variable `logical` puede valer `TRUE` o `FALSE`, que se abrevian como `T` o 
 sin(pi/2) == 1 # TRUE
 ```
 
-``` R
+``` r
 class(10 == 20)
 class(TRUE)
 class(T)
@@ -78,7 +78,7 @@ class(T)
 
 Representa números reales.
 
-``` R
+``` r
 numero = pi
 radio = 10
 area_circulo = pi * 10^2
@@ -97,7 +97,7 @@ is.numeric(area_circulo)
 
 -   Para distinguirlo de un `numeric` debemos añadir la letra L en mayúscula como sufijo.
 
-    ``` R
+    ``` r
     numero1 = 40
     class(numero1)
     numero2 = 40L
@@ -125,22 +125,21 @@ is.character(character) # TRUE
 
 -   Una lista ordenada de cosas
 
-    ``` R
+    ``` r
     vec = c(10, 20, 30)
     ```
 
-```{=html}
 <!-- -->
-```
+
 -   *los elementos tienen que ser del mismo tipo de datos básico*.
 
-    ``` R
+    ``` r
     class(vec)
     ```
 
 Por defecto R elige el tipo de datos **logical**, también pueden declararse vectores vacíos de cualquier tipo.
 
-``` R
+``` r
 vector("logical", 4) # FALSE FALSE FALSE FALSE
 vector("numeric", 4) # 0 0 0 0
 vector("character", 4) # "" "" "" ""
@@ -150,29 +149,29 @@ vector("character", 4) # "" "" "" ""
 
 Podemos acceder a sus elementos indicando las coordenadas de varias maneras
 
-``` R
+``` r
 vec = c(2, 4, 6, 8)
 ```
 
 ¿Qué hacen las siguientes expresiones?
 
-``` R
+``` r
 vec[4]
 ```
 
-``` R
+``` r
 vec[c(1, 2)] 
 ```
 
-``` R
+``` r
 vec[4:1]
 ```
 
-``` R
+``` r
 vec[-1] 
 ```
 
-``` R
+``` r
 vec[vec > 5]
 ```
 
@@ -184,16 +183,15 @@ Cuando se mezclan los tipo de datos, a veces R toma decisiones en nuestro lugar.
 
 -   Mezlamos `character` con `logical`
 
-    ``` R
+    ``` r
     c("a", TRUE)
     ```
 
-```{=html}
 <!-- -->
-```
+
 -   Mezlamos `logical` con `numeric`
 
-    ``` R
+    ``` r
     n = 20
     variable = sample(n) == 1:n
     variable + 1
@@ -203,13 +201,13 @@ Cuando se mezclan los tipo de datos, a veces R toma decisiones en nuestro lugar.
 
 Una lista es una colección ordenada de diferentes tipos.
 
-``` R
+``` r
 una_lista <- list(title = "números", numbers = 1:10, data = TRUE)
 ```
 
 Podemos acceder a los elementos de varias maneras
 
-``` R
+``` r
 una_lista$title
 una_lista[[2]]
 class(una_lista)
@@ -219,15 +217,14 @@ class(una_lista)
 
 -   En la terminal
 
-    ``` R
+    ``` r
     help(sum)
 
     ?mean
     ```
 
-```{=html}
 <!-- -->
-```
+
 -   En RStudio: panel de ayuda.
 
 -   Google + stackoverflow + foros: en internet ya está **todo**.
@@ -244,7 +241,7 @@ Las funciones son unidades de código encargadas de realizar **una** tarea parti
 
 ### Sintáxis
 
-``` R
+``` r
 mi_funcion = function(arg1, arg2, arg3) {
  # cosas que hace la función
  return(devuelve)
@@ -253,22 +250,22 @@ mi_funcion = function(arg1, arg2, arg3) {
 
 ### Ejemplo
 
-``` R
+``` r
 trasladar = function(x, a) {
   resultado = x + a
   return(resultado)
  }
 ```
 
-``` R
+``` r
 trasladar(1, 5)
 ```
 
-``` R
+``` r
 trasladar(1:10, 5)
 ```
 
-``` R
+``` r
 trasladar("hola", 5)
 ```
 
@@ -276,49 +273,20 @@ trasladar("hola", 5)
 
 Los argumentos se ordenan por posición o por nombre
 
-``` R
+``` r
 trasladar(a=5, x=1)
 ```
 
 Podemos definir valores por defecto
 
-``` R
+``` r
 trasladar = function(x, a=1) {
   resultado = x + a
   return(resultado)
  }
 ```
 
-``` R
+``` r
 trasladar(5)
 ```
 
-## Condicionales: *if...else*
-
-``` R
-promedio = function(x, tipo) {
-  if (tipo == "aritmetico") {
-      mean(x)
-  } else if (tipo == "armonico") {
-      1 / mean(1 / x)
-  } else if (tipo == "geometrico") {
-      prod(x)^(1 / length(x))
-  } else {
-    print(paste("El tipo", tipo, "no está implementado."))
-  }
-}
-```
-
-La probamos
-
-``` R
-muestra = sample(100, 10)
-promedio(muestra, "aritmetico")
-promedio(muestra, "geometrico")
-promedio(muestra, "armonico")
-promedio(muestra, "super")
-```
-
-¿Qué tipo de dato es `tipo=="armonico"` ?
-
-## 

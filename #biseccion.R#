@@ -29,35 +29,25 @@ iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     return(res)
 }
     
-biseccion_recursiva = function(fun, intervalo, tol = 1e-4) {
-
-  # calculo la condición para terminar
-  flag = (intervalo[2]-intervalo[1])/2 < tol
-
-  if (flag) {
-    # si se cumple devuelvo lo que encontré
-    ret = list(fun = fun, intervalo = intervalo, flag = flag)
-    return(ret)
-  } else { 
-    # si no se cumple hago un paso más partimos el intervalo
-    medio = (intervalo[1]+intervalo[2])/2
-    f_medio = fun(medio)
-    f_izq = fun(intervalo[1])
-    f_der = fun(intervalo[2])
-    if (((f_izq * f_medio) < 0) & ((f_der * f_medio) < 0)){
-      intervalo_nuevo = c(intervalo[1], intervalo[2])
-    } else if (((f_izq * f_medio) < 0) & ((f_der * f_medio) > 0)){
-      intervalo_nuevo = c(intervalo[1], medio)
-    } else if (((f_izq * f_medio) > 0) & ((f_der * f_medio) < 0)){
-      intervalo_nuevo = c(medio, intervalo[2])
-    } else {
-      intervalo_nuevo = c(medio, medio)
+biseccion_recursiva = function(fun, intervalo, tol = 1e-4){
+    ## Punto medio del intervalo
+    medio = mean(intervalo)
+    ## Evaluo la función en los tres puntos
+    fmedio = fun(medio)
+    fizq = fun(intervalo[1])
+    fder = fun(intervalo[2])
+    ## Defino el siguiente intervalo
+    cual = which(fmedio * c(fizq, fder) < 0)
+    intervalo_nuevo = sort(c(intervalo[cual], medio))
+    ## Chequeo la tolerancia
+    flag = (fun(intervalo_nuevo[2]) - fun(intervalo_nuevo[1])) < tol
+    ## Llamo a la misma función!
+    if (!flag) {
+        ret = biseccion_recursiva(fun, intervalo_nuevo)
     }
-    # acá el paso propiamente recursivo, llamamos a la función de nuevo
-    biseccion_recursiva(fun, intervalo_nuevo)
+    # Cuando termina duvuelvo el último resultado
+    return(ret)
 }
-
-
 
 
 # 4. Modifique la función `iterar_funcion` para registrar todas las iteraciones # del método para hacer un gráfico de la trayectoria. 
@@ -86,6 +76,7 @@ plot(xs, ys, col=1:length(xs), pch=19)
 curve(fun_verdad(x), min(xs), max(xs), add = TRUE)
 
 library(ggplot2)
+library(gganimate)
 ## En ggplot
 p <- ggplot(
   data.frame(x=xs, y=ys, iter = 1:length(xs)), 
@@ -97,7 +88,6 @@ p <- ggplot(
     labs(x = "x", y = "f(x)")
 p
 
-p_anim = p + transition_time(iter) +
+p + transition_time(iter) +
     labs(title = "Iteración: {iter}")
-
-
+animate(p, renderer = gifski_renderer())
