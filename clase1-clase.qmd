@@ -290,32 +290,3 @@ trasladar = function(x, a=1) {
 trasladar(5)
 ```
 
-## Condicionales: *if...else*
-
-``` r
-promedio = function(x, tipo) {
-  if (tipo == "aritmetico") {
-      mean(x)
-  } else if (tipo == "armonico") {
-      1 / mean(1 / x)
-  } else if (tipo == "geometrico") {
-      prod(x)^(1 / length(x))
-  } else {
-    print(paste("El tipo", tipo, "no está implementado."))
-  }
-}
-```
-
-La probamos
-
-``` r
-muestra = sample(100, 10)
-promedio(muestra, "aritmetico")
-promedio(muestra, "geometrico")
-promedio(muestra, "armonico")
-promedio(muestra, "super")
-```
-
-¿Qué tipo de dato es `tipo=="armonico"` ?
-
-## 
