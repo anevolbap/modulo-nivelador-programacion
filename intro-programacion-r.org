@@ -1,0 +1,133 @@
+#+TITLE: Curso Nivelador - Módulo Programación
+#+AUTHOR: Pablo Vena
+#+EMAIL: vena.pablo@gmail.com
+
+* Retro
+
+Aprovechar más el campus:
+- roles (estudiante ficticio?)
+- un curso privado para docentes
+  - instrucciones / onboarding para docentes nuevos
+  - documentar procesos (notas acta, inscripciones) y responsables de área
+    (inscripciones, aulas)
+- usar la mensajería del campus para evitar usar el mail personal
+- 
+
+* Objetivo de la materia
+
+- analogía con aprender un idioma
+- no vamos a aprender a programar
+- vamos a ver de qué se trata, ganar recursos para que el eterno camino sea más
+- ameno
+- Armar cheatsheet de snippets
+
+* Bibliografía
+
+- Intro light a R
+  https://bookdown.org/jboscomendoza/r-principiantes4/
+- Libro de Hadley Wickham para data science en R
+  https://es.r4ds.hadley.nz/explorar-introduccion.html
+
+* Dinámica
+
+- Foro async
+- Kahoot al final de cada clase
+  
+* Posibles ejercicios
+** Temas random
+
+idempotencia:
+- chequear que una funcion en particular es idempotente
+- abstraer para una función cualquier y aplicar a varias funciones
+- 
+
+** Sorting / complexity.
+
+- Bucle, comparación
+- Videitos de sorting
+- https://arxiv.org/abs/2110.01111
+- Hacer test para ver que ordenó bien (testthat)
+- Armar un comparador de performance.
+- Comparar contra benchmark contra la función sort.
+
+** Crear funciones
+
+- Convertir Fahrenheit a Celsius y viceversa
+- 
+
+** Verificar si un número es primo
+
+** Recursión
+- Factorial
+- Torre de Hanoi
+
+** Ordenar archivos
+
+- Lista de strings, agrupar por  
+
+** German tanks
+
+** Simulación Monty hall
+
+** Simulación 1, 2, 3
+
+** Simulación birthday (cheques Elon Musk)
+
+** Eficiencia mediana/media
+
+** Implementar bisección / Newton-Raphson
+
+** Logística a mano
+
+** Fenómeno de Runge
+
+Interpolador y plots
+
+https://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf
+
+
+
+* Cuestiones administrativas
+
+Matías Saucedo
+
+* Clase 1 - Martes 27 de Septiembre
+
+** Qué es R y RStudio
+- Instalar R
+- Instalar RStudio
+- Diferencias entre R y RStudio
+- Código desde la terminal (R)
+- Código desde RStudio
+- Instalar paquetes
+- "signature" de una función
+  
+** Tipos de datos, variables, listas
+
+R: class
+
+Funciones
+
+** Cómo buscar ayuda
+- Documentación, google, stackoverflow.
+- Cómo preguntar, código reproducible
+
+Crear funciones de test
+Crear una función
+Comparar tiempos de ejecución
+
+
+* Clase 2 - Sábado 1 de  Octubre
+
+Funciones
+
+* Clase 3 - Martes 11 de Octubre
+
+Funciones 
+* Clase 4 - Sábado 10 de Octubre
+
+DataFrames y CSV, plots, histograma., boxplot.
+
+* Clase 5 - Sábado 29 de Octubre
+
+

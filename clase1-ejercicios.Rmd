@@ -1,0 +1,82 @@
+---
+title: "Clase 1 - Ejercicios"
+output: html_document
+---
+
+1. Escriba 
+a. una funciòn que convierta una temperatura en grados Celsius a grados [Fahrenheit](https://es.wikipedia.org/wiki/Grado_Fahrenheit)
+b. otro programa que se haga la operación inversa (de Fahrenheit a Celsius)
+c. verifique que aplicar una función seguida de la otra devuelven el valor original.
+
+2. Cree una funciòn que dado un cuadrado, a partir de la variable `base`, calcule su perímetro y su área.
+
+3. Construya una función `es_cuadrado_perfecto` que devuelva un **booleano** según el input `x` es o no un cuadrado perfecto (existe $k$ tal que $k^2$) 
+
+4. Arme una función que dado un vector numérico `x` devuelve un vector con la media muestral y, la mediana. Use el siguiente modelo como base:
+
+```r
+medias = function(x) {
+  return(c(mean(x), median(x)))
+}
+```
+Una vez definida la función `medias` ejecute la siguente línea:
+
+```r
+replicaciones = replicate(10000, medias(rnorm(100)))
+```
+^
+Extraiga de la matriz `replicaciones` la medias y medianas y asígnelas a los vectores `las_medias` y `las_medianas` respectivamente. Luego ejecute el siguiente código para graficar.
+
+```r
+colores = c("skyblue3", "orange")
+densidades = c(50, 30)
+# las_medias = ...
+hist(las_medias, density=densidades[1], col = colores[1])
+# las_mediana = ...
+hist(las_medianas, density=densidades[2], col = colores[2], add=TRUE)
+legend("topright", legend=c("media", "mediana"), col = colores, density=densidades, fill = colores)
+```
+
+5. Una empresa regala una heladera al azar entre $N$ personas. Repite el proceso $n$ veces. ¿Cuál es la probabilidad de que una persona reciba dos heladeras?
+
+a. Primero escriba una función que simule una sola realización del sorteo. Usá el siguiente modelo:
+
+```r
+una_heladera = function(N, n){
+# ...
+return(dos_heladeras_bool)
+}
+```
+
+b. Use el siguiente código para obtener un vector con los resultados de correr la función anterior `k` veces.
+
+```r
+k = 1000
+N = 40000000
+n = 15000
+reps = replicate(k, una_heladera(N, n))
+```
+
+c. Calcule la media muestral de `reps`, ¿qué representa?.
+
+6. Considere la siguientes tres sucesiones:
+
+* $a_n = \frac{1}{\sqrt{n}} + (\frac{1}{2})^n$
+*  $b_n = (-1)^n + 5$
+* $c_n = \frac{3n-8}{\sqrt{16n^2+n}}$
+
+a. Grafique los primeros $n=100$ términos de cada sucesón.
+b. Decida si las sucesiones son convergentes y en tal caso agregue una línea horizontal al gráfico.
+
+7. Considere las siguientes funciones: 
+
+* $l_2(x) = x^2$,
+* $l_1(x) = |x|$,
+* $\rho_k(x) = x^2 * I_{(|x|\leq k)} + 2k|x|-k^2 * I_{(|x| > k)}$.
+
+para $x \in [-10, 10]$. Grafique $p_k$ con $k=5$ junto a las otras funciones con distintos colores y una leyenda.
+
+8. Grafique el polinomio interpolador de Lagranges en $n+1$ puntos equiespaciados en el intervalo $[-1,1]$, con $n= 5, 10, 15$, para los valores generados por las siguientes funciones:
+
+* $f_1(x) = \frac{1}{25x^2}$
+* $f_2(x) = \sin(\pi x)$

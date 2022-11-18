@@ -1,0 +1,41 @@
+---
+title: "Fórmula cuadrática"
+output: html_document
+---
+
+Dado el polinomio de grado $2$, $p(x) = a x^2 + b x + c$, decimos que $x_0$ es un cero o raíz del polinomio si $p(x_0) = 0$. Tenga presente que según el valor de $\Delta = b^2 - 4ac$ el polinomio podría tener una raíz múltiple o incluse no tener raíces. 
+
+1. Escriba una función que reciba los coeficientes del polinomio y devuelva un vector con las posibles raíces del polinomios. Use el siguiente modelo como base:  
+
+```r
+ceros_cuadratica = function(a, b, c){
+    # raices = ...
+    return(raices)
+}
+```
+
+2. En lugar de ingresar los coeficientes por separado, repita el ejercicio pero ingrese un vector de coeficientes. Use el siguiente modelo como base: 
+
+```r
+ceros_cuadratica = function(a, b, c){
+    # raices = ...
+    return(raices)
+}
+```
+
+3. Escriba una función que reciba una función matemática y un valor y devuelva si dicho valor es raíz de la función. Use el siguiente modelo como base: 
+
+```r
+decidir_raiz = function(fun, valor){
+    # es_raiz = ...
+    return(es_raiz)
+}
+```
+
+4. Escriba una función que grafique una función junto con un valor dado. Que diga en el título del gráfico si es o no raíz de la función.
+
+```r
+graficar_funcion_y_valor = function(fun, valor){
+    # ...
+}
+```

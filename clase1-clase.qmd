@@ -1,0 +1,292 @@
+---
+title: "Curso Nivelador - Programación"
+subtitle: "Tipos de datos, funciones y condicionales"
+date: "Septiembre, 2022"
+format: revealjs
+editor: visual
+---
+
+## R y RStudio
+
+-   R es un lenguaje de programación y entorno computacional dedicado a la estadística.
+
+-   Aunque podemos usar R directamente, es recomendable instalar y usar un entorno integrado de desarrollo (*IDE*, por sus siglas en inglés). [RStudio](https://www.rstudio.com/) es un IDE, un conjunto de funcionalidades que facilitan el desarrollo de código.
+
+## Asignaciones
+
+Nuestra primera instrucción:
+
+``` r
+variable <- valor
+```
+
+Almacena el valor de `valor` en algún lugar de la memoria de la computadora que identificaremos como `variable` .
+
+### Ejemplos
+
+``` r
+x <- 10
+y <- x
+x <- x + y * 22 / 33
+```
+
+Para asignar valores a variables podemos usar tanto el símbolo `<-` como el tradicional `=` . Por ahora, a nuestros efectos, son intercambiables.
+
+## Tipos de datos
+
+En R contamos con cuatro tipos de datos básicos, o atómicos:
+
+-   `logical` (`TRUE` o `FALSE` , *booleanos*)
+
+-   `numeric` (números reales, *double*)
+
+-   `integer` (números enteros)
+
+-   `character` (cadena texto, *string*)
+
+## logical
+
+Una variable `logical` puede valer `TRUE` o `FALSE`, que se abrevian como `T` o `F.`
+
+``` r
+10 == 20 # FALSE
+```
+
+``` {.R .R}
+sin(pi/2) == 1 # TRUE
+```
+
+``` r
+class(10 == 20)
+class(TRUE)
+class(T)
+```
+
+## Operaciones con datos `logical`
+
+-   `&` , "y"
+
+-   `|` , "o"
+
+-   `!` , "negación"
+
+-   `==` , "son iguales"
+
+-   `!=` , "son distintos
+
+## numeric
+
+Representa números reales.
+
+``` r
+numero = pi
+radio = 10
+area_circulo = pi * 10^2
+area_circulo
+
+class(area_circulo)
+# numeric
+
+is.numeric(area_circulo)
+# TRUE
+```
+
+## integer
+
+-   Representar los números enteros en R.
+
+-   Para distinguirlo de un `numeric` debemos añadir la letra L en mayúscula como sufijo.
+
+    ``` r
+    numero1 = 40
+    class(numero1)
+    numero2 = 40L
+    class(numero2)
+
+    is.integer(40)
+    is.numeric(40L)
+    ```
+
+## character
+
+Los caracteres o las cadenas de caracteres son símbolos, letras, palabras o frases dentro de comillas dobles o simples.
+
+``` {.R .R}
+character <- "a"
+
+typeof(character) # "character"
+
+class(character)  # "character"
+
+is.character(character) # TRUE
+```
+
+## vector
+
+-   Una lista ordenada de cosas
+
+    ``` r
+    vec = c(10, 20, 30)
+    ```
+
+<!-- -->
+
+-   *los elementos tienen que ser del mismo tipo de datos básico*.
+
+    ``` r
+    class(vec)
+    ```
+
+Por defecto R elige el tipo de datos **logical**, también pueden declararse vectores vacíos de cualquier tipo.
+
+``` r
+vector("logical", 4) # FALSE FALSE FALSE FALSE
+vector("numeric", 4) # 0 0 0 0
+vector("character", 4) # "" "" "" ""
+```
+
+## Elementos de un vector
+
+Podemos acceder a sus elementos indicando las coordenadas de varias maneras
+
+``` r
+vec = c(2, 4, 6, 8)
+```
+
+¿Qué hacen las siguientes expresiones?
+
+``` r
+vec[4]
+```
+
+``` r
+vec[c(1, 2)] 
+```
+
+``` r
+vec[4:1]
+```
+
+``` r
+vec[-1] 
+```
+
+``` r
+vec[vec > 5]
+```
+
+Funciones útiles: `seq`, `length`, `c`.
+
+## Coerción de tipos
+
+Cuando se mezclan los tipo de datos, a veces R toma decisiones en nuestro lugar.
+
+-   Mezlamos `character` con `logical`
+
+    ``` r
+    c("a", TRUE)
+    ```
+
+<!-- -->
+
+-   Mezlamos `logical` con `numeric`
+
+    ``` r
+    n = 20
+    variable = sample(n) == 1:n
+    variable + 1
+    ```
+
+## Listas
+
+Una lista es una colección ordenada de diferentes tipos.
+
+``` r
+una_lista <- list(title = "números", numbers = 1:10, data = TRUE)
+```
+
+Podemos acceder a los elementos de varias maneras
+
+``` r
+una_lista$title
+una_lista[[2]]
+class(una_lista)
+```
+
+## Buscar ayuda
+
+-   En la terminal
+
+    ``` r
+    help(sum)
+
+    ?mean
+    ```
+
+<!-- -->
+
+-   En RStudio: panel de ayuda.
+
+-   Google + stackoverflow + foros: en internet ya está **todo**.
+
+-   Reglas de etiqueta (ROTF):
+
+    -   precisar la pregunta lo más que se pueda,
+
+    -   proveer un MWE *(minimum working example)*
+
+## Funciones
+
+Las funciones son unidades de código encargadas de realizar **una** tarea particular.
+
+### Sintáxis
+
+``` r
+mi_funcion = function(arg1, arg2, arg3) {
+ # cosas que hace la función
+ return(devuelve)
+}
+```
+
+### Ejemplo
+
+``` r
+trasladar = function(x, a) {
+  resultado = x + a
+  return(resultado)
+ }
+```
+
+``` r
+trasladar(1, 5)
+```
+
+``` r
+trasladar(1:10, 5)
+```
+
+``` r
+trasladar("hola", 5)
+```
+
+## Funciones
+
+Los argumentos se ordenan por posición o por nombre
+
+``` r
+trasladar(a=5, x=1)
+```
+
+Podemos definir valores por defecto
+
+``` r
+trasladar = function(x, a=1) {
+  resultado = x + a
+  return(resultado)
+ }
+```
+
+``` r
+trasladar(5)
+```
+

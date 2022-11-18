@@ -1,0 +1,81 @@
+---
+title: "Polinomio interpolador de Lagrange"
+output: html_document
+---
+
+El objetivo de la actividad es implementar el [polinomio interpolador de Lagrange](https://es.wikipedia.org/wiki/Interpolaci%C3%B3n_polin%C3%B3mica_de_Lagrange#:~:text=En%20an%C3%A1lisis%20num%C3%A9rico%2C%20el%20polinomio,por%20Leonhard%20Euler%20en%201783.).
+
+Dados $n$ pares de puntos $(x_1,y_1), \dots, (x_n, y_n)$, el polinomio interpolador de Lagrange, es decir el único polinomio $f(x)$ de grado $n+1$ tal que $f(x_i)=y_i$ para todo $i=1,\dots,n$. Su expresión viene dada por:
+$$ f(x) = y_1 \cdot p_1(x) + \dots + y_n \cdot p_n(x) $$
+donde cada $p_j$ es el j-ésimo polinomio de Lagrange:
+$$ p_j(x) = \prod_{i \neq j} \frac{x-x_j}{x_i-x_j} $$
+1. Escriba una función que calcule el $j$-ésimo polinomio de Lagrange $p_j(x)$. Debe recibir,
+
+* el punto `x` donde será evaluado,
+* un vector `xi` con las abscisas de los puntos a interpolar,
+* el índice `idx` del polinomio de Lagrange buscado,
+
+y debe devolver el valor del polinomio evaluado $p_j(x)$. Use el siguiente modelo como base,
+```r
+pol_lagrange function(x xi, idx){
+# res = p_idx(j)...
+return(res)
+}
+```
+ 
+**Funciones útiles**: `sum`, `prod`.
+ 
+2. Escriba una función que reciba un vectores `xi` e `yi` con las coordenadas de los puntos a interpolar 
+y devuelva, como función, al correspondiente polinomio interpolador de Lagrange.  Use el siguiente modelo como base:
+```r
+interpolador = function(xi, yi) {
+    # f = function(x) ...
+    return(f)
+}
+```
+
+**Funciones útiles:** `length`, `source`.
+ 
+**Sugerencia:** use la función `eval_pol_lagrange()` del archivo `helpers_clase1.R`.
+
+```r
+eval_pol_lagrange = function(x, x_train, pol_lagrange) {
+    # Evalua todos los polinomios de Lagrange calculados para x_train usando los
+    # polinomios generados por build_plot_lagrange()
+    #
+    # Input
+    #
+    # x: punto donde quiero evaluar.
+    # x_train: vector de xs a interpolar.
+    # build_plot_lagrange: función que genera el j-ésimo polinomio
+    #                      de Lagrange calcularo para x_train (como función).
+    #
+    # Output
+    #
+    # res: vector de las evaluaciones en x de los polinomios de Lagrange.
+    res = c()
+    for (iter in 1:length(x_train)) {
+        pol = pol_lagrange(x, x_train, iter)
+        res = c(res, pol)
+    }
+    return(res)
+}
+```
+
+3. Escriba una función que reciba `xi`, `yi` y grafique su polinomio
+interpolador. Cambie los colores, agrege un título y etiquetas a los ejes.
+
+**Funciones útiles:** `plot`, `seq`.
+
+```r
+graficar_interpolador = function(xi, yi) {
+    # Datos los puntos (xi, yi), grafica su polinomio interpolador de Lagrange.
+    
+    # Defino una grilla de valores para graficar
+    xs = seq(min(x_train), max(x_train), length = 1e2)
+    # Calculo el valor del polinomio en la grilla
+    ys = Map(interpolador(x_train, y_train), xs)
+    # Grafico
+    # plot(...)
+}
+```

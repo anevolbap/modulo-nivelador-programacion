@@ -1,0 +1,79 @@
+---
+title: "Método de bisección"
+output: html_document
+---
+
+Dada una función continua $f$ definida en un intervalo $[a,b]$, si $f(a)*f(b) < 0$ entonces existe $x_0$ tal que $f(x_0) = 0$. El método de bisección repite el siguiente pasos:
+
+a. Elijo un punto del intervalo para crear dos subintervalos.
+b. Descarto el intervalo en cuyos extremos $f$ toma valores con distinto signo.
+c. Si el intervalo resultante tiene ancho menor a una tolerancia, declaramos que cualquiera de los extremos es raíz de $f$.
+
+1. Escriba una función que haga un paso de bisección. Debe recibir función `fun` cuya raíz buscamos, un vector `intervalo` cuyas coordenadas sean los extremos del intervalo inicial y una tolerancia `tol` para declarar que una raíz fue encontrada. Use el siguiente modelo como base:  
+
+```r
+biseccion_un_paso = function(fun, intervalo, tol = 1e-4){
+    # Punto medio del intervalo
+    medio = ...
+    # Evaluo la función en los tres puntos
+    f_medio = ...
+    f_izq = ...
+    f_der = ...
+    z Defino el siguiente intervalo
+    intervalo_nuevo = ...
+    # Chequeo la tolerancia
+    flag = ...
+    # Devuelvo el
+    return(list(fun = fun,
+                intervalo = intervalo_nuevo,
+                flag = flag))
+}
+```
+
+2. Utilice la función `iterar_funcion` para aplicar la función `biseccion_un_paso`.
+
+```r
+iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+    intervalo = intervalo_inicial
+    salida = FALSE
+    while (!salida) {
+        res = fun_iterar(fun, intervalo, tol)
+        intervalo = res$intervalo
+        salida = res$flag
+    }
+    return(res)
+}
+```
+
+3. Una forma de evitar la implementación de un bucle es la **recursión**. 
+
+```r
+biseccion_recursiva = function(fun, intervalo, tol = 1e-4){
+    
+    ## ... código de la función anterior....
+    
+    ## Llamo a la misma función!
+    if (!flag) {
+        ret = biseccion_recursiva(fun, intervalo_nuevo)
+    }
+    # Cuando termina devuelvo el último resultado
+    return(ret)
+}
+```
+
+4. Modifique la función `iterar_funcion` para registrar todas las iteraciones del método para hacer un gráfico de la trayectoria. 
+
+```r
+iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+    intervalo = intervalo_inicial
+    salida = FALSE
+    trace = c()
+    while (!salida) {
+        res = fun_iterar(fun, intervalo, tol)
+        intervalo = res$intervalo
+        salida = res$flag
+        trace = c(trace, mean(intervalo))
+    }
+    return(trace)
+}
+```

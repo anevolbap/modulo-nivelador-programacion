@@ -1,0 +1,1 @@
+mean(replicate(nrep, any(duplicated(sample(N, n, replace=TRUE)))))

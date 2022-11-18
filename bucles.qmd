@@ -1,0 +1,223 @@
+---
+title: "Bucles: `for` y `while`"
+subtitle: "Curso Nivelador - Programación"
+format: revealjs
+editor: visual
+---
+
+## ¿Qué es un bucle?
+
+Un bucle permite escribir de forma compacta la repetición de una misma tarea o tareas muy similares.
+
+Por ejemplo,
+
+-   aplicar una transformación a los elementos de un vector o una lista (*feature engineering*)
+
+-   optimizar una función mediante pasos sucesivos (método de bisección, método de Newton-Raphson)
+
+-   repetir realizaciones de un mismo experimento (ensayos de Bernoulli)
+
+## `for` y `while`
+
+En `R` hay varias formas de repetir tareas.
+
+-   `for`: repite una cantidad establecida de veces un bloque de código.
+
+-   `while`: repite un bloque de código mientras se verifique una condición.
+
+Hay formas propias de `R` como la familia de comandos `replicate`, `lapply`, `sapply`, `mapply`, entre otros.
+
+## Sintáxis del `for`
+
+Queremos repetir una tarea tantas veces como elementos en `lista_de_valores`
+
+``` r
+for (valor in lista_de_valores) {
+  # la tarea que se repite...
+}
+```
+
+El código anterior recorre la lista `lista_de_valores`, para cada elemento `valor` de la lista se ejecuta el bloque de código encerrado entre `{}` .
+
+## Sintáxis del `for`
+
+Cada repetición de la tarea podría depender o no de `valor`.
+
+#### ejemplo 1
+
+``` r
+# Tiro 10 veces un dado equilibrado
+
+for (valor in 1:10) {
+
+  # no depende de 'valor'
+  dado = sample(1:6, 1)
+  print(paste("Tiro el dado:", dado))
+
+}
+```
+
+#### ejemplo 2
+
+``` r
+# Imprimo los valores de una lista
+
+metricas <- list("mse", "mae", "mape")
+
+for (mtr in metricas) {
+  
+  # depende de 'mtr' 
+  mensaje = paste("La métrica", toupper(mtr), "está disponible.")
+  print(mensaje)
+}
+```
+
+## Sintáxis del `for`
+
+#### ejemplo 3
+
+``` r
+# Quiero elevar cada coordenada al cuadrado
+x = 1:10
+
+# Inicializo un vector numérico vacío
+x_al_cuadrado = vector("numeric", length(x))
+
+# Bucle
+for (i in 1:length(x)) {
+  x_al_cuadrado[i] = x[i]^2
+}
+```
+
+#### ejemplo 4
+
+``` r
+angulo = seq(0, 360, length=60)
+radianes = angulo * pi / 180
+x = cos(radianes)
+y = sin(radianes)
+
+for (i in 2:length(angulo)) {
+  Sys.sleep(1)
+  plot(y, x, axes=F, xlab="", ylab="", type="l", lwd=3, main = "un reloj")
+  arrows(0, 0, y[i-1], x[i-1], col = "white",lwd=2)
+  arrows(0, 0, y[i], x[i], col = "blue", lty=2, lwd=2)
+}
+```
+
+## Bucles anidados
+
+Dentro de un bucle podríamos necesitar otro bucle.
+
+``` r
+trasponer = function(mi_matriz){
+  
+  # inicializamos la traspuesta como una matriz vacia
+  matriz_traspuesta = matrix(0, nrow=ncol(mi_matriz), 
+                                ncol=nrow(mi_matriz))
+    
+  for (i in 1:nrow(mi_matriz)) {  # para cada fila de mi_matriz 
+    for (j in 1:ncol(mi_matriz)) {  # recorro todas sus columnas 
+    
+      # El elemento (i,j) pasa a ser el (j,i) en la traspuesta
+      matriz_traspuesta[j,i] = mi_matriz[i, j]
+      
+      # Un mensajito sobre qué iteración es
+      print(paste("Trasponiendo:", "fila", i, ",", "columna", j))
+    }
+  }
+
+  # devolvemos la matriz traspuesta
+  return(matriz_traspuesta)
+}
+```
+
+## Salir del `for`: `break`
+
+Podemos usar `break` para salir de un bucle.
+
+``` r
+# Queremos saber si un vector tiene valores negativos.
+
+num_vector = c(1, 5, -1, 2, 0, -3)
+
+for (coord in 1:length(num_vector)) {
+
+  # Verifico si la coordenada 'coord' es negativa
+  if (num_vector[coord] < 0) {
+    print("El vector tiene valores negativos.")
+    break  # salimos del bucle ahora
+    print("Esto no se imprime porque está después del 'break'.")
+  }
+  print(paste("El valor de la coordenada", coor, "es positivo.")
+}
+```
+
+## Siguiente iteración: `next`
+
+Con `next` podemos saltear la iteración actual y continuar con el bucle desde la siguiente.
+
+``` r
+for (val in x) {
+  if (val == 3) {
+    next
+  }
+  print(val)
+}
+```
+
+## `while`
+
+Cada repetición se ejecuta si y solo si
+
+`condicion_logical == TRUE`
+
+``` r
+while (condicion_logical){
+  # la tarea que queremos repetir...
+}
+```
+
+Ejemplo
+
+``` r
+conjetura_catalan = function(k){
+  while (k > 1) {
+    if (k %% 2 == 0) {
+      k = k / 2
+    } else {
+      k = 3 * k + 1
+    }
+    print(k)
+  }
+  print("Conjetura: siempre termina en 1.")
+}
+```
+
+## Contador auxiliar
+
+Por ejemplo, dada una `lista_de_numeros`, indiquémos en qué posición aparece por primera vez `valor`.
+
+``` r
+iter = 1
+while (lista_de_numeros[iter] != valor & iter <= length(lista_de_numeros)){
+
+    print(c(iter, lista_de_numeros[iter], valor, lista_de_numeros[iter] != valor))
+    iter = iter + 1
+}
+print(iter)
+```
+
+Metemos nuestro código en una función y lo probamos
+
+``` r
+primera_aparicion = function(valor, lista_de_numeros){
+  iter = 1
+  while (lista_de_numeros[iter] != valor & iter <= length(lista_de_numeros)){
+    iter = iter + 1
+  }
+  return(iter)
+}
+
+primera_aparicion(5, list(10, 2, 5, -3 ,4, 9))
+```
