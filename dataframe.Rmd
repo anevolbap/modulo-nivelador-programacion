@@ -5,7 +5,7 @@ output: html_document
 
 Considere el dataset Bikeshare del paquete [ISLR2](https://cran.rstudio.com/web/packages/ISLR2/index.html):
 
-``` R
+``` r
 # install.packages("ISLR2")
 library(ISLR2)
 Bikeshare
@@ -25,7 +25,7 @@ Bikeshare
 
 7.  Escriba una función que transforme una columna numérica en una con solo dos categorías, "bajo" y "alto" según los valores sean menores que un umbral predeterminado. Use el siguiente modelo como ejemplo:
 
-    ``` R
+    ``` r
     transformar_columna(dataframe, nombre_columna, umbral){ 
       #…
       return(dataframe)

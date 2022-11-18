@@ -1,0 +1,85 @@
+---
+title: "Entrega de ejercicios"
+subtitle: "Curso nivelador"
+output: html_document
+date: "2022-11-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instrucciones
+
+* Los ejercicios deberán ser entregados a través del campus virtual en archivos separados respectivamente bajo los nombres:
+  * `ejercicio1.R`
+  * `ejercicio2.R`
+  * ...
+  * `ejercicio5.R`
+* Utilice los modelos indicados en cada ejercicio, respete los nombres y tipos de variables sugeridos.
+* Comente en el código las soluciones propuestas.
+
+# Ejercicio 1 - Fórmula cuadrática
+
+Dado el polinomio de grado $2$, $p(x) = a x^2 + b x + c$, decimos que $x_0$ es un cero o raíz del polinomio si $p(x_0) = 0$. Tenga presente que según el valor de $\Delta = b^2 - 4ac$ el polinomio podría tener una raíz múltiple o inclusive no tener raíces.
+
+Escriba una función que reciba los coeficientes del polinomio y devuelva un vector con las posibles raíces del polinomios. Use el siguiente modelo:
+
+``` r
+ceros_cuadratica = function(a, b, c){
+    # raices = ...
+    return(raices)
+}
+```
+
+# Ejercicio 2 - Valores únicos
+
+Dada una lista de palabras, queremos encontrar el subconjunto resultante de eliminar todas las repetidas. Es decir, buscamos el conjunto de **valores únicos** de la lista. Por ejemplo, en la lista
+
+``` r
+lista_de_palabras = c("aca", "hay", "una", "una", "duplicada")
+```
+
+hay una palabra duplicada, `"una"`. La salida esperada es `c("aca", "hay", "una", "duplicada")`.
+
+Escriba una función que decida si una palabra pertenece a una lista de palabras. Use el siguiente modelo:
+
+``` r
+buscar_una_palabra = function(palabra, lista_de_palabras){
+  # si_esta_la_palabra = ...  # logical
+  return(si_esta_la_palabra)
+}
+```
+
+# Ejercicio 3 - Algoritmo de ordenamiento
+
+En la primera página de [este](https://arxiv.org/pdf/2110.01111.pdf) trabajo, sus autores proponen un método para ordenar una lista de números de forma creciente. Escriba una función en `R` que implemente el pseudocódigo de la imagen. Use el siguiente modelo:
+
+``` r
+ordenar = function(lista_de_numeros){
+  # ...
+  return(lista_ordenada)
+}
+```
+
+# Ejercicio 4 - Amigo invisible
+
+Escriba una función `sorteo_valido` que reciba como entrada la cantidad de personas, simule la extracción de los papelitos y devuelva `TRUE` si nadie sacó su propio papelito y `FALSE` en caso contrario. Use el siguiente modelo:
+
+``` r
+sorteo_valido = function(n_personas){
+  # es_valido = ...  # logical
+  return(es_valido)
+}
+```
+
+# Ejercicio 5 - Dataframes
+
+Escriba una función que, dado un dataframe, transforme una columna numérica a elección en una columna con solo dos categorías, "bajo" y "alto", según los valores sean menores que un umbral predeterminado. Use el siguiente modelo como ejemplo:
+
+``` r
+transformar_columna(dataframe, nombre_columna, umbral){ 
+  # ... 
+  return(dataframe)
+}
+```
