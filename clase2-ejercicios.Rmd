@@ -11,7 +11,17 @@
       return(suma)
     }
     ```
-2.  Un juego consiste en revelar una por una las cartas de un mazo mientras que se repiten los números 1, 2 y 3. Si al revelar la carta coincide con el número cantado, el juego se pierde. Solo se gana si no hay ninguna coincidencia.
+
+2.  Escriba una función tal que dada una matriz devuelva su parte triangular superior. Utilice el siguiente modelo como base:
+
+    ``` r
+    extraer_trisup = function(matriz) {
+      # trisup = ...
+      return(trisup)
+    }
+    ```
+
+3.  Un juego consiste en revelar una por una las cartas de un mazo mientras que se repiten los números 1, 2 y 3. Si al revelar la carta coincide con el número cantado, el juego se pierde. Solo se gana si no hay ninguna coincidencia.
 
     1.  Escriba una función que realice una sola repetición del juego. Utilice el siguiente modelo como base:
 
@@ -27,16 +37,6 @@
         ``` r
         mean(replicate(n=1000, expr=juego_123))
         ```
-
-3.  Escriba una función tal que dada una matriz devuelva su parte triangular superior. Utilice el siguiente modelo como base:
-
-    ``` r
-    extraer_trisup = function(matriz) {
-      # trisup = ...
-      return(trisup)
-    }
-    ```
-
 
 4.  Diseñe una función que dado un vector numérico devuelva un vector que indique, como texto, a qué decil pertenece cada valor. Por ejemplo, para el vector `num_vec=1:10`, la función debería devolver el vector `c("primer decil", "segundo decil", …, "décimo decil")` . Utilice el siguiente modelo como base:
 

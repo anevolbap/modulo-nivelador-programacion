@@ -80,7 +80,7 @@ contar_palabras = function(lista_de_palabras){
 
 5. Compare el desempeño contra la función `table` de R.
 
-6. Agregue a la función anterior un argumento `frec_tipo` para calcular la **frecuencia relativa** o la **frecuencia porcentual**.
+6. Agregue a la función anterior un argumento `frec_tipo` para calcular la **frecuencia relativa** o incluso la **porcentual**.
 
 ```r
 contar_palabras = function(lista_de_palabras, frec_tipo){
