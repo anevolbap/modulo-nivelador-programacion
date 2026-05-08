@@ -1,6 +1,6 @@
 ---
 title: "Polinomio interpolador de Lagrange"
-output: html_document
+format: html
 ---
 
 El objetivo de la actividad es implementar el [polinomio interpolador de Lagrange](https://es.wikipedia.org/wiki/Interpolaci%C3%B3n_polin%C3%B3mica_de_Lagrange#:~:text=En%20an%C3%A1lisis%20num%C3%A9rico%2C%20el%20polinomio,por%20Leonhard%20Euler%20en%201783.).

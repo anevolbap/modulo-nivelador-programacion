@@ -1,6 +1,6 @@
 ---
 title: "Valores únicos"
-output: html_document
+format: html
 ---
 
 Dada una lista de palabras, queremos encontrar el subconjunto resultante de eliminar todas las repetidas. Es decir, buscamos el conjunto de **valores únicos** de la lista. Por ejemplo, en la lista

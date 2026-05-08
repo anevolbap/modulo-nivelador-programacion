@@ -1,6 +1,6 @@
 ---
 title: "Dataframes"
-output: html_document
+format: html
 ---
 
 Considere el dataset Bikeshare del paquete [ISLR2](https://cran.rstudio.com/web/packages/ISLR2/index.html):

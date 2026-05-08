@@ -1,6 +1,6 @@
 ---
 title: "Clase 1 - Ejercicios"
-output: html_document
+format: html
 ---
 
 1. Escriba 

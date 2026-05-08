@@ -1,6 +1,6 @@
 ---
 title: "Fórmula cuadrática"
-output: html_document
+format: html
 ---
 
 Dado el polinomio de grado $2$, $p(x) = a x^2 + b x + c$, decimos que $x_0$ es un cero o raíz del polinomio si $p(x_0) = 0$. Tenga presente que según el valor de $\Delta = b^2 - 4ac$ el polinomio podría tener una raíz múltiple o incluse no tener raíces. 

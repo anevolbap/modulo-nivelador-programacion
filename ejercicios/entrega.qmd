@@ -1,13 +1,9 @@
 ---
 title: "Entrega de ejercicios"
 subtitle: "Curso nivelador"
-output: html_document
+format: html
 date: "2022-11-09"
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 # Instrucciones
 

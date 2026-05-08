@@ -1,6 +1,6 @@
 ---
 title: "Método de bisección"
-output: html_document
+format: html
 ---
 
 Dada una función continua $f$ definida en un intervalo $[a,b]$, si $f(a)*f(b) < 0$ entonces existe $x_0$ tal que $f(x_0) = 0$. El método de bisección repite el siguiente pasos:

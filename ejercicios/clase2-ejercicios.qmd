@@ -1,6 +1,6 @@
 ---
-  title: "Clase 2 - Ejercicios"
-  output: html_document
+title: "Clase 2 - Ejercicios"
+format: html
 ---
 
 1.  Escriba una función que sume los primeros $n$ números naturales. Compare su desempeño contra la `sum(1:n)`. Utilice el siguiente modelo como base:
