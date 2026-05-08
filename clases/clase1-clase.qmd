@@ -255,30 +255,55 @@ help(sum)
 -   Google + Stack Overflow: la mayoría de las dudas ya las preguntó alguien.
 -   Cuando preguntan en un foro, incluir un **MWE** (minimum working example): el código mínimo que reproduce el problema.
 
+## Buena práctica: nombres descriptivos
+
+El nombre de una variable es la **primera línea de documentación** del código. Si los nombres son buenos, casi no hace falta comentar.
+
+``` r
+# poco claro
+x  <- 25
+df <- read.csv("datos.csv")
+n  <- 100
+
+# claro
+edad_paciente   <- 25
+pacientes       <- read.csv("datos.csv")
+n_simulaciones  <- 100
+```
+
+Reglas prácticas:
+
+-   `snake_case` (palabras separadas por `_`).
+-   Singular para escalares, plural para vectores: `edad` vs `edades`.
+-   Evitar nombres que pisan funciones de R: `c`, `t`, `T`, `F`, `data`, `df`, `mean`.
+
 ## Ejercicios en clase
 
-Hacé los siguientes en un script de RStudio.
+Cargá `mtcars` (ya viene con R) y trabajá sobre ese `data.frame`.
 
-1.  Asigná tres variables: `nombre` (string con tu nombre), `edad` (entero) y `es_estudiante` (booleano). Usá `class()` para verificar el tipo de cada una.
+``` r
+head(mtcars)   # mira las primeras filas
+?mtcars        # qué representa cada columna
+```
 
-2.  Sin correrlo, predecí qué hace este código y por qué:
+1.  Asigná tres variables que describan **un** auto: `consumo_mpg`, `cilindros` (entero) y `transmision_manual` (booleano). Verificá el tipo de cada una con `class()`. Elegí los nombres pensando que los va a leer otra persona.
+
+2.  Sin correrlo, predecí qué hace este código y por qué. Después corré y comparalo:
 
     ``` r
-    x <- 5
-    y <- "10"
-    x + y
+    consumo <- 20
+    auto    <- "Toyota"
+    consumo + auto
     ```
 
-    Después corré y comparalo con tu predicción.
+3.  Sobre el vector `mtcars$mpg` (consumo en miles por galón), quedate con los autos cuyo consumo supera el promedio. Pista: `mean(mtcars$mpg)` te da el promedio; usá indexado lógico.
 
-3.  Creá un vector con las primeras cinco potencias de 2: `c(2, 4, 8, 16, 32)`. Usando indexado lógico, quedate solo con las que son mayores que `10`.
+4.  Escribí una función `etiquetar_auto(modelo, consumo)` que devuelva el string `"<modelo>: <consumo> mpg"`. Pista: `paste0`.
 
-4.  Escribí una función `bienvenida(nombre)` que devuelva el string `"Hola, <nombre>!"`. Pista: `paste0`.
-
-5.  Creá un `data.frame` con tres alumnos imaginarios y tres columnas: `nombre`, `nota` y `aprobado`. Mostrá solo la columna `nota`.
+5.  Creá una **lista** `mi_auto` con cuatro campos: `modelo` (string), `cilindros` (integer), `consumo` (double) y `manual` (logical). Accedé al modelo con `$` y con `[[ ]]`.
 
 ::: notes
-~15 min. Pasar por las mesas. Si terminan rápido: agregar una columna nueva al data.frame.
+~15 min. Pasar por las mesas. Si terminan rápido: comparar el consumo medio entre autos manuales (`am == 1`) y automáticos.
 :::
 
 ## Comprensión: ¿quedó claro?
