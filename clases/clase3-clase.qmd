@@ -278,22 +278,51 @@ Cuándo evitar: para tratar como texto libre.
 | una tabla de datos (mezcla de tipos por col.)   | `data.frame` |
 | una variable categórica con valores fijos       | `factor`     |
 
+## Buena práctica: una función, una responsabilidad
+
+Si una función "carga el CSV, le saca outliers, calcula la media y grafica", es difícil de **probar**, **reusar** y **debuggear**.
+
+Mejor partirla en cuatro funciones chicas:
+
+``` r
+# malo: hace de todo
+analizar_pacientes <- function(archivo) { ... }
+
+# bueno: una responsabilidad cada una
+cargar_pacientes  <- function(archivo)        { ... }
+filtrar_outliers  <- function(df, columna)    { ... }
+calcular_resumen  <- function(df)             { ... }
+graficar_resumen  <- function(resumen)        { ... }
+```
+
+Si cada pieza es chica, podés probarla por separado, reusarla en otro contexto y reemplazarla sin romper el resto.
+
 ## Ejercicios en clase
 
-1.  Creá una lista `auto` con: `marca` (string), `modelo` (string), `año` (entero), `mantenimientos` (vector de strings con las últimas reparaciones). Accedé al primer mantenimiento de dos formas distintas.
+Vamos a usar `iris` (medidas de flores) y `mtcars` (autos), los dos vienen con R.
 
-2.  Creá la matriz identidad de 5x5 (`diag(5)`) y verificá que `M %*% M` da la misma matriz.
+``` r
+head(iris)
+?iris
+```
 
-3.  Cargá el `data.frame` `mtcars` (viene con R: `data(mtcars)`) y mostrá:
-    -   solo las filas con `mpg > 25`,
-    -   solo las columnas `mpg`, `cyl` y `hp`.
+1.  Lista `paciente` con cuatro campos: `id` (integer), `edad` (double), `sintomas` (vector de strings) y `tiene_diagnostico` (logical). Accedé al primer síntoma con `$` y con `[[ ]]`. Mostrá la diferencia con `[ ]`.
 
-4.  Convertí el vector `c("perro", "gato", "perro", "loro", "gato")` en un `factor`. ¿Cuántos niveles tiene? Imprimí los niveles ordenados alfabéticamente.
+2.  Convertí `iris` en una **matriz** quedándote con las cuatro columnas numéricas: `M <- as.matrix(iris[, 1:4])`. Calculá el promedio de cada columna usando `colMeans(M)`.
 
-5.  Escribí una función `resumen_columnas(df)` que reciba un `data.frame` numérico y devuelva una **lista** con dos elementos: `medias` (vector con la media de cada columna) y `desvios` (vector con el `sd` de cada columna). Pista: `sapply`.
+3.  Filtrá `iris` para quedarte solo con las flores **`virginica` con `Petal.Length > 6`**. Pista: `iris[iris$Species == "virginica" & iris$Petal.Length > 6, ]`.
+
+4.  Convertí la columna `iris$Species` (que ya es factor) en un vector ordenado por la **frecuencia de aparición** de cada especie. Pista: `table(iris$Species)` te da los conteos; `sort()` ordena.
+
+5.  Aplicando la buena práctica, escribí estas dos funciones por separado:
+
+    -   `medias_por_grupo(df, columna_numerica, columna_grupo)` que devuelva un `data.frame` con dos columnas, `grupo` y `media`. Pista: `aggregate`.
+    -   `top_grupo(resumen)` que reciba la salida de la función anterior y devuelva el grupo con la media más alta.
+
+    Probalas con `medias_por_grupo(mtcars, "mpg", "cyl")`.
 
 ::: notes
-~15 min. mtcars y diag(5) están disponibles sin instalar nada. Para el ejercicio 5, sugerir partir de `sapply(df, mean)`.
+~15 min. `colMeans`, `aggregate`, `table`, `sort` son funciones importadas: bloques de encastre, no las implementan. Si terminan rápido: graficar un boxplot de `Sepal.Length ~ Species` (ya vamos a verlo en clase 4).
 :::
 
 ## Comprensión: ¿quedó claro?
