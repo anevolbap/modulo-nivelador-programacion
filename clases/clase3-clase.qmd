@@ -1,0 +1,357 @@
+---
+title: "Curso Nivelador - Programación en R"
+subtitle: "Clase 3: estructuras compuestas (lista, matriz, data.frame, factor)"
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
+editor: visual
+---
+
+## De un valor a una colección
+
+En clase 1 vimos los **tipos atómicos**: `logical`, `double`, `integer`, `character`. Cada variable guardaba *un* valor (o un vector de valores del mismo tipo).
+
+Hoy vamos a ver cómo guardar **colecciones más ricas**:
+
+-   **lista**: cosas distintas, juntas, con nombre.
+-   **matriz**: tabla rectangular de valores del mismo tipo.
+-   **`data.frame`**: tabla rectangular donde cada columna puede tener su tipo.
+-   **`factor`**: variable categórica con un conjunto fijo de valores posibles.
+
+::: notes
+~5 min. Recordar la analogía: hasta ahora teníamos sustantivos sueltos, ahora armamos "frases compuestas".
+:::
+
+## Un mapa de las estructuras
+
+| Estructura   |  Dimensiones | ¿Mismo tipo? |
+|--------------|:------------:|:------------:|
+| vector       |       1      |      sí      |
+| matriz       |       2      |      sí      |
+| array        |       n      |      sí      |
+| lista        |       1      |      no      |
+| `data.frame` |       2      | por columna  |
+| `factor`     |       1      | sí (entero)  |
+
+`vector` y `matriz` son rígidos: todo del mismo tipo. `lista` y `data.frame` son flexibles.
+
+## Vectores con nombre (puente)
+
+Un vector puede tener **nombres** en sus posiciones:
+
+``` r
+edades <- c(ana = 23, beto = 31, cami = 19)
+edades["beto"]    # 31
+names(edades)     # "ana"  "beto" "cami"
+```
+
+Esto ya empieza a parecerse a una lista. La diferencia: los elementos siguen teniendo que ser del **mismo tipo**.
+
+## Listas: motivación
+
+Cuando una "cosa" tiene piezas heterogéneas, necesitamos una lista.
+
+Por ejemplo, un alumno tiene un nombre (string), una edad (entero), un vector de notas y un booleano de aprobado.
+
+``` r
+alumno <- list(
+  nombre   = "Ana",
+  edad     = 23L,
+  notas    = c(7, 8, 9),
+  aprobado = TRUE
+)
+```
+
+Una lista es como un **cajón con etiquetas**: cada compartimento puede contener algo distinto.
+
+## Listas: tres formas de acceder
+
+``` r
+alumno$nombre        # "Ana"          (por nombre, atajo)
+alumno[["nombre"]]   # "Ana"          (por nombre, forma larga)
+alumno[[1]]          # "Ana"          (por posición)
+```
+
+Y la forma "que parece igual pero no":
+
+``` r
+alumno["nombre"]     # lista de un elemento, no el string
+class(alumno["nombre"])    # "list"
+class(alumno[["nombre"]])  # "character"
+```
+
+**Regla mental**: `[[ ]]` saca *el contenido*; `[ ]` saca *un sub-cajón*.
+
+::: notes
+Esta es LA trampa de listas. Insistir con un par de ejemplos.
+:::
+
+## Listas anidadas
+
+Una lista puede contener otras listas. Útil cuando los datos tienen jerarquía.
+
+``` r
+curso <- list(
+  nombre  = "Nivelador",
+  alumnos = list(
+    list(nombre = "Ana",  nota = 7),
+    list(nombre = "Beto", nota = 5)
+  )
+)
+
+curso$alumnos[[1]]$nombre    # "Ana"
+```
+
+## Matrices
+
+Una matriz es una **tabla rectangular** de valores del **mismo tipo**.
+
+``` r
+M <- matrix(1:12, nrow = 3, ncol = 4)
+M
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    4    7   10
+# [2,]    2    5    8   11
+# [3,]    3    6    9   12
+```
+
+Por defecto se rellena por columna. Para rellenar por fila:
+
+``` r
+matrix(1:12, nrow = 3, byrow = TRUE)
+```
+
+## Acceso en matrices
+
+`M[fila, columna]`. Vacío en una posición = "todas".
+
+``` r
+M[1, 2]    # 4   (fila 1, columna 2)
+M[1, ]     # 1 4 7 10  (fila 1 entera)
+M[, 2]     # 4 5 6     (columna 2 entera)
+M[1:2, ]   # primeras dos filas
+
+dim(M)     # 3 4
+nrow(M)    # 3
+ncol(M)    # 4
+t(M)       # traspuesta
+M %*% t(M) # producto matricial
+```
+
+## `data.frame`: la tabla de R
+
+Un `data.frame` es una **tabla** donde:
+
+-   las **filas** son observaciones,
+-   las **columnas** son variables,
+-   cada columna puede tener su **propio tipo**.
+
+Por dentro es una lista donde cada elemento es una columna y todas tienen la **misma longitud**.
+
+``` r
+estudiantes <- data.frame(
+  nombre   = c("Ana", "Beto", "Cami"),
+  nota     = c(7, 4, 9),
+  aprobado = c(TRUE, FALSE, TRUE)
+)
+```
+
+## Acceso a un `data.frame`
+
+``` r
+estudiantes$nota              # columna como vector
+estudiantes[, "nombre"]       # columna por nombre
+estudiantes[1, ]              # primera fila
+estudiantes[2, "nota"]        # celda fila 2, columna "nota"
+estudiantes[, c("nombre", "nota")]   # varias columnas
+```
+
+`$` es el atajo más usado para columnas. `[fila, columna]` es general.
+
+## Filtrar filas con condición lógica
+
+``` r
+estudiantes[estudiantes$nota >= 6, ]
+#   nombre nota aprobado
+# 1    Ana    7     TRUE
+# 3   Cami    9     TRUE
+```
+
+La idea: `estudiantes$nota >= 6` es un vector `logical`, y se usa como índice de filas.
+
+``` r
+estudiantes$nota >= 6   # TRUE FALSE TRUE
+```
+
+## Modificar un `data.frame`
+
+Agregar columna:
+
+``` r
+estudiantes$bonus <- estudiantes$nota + 1
+```
+
+Quitar columna (asignar `NULL`):
+
+``` r
+estudiantes$bonus <- NULL
+```
+
+Agregar fila con `rbind`:
+
+``` r
+nuevo <- data.frame(nombre = "Dani", nota = 6, aprobado = TRUE)
+estudiantes <- rbind(estudiantes, nuevo)
+```
+
+## Inspección rápida
+
+Para ver qué hay adentro sin imprimir todo:
+
+``` r
+head(estudiantes)    # primeras 6 filas
+tail(estudiantes)    # últimas 6 filas
+dim(estudiantes)     # filas, columnas
+str(estudiantes)     # estructura por columna
+summary(estudiantes) # resumen estadístico
+colnames(estudiantes)
+```
+
+`str()` es el más útil al recibir un dataset nuevo: en una mirada se ve cuántas filas, qué columnas y de qué tipo.
+
+## Cargar datos de un archivo
+
+Para CSV (lo más común):
+
+``` r
+df <- read.csv("datos/bikeshare.csv")
+```
+
+Argumentos útiles:
+
+-   `header = TRUE` (por defecto): primera fila son nombres de columnas.
+-   `sep = ","` (por defecto): separador. En español a veces es `";"`.
+-   `stringsAsFactors = FALSE` (por defecto desde R 4.0): los strings quedan como `character`, no `factor`.
+
+Después suele convenir un `str(df)` o `head(df)` para confirmar que se cargó como esperábamos.
+
+## `factor`: variables categóricas
+
+Un `factor` representa una variable que toma valores en un **conjunto fijo** (categorías).
+
+``` r
+nivel <- factor(c("alto", "bajo", "alto", "medio"))
+nivel
+# [1] alto  bajo  alto  medio
+# Levels: alto bajo medio
+
+levels(nivel)    # "alto" "bajo" "medio"
+```
+
+Por dentro, R guarda enteros y una tabla de niveles. Es eficiente y deja claro que los valores son categorías.
+
+## `factor` con orden
+
+Si las categorías tienen un orden natural ("bajo" \< "medio" \< "alto"), se puede declarar:
+
+``` r
+nivel <- factor(
+  c("alto", "bajo", "alto", "medio"),
+  levels  = c("bajo", "medio", "alto"),
+  ordered = TRUE
+)
+
+nivel[1] > nivel[2]   # TRUE: "alto" > "bajo"
+```
+
+Cuándo conviene: variables categóricas en modelos (`lm`, `glm`), ejes de gráficos, agrupaciones.\
+Cuándo evitar: para tratar como texto libre.
+
+## Para elegir estructura
+
+| Querés...                                       | Usá          |
+|-------------------------------------------------|--------------|
+| una secuencia de valores del mismo tipo         | `vector`     |
+| una tabla rectangular numérica                  | `matrix`     |
+| una "ficha" con campos heterogéneos             | `list`       |
+| una tabla de datos (mezcla de tipos por col.)   | `data.frame` |
+| una variable categórica con valores fijos       | `factor`     |
+
+## Ejercicios en clase
+
+1.  Creá una lista `auto` con: `marca` (string), `modelo` (string), `año` (entero), `mantenimientos` (vector de strings con las últimas reparaciones). Accedé al primer mantenimiento de dos formas distintas.
+
+2.  Creá la matriz identidad de 5x5 (`diag(5)`) y verificá que `M %*% M` da la misma matriz.
+
+3.  Cargá el `data.frame` `mtcars` (viene con R: `data(mtcars)`) y mostrá:
+    -   solo las filas con `mpg > 25`,
+    -   solo las columnas `mpg`, `cyl` y `hp`.
+
+4.  Convertí el vector `c("perro", "gato", "perro", "loro", "gato")` en un `factor`. ¿Cuántos niveles tiene? Imprimí los niveles ordenados alfabéticamente.
+
+5.  Escribí una función `resumen_columnas(df)` que reciba un `data.frame` numérico y devuelva una **lista** con dos elementos: `medias` (vector con la media de cada columna) y `desvios` (vector con el `sd` de cada columna). Pista: `sapply`.
+
+::: notes
+~15 min. mtcars y diag(5) están disponibles sin instalar nada. Para el ejercicio 5, sugerir partir de `sapply(df, mean)`.
+:::
+
+## Comprensión: ¿quedó claro?
+
+Marcá la opción correcta.
+
+1.  ¿Cuál es la diferencia entre `mi_lista[1]` y `mi_lista[[1]]`?
+
+    a)  No hay diferencia.
+    b)  `[1]` devuelve una lista de un elemento; `[[1]]` devuelve el elemento mismo.
+    c)  `[[1]]` da error si la lista tiene más de un elemento.
+    d)  `[1]` da error si la lista no tiene nombres.
+
+2.  Si `M <- matrix(1:6, nrow = 2)`, ¿qué devuelve `M[, 2]`?
+
+    a)  Un escalar.
+    b)  Una matriz de 2x1.
+    c)  Un vector de 2 elementos.
+    d)  Un error.
+
+3.  Para cargar un archivo CSV en R conviene usar:
+
+    a)  `load("archivo.csv")`
+    b)  `read.csv("archivo.csv")`
+    c)  `library("archivo.csv")`
+    d)  `import("archivo.csv")`
+
+4.  ¿Cuándo conviene usar un `factor` en lugar de un `character`?
+
+    a)  Cuando los datos son números.
+    b)  Cuando son categorías con un conjunto fijo de valores.
+    c)  Siempre, `factor` es más rápido.
+    d)  Nunca, `factor` está deprecado.
+
+::: notes
+Respuestas: 1-b, 2-c (por defecto R "drop"ea la dimensión 1 y devuelve vector), 3-b, 4-b.
+:::
+
+## Apéndice: una lista de `data.frame`s
+
+Cuando manejamos varios datasets a la vez, una lista de `data.frame`s es muy práctica.
+
+``` r
+datasets <- list(
+  norte = read.csv("datos/norte.csv"),
+  sur   = read.csv("datos/sur.csv")
+)
+
+# aplicar una función a cada uno
+sapply(datasets, nrow)
+#  norte    sur
+#    100    150
+```
+
+Combinarlos verticalmente:
+
+``` r
+todo <- do.call(rbind, datasets)
+```
+
+Esta combinación de listas + `data.frame`s + `sapply` aparece todo el tiempo en análisis de datos.
