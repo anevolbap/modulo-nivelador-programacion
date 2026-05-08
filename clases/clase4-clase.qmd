@@ -1,0 +1,272 @@
+---
+title: "Curso Nivelador - Programación en R"
+subtitle: "Clase 4: visualización y exploración de datos"
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
+editor: visual
+---
+
+## De mirar código a mirar datos
+
+Hasta acá aprendimos a guardar valores, decidir, repetir y organizar datos. Hoy damos el paso natural en estadística: **mirar los datos**.
+
+Una buena visualización:
+
+-   muestra patrones en segundos que tablas con miles de filas esconden,
+-   sirve como sanity check antes de modelar,
+-   es la mejor manera de comunicar resultados.
+
+Vamos a usar **gráficos en base R** porque están siempre disponibles, y al final un vistazo a `ggplot2`.
+
+::: notes
+~5 min. Bridge: clase 1 cosas, clase 2 decisiones+repetición, clase 3 estructuras, hoy "ver" datos.
+:::
+
+## Tres gráficos que cubren mucho
+
+| Gráfico   | Para qué sirve                            | Función     |
+|-----------|-------------------------------------------|-------------|
+| Scatter   | relación entre dos variables numéricas    | `plot`      |
+| Histograma| distribución de **una** variable numérica | `hist`      |
+| Boxplot   | comparar distribuciones por grupo         | `boxplot`   |
+
+Empezar por estos tres ya cubre el 80% de un análisis exploratorio.
+
+## Scatter: `plot(x, y)`
+
+``` r
+plot(mtcars$hp, mtcars$mpg)
+```
+
+Cada punto es un auto, eje x = caballos de fuerza, eje y = consumo.
+
+Personalizar:
+
+``` r
+plot(mtcars$hp, mtcars$mpg,
+     main = "Consumo vs potencia",
+     xlab = "Potencia (hp)",
+     ylab = "Consumo (mpg)",
+     pch  = 19,        # tipo de punto (relleno)
+     col  = "steelblue")
+```
+
+`?par` lista todos los argumentos gráficos.
+
+## Histograma: `hist(x)`
+
+``` r
+hist(airquality$Ozone,
+     main   = "Ozono diario en NY (1973)",
+     xlab   = "Ozono (ppb)",
+     col    = "lightgray",
+     breaks = 20)        # cantidad aproximada de bins
+```
+
+Decisión clave: **cuántos bins**. Pocos esconden estructura, muchos la enmascaran con ruido. `breaks = 20` o `breaks = "FD"` (regla de Freedman-Diaconis) son puntos de partida razonables.
+
+## Boxplot por grupo
+
+Sintaxis tipo "fórmula": `y ~ grupo`.
+
+``` r
+boxplot(Ozone ~ Month, data = airquality,
+        main = "Ozono por mes",
+        xlab = "Mes",
+        ylab = "Ozono (ppb)",
+        col  = "lightblue")
+```
+
+Cada caja es la distribución del ozono en un mes. La línea del medio es la mediana, los bordes el primer y tercer cuartil.
+
+## Capas: dibujar encima
+
+`plot` abre la ventana; `points`, `lines`, `abline`, `legend` agregan elementos sobre lo dibujado.
+
+``` r
+plot(mtcars$hp, mtcars$mpg, pch = 19, col = "gray60",
+     xlab = "Potencia (hp)", ylab = "Consumo (mpg)")
+
+# linea de regresion lineal (lm es funcion importada)
+abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)
+
+# linea horizontal en el promedio
+abline(h = mean(mtcars$mpg), lty = 2)
+
+legend("topright",
+       legend = c("ajuste lineal", "promedio"),
+       col    = c("tomato", "black"),
+       lty    = c(1, 2))
+```
+
+## Varios gráficos: `par(mfrow)`
+
+``` r
+par(mfrow = c(2, 2))     # 2 filas, 2 columnas
+
+hist(airquality$Ozone, main = "Ozono")
+hist(airquality$Wind,  main = "Viento")
+hist(airquality$Temp,  main = "Temperatura")
+hist(airquality$Solar.R, main = "Radiación")
+
+par(mfrow = c(1, 1))     # volver a 1x1
+```
+
+Permite comparar varias distribuciones de un vistazo.
+
+## Datos reales tienen `NA`
+
+`airquality$Ozone` tiene valores faltantes. La mayoría de las funciones agregadas se quejan:
+
+``` r
+mean(airquality$Ozone)             # NA: hay NAs
+mean(airquality$Ozone, na.rm = TRUE)   # 42.13
+```
+
+Otras útiles:
+
+``` r
+sum(is.na(airquality$Ozone))   # cuántos NA hay
+complete.cases(airquality)     # filas sin ningún NA
+na.omit(airquality)            # data.frame sin filas con NA
+```
+
+Decisión de fondo: tirar las filas con NA, imputarlas o usarlas como información. Depende del problema.
+
+## Resumir por grupo
+
+Tres herramientas clásicas en base R.
+
+``` r
+# media de mpg por cantidad de cilindros
+aggregate(mpg ~ cyl, data = mtcars, FUN = mean)
+
+# lo mismo, otra forma
+tapply(mtcars$mpg, mtcars$cyl, mean)
+
+# tabla de frecuencias
+table(mtcars$cyl)
+prop.table(table(mtcars$cyl))   # proporciones
+```
+
+`aggregate` devuelve un `data.frame`, ideal para encadenar con un gráfico.
+
+## Un EDA mínimo en cuatro pasos
+
+Ante un dataset nuevo:
+
+``` r
+# 1. estructura
+str(airquality)
+
+# 2. resumen estadistico por columna
+summary(airquality)
+
+# 3. extremos
+head(airquality)
+tail(airquality)
+
+# 4. graficos basicos
+par(mfrow = c(2, 2))
+hist(airquality$Ozone, main = "Ozono")
+hist(airquality$Wind,  main = "Viento")
+boxplot(Ozone ~ Month, data = airquality, main = "Ozono por mes")
+plot(airquality$Wind, airquality$Ozone, pch = 19, main = "Ozono vs Viento")
+par(mfrow = c(1, 1))
+```
+
+## Buena práctica: probar antes de creer
+
+Una función puede parecer correcta y estar mal. Lo más simple para no engañarse: **escribir un test antes de usarla**.
+
+``` r
+normalizar <- function(x) (x - mean(x)) / sd(x)
+
+# tests: ejemplos donde sabemos la respuesta
+stopifnot(abs(mean(normalizar(c(1, 2, 3))))      < 1e-10)   # media debe ser 0
+stopifnot(abs(sd(normalizar(c(1, 2, 3))) - 1)    < 1e-10)   # sd debe ser 1
+```
+
+`stopifnot` corta con error si la condición es falsa. Si pasa silenciosamente, la función pasó **ese** test.
+
+Un test no garantiza que la función esté bien siempre, pero garantiza que está bien para los casos que probamos.
+
+## Ejercicios en clase
+
+Trabajamos sobre `airquality` (calidad del aire en NY) y `mtcars`.
+
+1.  Histograma de `airquality$Ozone` con título y eje en español. Probá tres valores distintos de `breaks` (10, 20, 50). ¿Qué cambia?
+
+2.  Boxplot de `Temp ~ Month` sobre `airquality`. Pintá las cajas con `col = "lightgreen"`. ¿En qué mes hay más dispersión?
+
+3.  Scatter de `mpg ~ hp` sobre `mtcars`, con la recta de regresión por encima usando `abline(lm(...))` y una leyenda.
+
+4.  Calculá la media de `mpg` por `cyl` con `aggregate`, y graficala con `barplot(height = ..., names.arg = ...)`. ¿Cae monótonamente?
+
+5.  Función `normalizar(x)` con dos `stopifnot` que verifiquen media 0 y sd 1. Aplicala a `mtcars$mpg` y graficá el histograma del resultado.
+
+6.  (Bonus, datos argentinos) Bajá la encuesta de [sysarmy](https://sysarmy.com/blog/) en CSV, cargala con `read.csv` y graficá un histograma del salario neto. ¿Qué bin elegirías para que no se aplaste con los outliers?
+
+::: notes
+~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975))).
+:::
+
+## Comprensión: ¿quedó claro?
+
+1.  ¿Qué función usás para comparar la **distribución** de una variable numérica entre varios grupos?
+
+    a)  `plot`
+    b)  `hist`
+    c)  `boxplot`
+    d)  `barplot`
+
+2.  ¿Qué hace `mean(x, na.rm = TRUE)` cuando `x` tiene `NA`?
+
+    a)  Devuelve `NA`.
+    b)  Da error.
+    c)  Calcula la media ignorando los `NA`.
+    d)  Reemplaza los `NA` por 0.
+
+3.  Para agregar una recta de regresión sobre un scatter ya dibujado, usás:
+
+    a)  `plot(lm(...))`
+    b)  `abline(lm(...))`
+    c)  `lines(lm(...))`
+    d)  `regline(...)`
+
+4.  ¿Para qué sirve `stopifnot`?
+
+    a)  Para parar un bucle infinito.
+    b)  Para chequear que una condición es cierta y cortar con error si no.
+    c)  Para imprimir un mensaje de advertencia.
+    d)  Para suprimir errores.
+
+::: notes
+Respuestas: 1-c, 2-c, 3-b, 4-b.
+:::
+
+## Apéndice: gramática mínima de `ggplot2`
+
+`ggplot2` propone una **gramática**: todo gráfico es `data + mapping (aes) + geom`.
+
+``` r
+library(ggplot2)
+
+ggplot(mtcars, aes(x = hp, y = mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Consumo vs potencia",
+       x = "Potencia (hp)", y = "Consumo (mpg)")
+```
+
+Misma idea para boxplot:
+
+``` r
+ggplot(airquality, aes(x = factor(Month), y = Ozone)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(x = "Mes", y = "Ozono (ppb)")
+```
+
+Una vez que se entiende la gramática, queda más fácil que el base R para gráficos complejos. Lo vamos a usar más adelante.
