@@ -3,6 +3,6 @@
 ##   return(lista_ordenada)
 ## }
 
-ordenar = function(lista_de_numeros){
+ordenar <- function(lista_de_numeros){
     sort(lista_de_numeros)
 }

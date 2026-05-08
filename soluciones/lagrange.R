@@ -26,7 +26,7 @@
 ## Funciones útiles: plot, seq
 ##
 
-pol_lagrange = function(x, x_train, idx) {
+pol_lagrange <- function(x, x_train, idx) {
     ## Polinomio idx-ésimo de Lagrange calculado para x_train evaluado en x.
     ##
     ## Input
@@ -45,7 +45,7 @@ pol_lagrange = function(x, x_train, idx) {
     return(res)
     }
 
-eval_pol_lagrange = function(x, x_train, pol_lagrange) {
+eval_pol_lagrange <- function(x, x_train, pol_lagrange) {
     ## Evalua todos los polinomios de Lagrange calculados para x_train usando los
     ## polinomios generados por build_plot_lagrange()
     ##
@@ -67,12 +67,12 @@ eval_pol_lagrange = function(x, x_train, pol_lagrange) {
     return(res)
 }
 
-interpolador = function(x_train, y_train) {
-    f = function(x) sum(y_train * eval_pol_lagrange(x, x_train, pol_lagrange))
+interpolador <- function(x_train, y_train) {
+    f <- function(x) sum(y_train * eval_pol_lagrange(x, x_train, pol_lagrange))
     return(f)
 }
 
-graficar_interpolador = function(x_train, y_train){
+graficar_interpolador <- function(x_train, y_train){
     ## Datos los puntos (x_train, y_train), grafica su polinomio interpolador de
     ## Lagrange.
     xs = seq(min(x_train), max(x_train), length = 1e2)

@@ -1,4 +1,4 @@
-make_test_files = function(n,
+make_test_files <- function(n,
                            file_main_name = "test_file",
                            dir_name = "test_dir",
                            extensions = c("png", "txt", "pdf", "csv"),
@@ -25,7 +25,7 @@ make_test_files = function(n,
     }
 }
 
-get_extension = function(tupla){
+get_extension <- function(tupla){
     ## A partir de un vector (nombre, extension) devuelve la extensión.
 
     ## Extraigo el segundo elemento del vector.
@@ -35,7 +35,7 @@ get_extension = function(tupla){
     return(extension)
 }
 
-get_unique_extensions = function(dir_name){
+get_unique_extensions <- function(dir_name){
     ## Listamos todos los archivos del directorio 'dir_name'
     list_files = list.files(dir_name)
 
@@ -51,7 +51,7 @@ get_unique_extensions = function(dir_name){
     return(exts_uniques)
 }
 
-move_one_file_by_extension = function(file_name) {
+move_one_file_by_extension <- function(file_name) {
     ## Mueve un archivo a una carpeta según su extensión.
     target_folder = strsplit(basename(file_name), split="\\.")[[1]][2]
     if (!dir.exists(paste(dirname(file_name), target_folder, sep = "/"))) {
@@ -72,7 +72,7 @@ move_one_file_by_extension = function(file_name) {
     )
 }
 
-tidy_folder = function(dir_name) {
+tidy_folder <- function(dir_name) {
     ## Organiza los archivos de la carpeta 'dir_name' en subcarpetas según su
     ## extensión
 

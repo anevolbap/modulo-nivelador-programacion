@@ -1,6 +1,6 @@
 ## Actividad - Bisección
 
-biseccion_un_paso = function(fun, intervalo, tol = 1e-4){
+biseccion_un_paso <- function(fun, intervalo, tol = 1e-4){
     # Punto medio del intervalo
     medio = mean(intervalo)
     # Evaluo la función en los tres puntos
@@ -18,7 +18,7 @@ biseccion_un_paso = function(fun, intervalo, tol = 1e-4){
                 flag = flag))
 }
 
-iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+iterar_funcion <- function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     intervalo = intervalo_inicial
     salida = FALSE
     while (!salida) {
@@ -29,7 +29,7 @@ iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     return(res)
 }
     
-biseccion_recursiva = function(fun, intervalo, tol = 1e-4){
+biseccion_recursiva <- function(fun, intervalo, tol = 1e-4){
     ## Punto medio del intervalo
     medio = mean(intervalo)
     ## Evaluo la función en los tres puntos

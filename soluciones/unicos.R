@@ -1,7 +1,7 @@
 # Unicos
 
 # 1. buscar_una_palabra devuelve TRUE o FALSE
-buscar_una_palabra = function(palabra, lista_de_palabras){
+buscar_una_palabra <- function(palabra, lista_de_palabras){
   for (iter in seq(lista_de_palabras)){
     if (palabra == lista_de_palabras[[iter]]){
       return(TRUE)
@@ -10,7 +10,7 @@ buscar_una_palabra = function(palabra, lista_de_palabras){
   return(FALSE)
 }
 
-buscar_una_palabra = function(palabra, lista_de_palabras){
+buscar_una_palabra <- function(palabra, lista_de_palabras){
   for (p in lista_de_palabras){
     if (p == palabra){
       return(TRUE)
@@ -19,7 +19,7 @@ buscar_una_palabra = function(palabra, lista_de_palabras){
   return(FALSE)
 }
 
-test_buscar_una_palabra = function(){
+test_buscar_una_palabra <- function(){
   
   test_1 = list(palabra = "hola", 
                 lista = list("hola", "qué", "tal"), 
@@ -36,7 +36,7 @@ test_buscar_una_palabra = function(){
   
 }
 
-borrar_duplicados = function(lista_de_palabras){
+borrar_duplicados <- function(lista_de_palabras){
   unicos = lista_de_palabras[[1]]
   for (iter in 2:length(lista_de_palabras)){
     if (!buscar_una_palabra(lista_de_palabras[[iter]], unicos)) {
@@ -46,14 +46,14 @@ borrar_duplicados = function(lista_de_palabras){
   return(unicos)
 }
 
-test_borrar_duplicados = function(){
+test_borrar_duplicados <- function(){
   out_1 = (length(borrar_duplicados(c("Hola", "Hola", "Chau")) == 2))
   out_2 = (length(borrar_duplicados(c("No", "hay", "duplicados")) == 3))
   out_3 = (length(borrar_duplicados(c("Soloduplicados", "Soloduplicados", "Soloduplicados"))==1))
   return(out_1 & out_2 & out_3)
 }
 
-generar_lista = function(lista_de_palabras, repeticiones, seed=42){
+generar_lista <- function(lista_de_palabras, repeticiones, seed=42){
   set.seed(seed)
   sample(rep(lista_de_palabras, repeticiones))
 }

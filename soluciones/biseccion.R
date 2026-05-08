@@ -1,6 +1,6 @@
 ## Actividad - Bisección
 
-biseccion_un_paso = function(fun, intervalo, tol = 1e-4){
+biseccion_un_paso <- function(fun, intervalo, tol = 1e-4){
     # Punto medio del intervalo
     medio = mean(intervalo)
     # Evaluo la función en los tres puntos
@@ -18,7 +18,7 @@ biseccion_un_paso = function(fun, intervalo, tol = 1e-4){
                 flag = flag))
 }
 
-iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+iterar_funcion <- function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     intervalo = intervalo_inicial
     salida = FALSE
     while (!salida) {
@@ -29,7 +29,7 @@ iterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     return(res)
 }
     
-biseccion_recursiva = function(fun, intervalo, tol = 1e-4) {
+biseccion_recursiva <- function(fun, intervalo, tol = 1e-4) {
 
   # calculo la condición para terminar
   flag = (intervalo[2]-intervalo[1])/2 < tol
@@ -60,7 +60,7 @@ biseccion_recursiva = function(fun, intervalo, tol = 1e-4) {
 
 # 4. Modifique la función `iterar_funcion` para registrar todas las iteraciones # del método para hacer un gráfico de la trayectoria. 
 
-iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
+iterar_funcion_track <- function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     intervalo = intervalo_inicial
     salida = FALSE
     trace = c()
@@ -73,7 +73,7 @@ iterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {
     return(trace)
 }
 
-fun_verdad = function(x) {1+x-x^2+x^5}
+fun_verdad <- function(x) {1+x-x^2+x^5}
 
 trace = iterar_funcion_track(biseccion_un_paso, fun_verdad, c(-5,10), tol = 1e-15)
 
