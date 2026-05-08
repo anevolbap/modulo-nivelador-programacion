@@ -247,25 +247,52 @@ for (i in 1:10) {
 # 1 3
 ```
 
+## Buena práctica: comentar el porqué, no el qué
+
+Si los nombres son buenos, el código ya cuenta **qué** hace. Los comentarios son para explicar **por qué** ese código está así: una decisión, una excepción, un dato externo.
+
+``` r
+# parafrasea: no agrega informacion
+x <- 5  # asigno 5 a x
+
+# explica el porqué: agrega información
+edad_minima_aprobado <- 18  # mayoria de edad civil en Argentina (Cod. Civ. art 25)
+```
+
+Reglas:
+
+-   Si tenés que parafrasear el código, mejorá el nombre.
+-   Si una decisión no es obvia, escribí en una línea **por qué**.
+-   Borrar comentarios desactualizados es tan importante como escribirlos.
+
 ## Ejercicios en clase
 
-Hacé los siguientes en un script de RStudio.
+Vamos a usar `airquality` (calidad del aire en NY, mayo a septiembre 1973). Ya viene con R.
 
-1.  **FizzBuzz**: para los números de 1 a 30, imprimí `"Fizz"` si es múltiplo de 3, `"Buzz"` si es múltiplo de 5, `"FizzBuzz"` si es múltiplo de ambos, y el número en otro caso. Pista: `i %% 3 == 0`.
+``` r
+head(airquality)
+?airquality
+```
 
-2.  Escribí una función `factorial(n)` que calcule `n!` usando un `for`. (Empezá con `resultado <- 1` y multiplicá por cada `i` de 1 a `n`).
+1.  Recorrer `airquality$Ozone` con un `for` y contar cuántos días superan los **80 ppb** (umbral OMS para alerta). Comparalo con `sum(airquality$Ozone > 80, na.rm = TRUE)`.
 
-3.  Dado el vector `x <- c(4, -1, 7, 0, -3, 2)`, contá cuántos elementos son **estrictamente positivos** usando un `for` y un `if`.
+2.  Clasificar cada valor de `airquality$Temp` (en °F) en `"frio"`, `"templado"` o `"caluroso"` usando `if/else if/else` dentro de un `for`. Umbrales: \<60, 60-80, \>80. Comparalo con `ifelse` vectorial.
 
-4.  Encontrá el primer múltiplo de 7 que sea mayor que 100 usando un `while`. Empezá en 100 y avanzá de 1 en 1.
+3.  **Bootstrap a mano**: estimar la media de `airquality$Wind` con 1000 muestras con reemplazo. Pista: `replicate(1000, mean(sample(airquality$Wind, replace = TRUE)))`. La media de las medias muestrales debería estar cerca de `mean(airquality$Wind)`.
 
-5.  Escribí una función `clasificar_nota(nota)` que devuelva:
-    -   `"aprobado"` si `nota >= 6`,
-    -   `"recuperatorio"` si `4 <= nota < 6`,
-    -   `"desaprobado"` si `nota < 4`.
+4.  Encontrar el **primer día** en que `airquality$Ozone` supera 100 usando un `while` con `seq_along`. Comparalo con `which(airquality$Ozone > 100)[1]`.
+
+5.  Función `clasificar_presion(sistolica)` (mmHg, criterio de la AHA):
+
+    -   `"normal"` si `< 120`,
+    -   `"elevada"` si `120 <= x < 130`,
+    -   `"hipertensión 1"` si `130 <= x < 140`,
+    -   `"hipertensión 2"` si `>= 140`.
+
+    Probala con `c(115, 122, 135, 150)`.
 
 ::: notes
-~15 min. Recorrer mesas. Si terminan rápido: re-escribir el ejercicio 3 sin `for`, usando `sum(x > 0)`.
+~15 min. `replicate` y `sample` son funciones importadas: las usamos como bloque de encastre, no las implementamos. Si terminan rápido: comparar la desviación estándar de las medias bootstrap con `sd(airquality$Wind) / sqrt(length(airquality$Wind))`.
 :::
 
 ## Comprensión: ¿quedó claro?
