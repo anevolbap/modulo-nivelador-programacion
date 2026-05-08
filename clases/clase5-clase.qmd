@@ -1,0 +1,264 @@
+---
+title: "Curso Nivelador - Programación en R"
+subtitle: "Clase 5: simulación y algoritmos iterativos"
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
+editor: visual
+---
+
+## De un experimento a muchos
+
+En estadística muchas preguntas se responden mejor **simulando** que con cuentas analíticas: ¿cuál es la probabilidad de tal evento?, ¿cuánta dispersión tiene esta estimación?
+
+Y muchos problemas no tienen fórmula cerrada, pero sí un algoritmo **iterativo** que se acerca a la respuesta: bisección, Newton, optimización numérica.
+
+Hoy vemos los dos:
+
+-   **simulación** con `replicate` (Monte Carlo, bootstrap),
+-   **algoritmos iterativos** con `while` y tolerancia (bisección como caso de estudio).
+
+Y cerramos con una buena práctica de programación: **control de versiones**.
+
+::: notes
+~5 min. Conectar con bucles de clase 2 (replicate y while son sus parientes naturales).
+:::
+
+## Funciones que reciben funciones
+
+Una función puede recibir **otra función** como argumento. Es la herramienta que hace todo lo demás posible.
+
+``` r
+aplicar_dos_veces <- function(f, x) {
+  f(f(x))
+}
+
+aplicar_dos_veces(sqrt, 16)   # sqrt(sqrt(16)) = 2
+aplicar_dos_veces(sin, 0)     # sin(sin(0))    = 0
+```
+
+`f` no es un valor, es una **función**. Esto se llama "función de orden superior". `replicate`, `lapply`, `sapply`, `optimize`, `uniroot` son ejemplos.
+
+## `replicate`: Monte Carlo en una línea
+
+`replicate(n, expr)` ejecuta `expr` `n` veces y devuelve el resultado.
+
+``` r
+# tirar un dado equilibrado 10000 veces
+tiradas <- replicate(10000, sample(1:6, 1))
+mean(tiradas)        # ~ 3.5 (esperanza teorica)
+table(tiradas) / 10000   # frecuencias relativas
+```
+
+Idea de Monte Carlo: si no sé la probabilidad analíticamente, repito el experimento muchas veces y la **estimo** por la frecuencia.
+
+## Caso clásico: paradoja del cumpleaños
+
+¿Cuál es la probabilidad de que en un grupo de `n` personas haya al menos dos con el mismo cumpleaños?
+
+``` r
+# una realizacion: ¿hay coincidencia en un grupo de n?
+hay_coincidencia <- function(n) {
+  cumples <- sample(1:365, n, replace = TRUE)
+  any(duplicated(cumples))
+}
+
+# estimar la probabilidad para n = 23
+mean(replicate(10000, hay_coincidencia(23)))
+# ~ 0.507  (la respuesta clasica)
+```
+
+Para `n = 23` la probabilidad ya es mayor que el 50%, contraintuitivo.
+
+## Bootstrap: la dispersión de un estimador
+
+Si tenemos una muestra de tamaño `n` y queremos saber **cuán precisa** es nuestra estimación, hacemos bootstrap: re-muestreamos con reemplazo y vemos cómo varía.
+
+``` r
+muestra <- airquality$Wind   # viento diario en NY
+
+# 1000 re-muestreos, calcular la media de cada uno
+medias_boot <- replicate(1000,
+  mean(sample(muestra, replace = TRUE))
+)
+
+# intervalo de confianza del 95% por percentiles
+quantile(medias_boot, c(0.025, 0.975))
+```
+
+Lo lindo: no hicimos ningún supuesto sobre la distribución del viento. La idea funciona para **cualquier estimador**.
+
+## Algoritmos iterativos: bisección
+
+Para encontrar una raíz de `f` en `[a, b]` cuando `f(a) * f(b) < 0`:
+
+1.  Calculamos el punto medio `m = (a + b) / 2`.
+2.  Decidimos si la raíz está en `[a, m]` o en `[m, b]` mirando el signo de `f`.
+3.  Repetimos hasta que el intervalo sea más chico que una **tolerancia**.
+
+``` r
+biseccion <- function(f, a, b, tol = 1e-6) {
+  stopifnot(f(a) * f(b) < 0)        # precondicion
+  while ((b - a) / 2 > tol) {
+    m <- (a + b) / 2
+    if (f(a) * f(m) < 0) {
+      b <- m
+    } else {
+      a <- m
+    }
+  }
+  (a + b) / 2
+}
+```
+
+## Bisección en acción
+
+``` r
+# raiz de x^3 - x - 1 entre 1 y 2
+biseccion(function(x) x^3 - x - 1, 1, 2)
+# 1.324718
+```
+
+`stopifnot(f(a) * f(b) < 0)` es la precondición: si los signos no son distintos, el método no aplica. Mejor cortar con error claro que devolver basura.
+
+## "Ya estaba hecho": `uniroot`
+
+R trae una raíz numérica robusta. La nuestra fue para entender; la de R es para producir.
+
+``` r
+uniroot(function(x) x^3 - x - 1, c(1, 2))$root
+# 1.324718
+```
+
+Misma respuesta. La diferencia: `uniroot` está más probado, maneja mejor casos límite, no tenemos que mantenerlo.
+
+**Implementar para aprender, importar para producir.** Es la regla.
+
+## Buena práctica: control de versiones
+
+Git permite **guardar fotos** de tu código a lo largo del tiempo. ¿Por qué importa?
+
+-   Volver atrás cuando algo deja de funcionar.
+-   Ver qué cambió y por qué.
+-   Compartir el código con otra gente.
+
+Comandos básicos (en la terminal de RStudio):
+
+``` bash
+git init                     # primera vez en una carpeta
+git status                   # que cambio desde la ultima foto
+git add ejercicio1.R         # marcar para guardar
+git commit -m "mensaje"      # sacar la foto
+git log                      # historial
+```
+
+## Mensajes de commit que sirven
+
+Mensaje útil = **explica el porqué**, no parafrasea el qué.
+
+``` text
+malo:  "cambios"
+malo:  "fix biseccion"
+mejor: "fix(biseccion): bajar tolerancia a 1e-8 porque
+        no convergia con datos chicos"
+```
+
+Una foto cada vez que terminás algo coherente: una función nueva, un bug arreglado, un experimento que corre. No "una foto cada cinco minutos" ni "una foto cada tres semanas".
+
+## Cierre
+
+Lo que vimos en cinco clases:
+
+1.  Tipos de datos y funciones (clase 1).
+2.  Decisiones y repetición (clase 2).
+3.  Estructuras compuestas (clase 3).
+4.  Visualización y exploración (clase 4).
+5.  Simulación y algoritmos (hoy).
+
+Y cinco buenas prácticas:
+
+1.  Buenos nombres.
+2.  Comentar el porqué.
+3.  Funciones chicas, una responsabilidad cada una.
+4.  Probar antes de creer.
+5.  Control de versiones.
+
+Esto es la base. Lo que sigue (`dplyr`, `ggplot2`, `tidyr`, modelos) son herramientas, no conceptos nuevos.
+
+## Ejercicios en clase
+
+1.  **Función de orden superior**: escribí `iterar(f, x0, n)` que aplique `f` `n` veces a `x0`. Probala con `f = function(x) (x + 2/x) / 2`, `x0 = 1`, `n = 10`. ¿A qué número converge?
+
+2.  **Monte Carlo**: estimá la probabilidad de obtener al menos 6 caras al tirar 10 monedas equilibradas. Pista: `sample(c(0, 1), 10, replace = TRUE)` simula una tirada. Comparalo con `1 - pbinom(5, 10, 0.5)`.
+
+3.  **Bootstrap**: usando `mtcars$mpg`, estimá un IC del 95% para la media con 1000 réplicas bootstrap. Comparalo con el IC analítico `t.test(mtcars$mpg)$conf.int`.
+
+4.  **Bisección**: usando la función `biseccion` de la slide, encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot(f, c(0, 1))$root`.
+
+5.  **Cumpleaños**: escribí una función `prob_coincidencia(n, n_sim = 10000)` que estime la probabilidad para distintos `n`. Ejecutala para `n = 5, 10, 15, 20, 23, 30, 50` y graficá los resultados con `plot(n, p, type = "b")`.
+
+6.  **Git**: en RStudio, en una carpeta nueva, hacé `git init`, agregá los ejercicios anteriores y hacé tres commits con mensajes claros.
+
+::: notes
+~15 min. Si terminan rápido: comparar el IC bootstrap del ejercicio 3 con el clásico (asumiendo normalidad). Suele ser muy parecido cuando n es grande.
+:::
+
+## Comprensión: ¿quedó claro?
+
+1.  ¿Qué hace `replicate(1000, expr)`?
+
+    a)  Repite `expr` 1000 veces y descarta el resultado.
+    b)  Ejecuta `expr` 1000 veces y devuelve los 1000 resultados.
+    c)  Ejecuta `expr` una vez con un argumento de 1000.
+    d)  Crea un vector de tamaño 1000 con `expr`.
+
+2.  ¿Qué condición tiene que cumplir el intervalo `[a, b]` para que la bisección funcione?
+
+    a)  `f(a) > 0` y `f(b) > 0`.
+    b)  `f(a) * f(b) < 0` (signos distintos).
+    c)  `a < b` solamente.
+    d)  `f(a) == f(b)`.
+
+3.  ¿Cuál es la idea central del **bootstrap**?
+
+    a)  Generar datos sintéticos con una distribución conocida.
+    b)  Re-muestrear con reemplazo desde la propia muestra para estimar la dispersión de un estimador.
+    c)  Repetir un experimento aleatorio en condiciones nuevas.
+    d)  Aplicar una función dos veces seguidas.
+
+4.  Un **mensaje de commit** útil:
+
+    a)  Es lo más corto posible.
+    b)  Parafrasea el código.
+    c)  Explica por qué hicimos el cambio.
+    d)  No importa, nadie lo lee.
+
+::: notes
+Respuestas: 1-b, 2-b, 3-b, 4-c.
+:::
+
+## Apéndice: validar argumentos con `stopifnot`
+
+Una función robusta valida sus entradas antes de empezar.
+
+``` r
+biseccion <- function(f, a, b, tol = 1e-6) {
+  stopifnot(
+    is.function(f),
+    is.numeric(a), is.numeric(b),
+    a < b,
+    f(a) * f(b) < 0,
+    tol > 0
+  )
+  # ... cuerpo
+}
+```
+
+Beneficios:
+
+-   Mensaje de error claro cuando alguien la usa mal.
+-   Sirve como **documentación ejecutable** de los supuestos.
+-   Evita resultados silenciosamente incorrectos.
+
+Más serio aún: el paquete `testthat` para escribir tests automáticos. Lo van a ver más adelante.
