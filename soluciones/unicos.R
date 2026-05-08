@@ -58,4 +58,4 @@ generar_lista <- function(lista_de_palabras, repeticiones, seed=42){
   sample(rep(lista_de_palabras, repeticiones))
 }
 
-generar_listas(c("Hola", "que", "tal"), c(1,2,2))
+generar_lista(c("Hola", "que", "tal"), c(1, 2, 2))
