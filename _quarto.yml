@@ -1,0 +1,40 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Curso Nivelador - Programación en R"
+  description: "Módulo nivelador de programación en R para la Maestría en Estadística Matemática (UBA)."
+  navbar:
+    background: light
+    left:
+      - text: Inicio
+        href: index.qmd
+      - text: Clases
+        menu:
+          - text: "1. Tipos de datos y funciones"
+            href: clases/clase1-clase.qmd
+          - text: "2. Condicionales y bucles"
+            href: clases/clase2-clase.qmd
+          - text: "3. Estructuras compuestas"
+            href: clases/clase3-clase.qmd
+          - text: "4. Visualización y EDA"
+            href: clases/clase4-clase.qmd
+          - text: "5. Simulación y algoritmos"
+            href: clases/clase5-clase.qmd
+      - text: Ejercicios
+        menu:
+          - text: "Clase 1"
+            href: ejercicios/clase1-ejercicios.qmd
+          - text: "Clase 2"
+            href: ejercicios/clase2-ejercicios.qmd
+          - text: "Entrega final"
+            href: ejercicios/entrega.qmd
+    right:
+      - icon: github
+        href: https://github.com/anevolbap/modulo-nivelador-programacion
+
+format:
+  html:
+    theme: cosmo
+    toc: true

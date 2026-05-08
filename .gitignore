@@ -10,6 +10,8 @@
 *_files/
 *_cache/
 .quarto/
+_site/
+_freeze/
 
 # LaTeX intermediates
 *.aux

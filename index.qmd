@@ -1,0 +1,25 @@
+---
+title: "Curso Nivelador - Programación en R"
+---
+
+Material del módulo nivelador de programación en R para la **Maestría en Estadística Matemática** (UBA).
+
+El curso son cinco clases de 90 minutos pensadas para alumnos sin experiencia previa en programación. Cada clase combina material expositivo, ejercicios para hacer en clase y un checkpoint de comprensión, y deja una buena práctica de programación instalada.
+
+## Clases
+
+1. [Tipos de datos y funciones](clases/clase1-clase.qmd)
+2. [Condicionales y bucles](clases/clase2-clase.qmd)
+3. [Estructuras compuestas](clases/clase3-clase.qmd)
+4. [Visualización y exploración de datos](clases/clase4-clase.qmd)
+5. [Simulación y algoritmos iterativos](clases/clase5-clase.qmd)
+
+## Ejercicios
+
+- [Clase 1](ejercicios/clase1-ejercicios.qmd)
+- [Clase 2](ejercicios/clase2-ejercicios.qmd)
+- [Entrega final](ejercicios/entrega.qmd)
+
+## Repositorio
+
+El código fuente está en [GitHub](https://github.com/anevolbap/modulo-nivelador-programacion).
