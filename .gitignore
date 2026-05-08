@@ -1,0 +1,34 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj
+
+# Quarto / RMarkdown render outputs
+*.html
+*_files/
+*_cache/
+.quarto/
+
+# LaTeX intermediates
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.tex
+*.toc
+
+# Editor leftovers
+*~
+\#*\#
+.\#*
+.DS_Store
+
+# Privado: entregas y planillas de alumnos. NO subir a GitHub.
+curso-nivelador-programacion-*/
+curso-nivelador-programacion-*.zip
+.zip/
+planilla*.csv
