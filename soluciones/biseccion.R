@@ -55,10 +55,8 @@ biseccion_recursiva = function(fun, intervalo, tol = 1e-4) {
     }
     # acá el paso propiamente recursivo, llamamos a la función de nuevo
     biseccion_recursiva(fun, intervalo_nuevo)
+  }
 }
-
-
-
 
 # 4. Modifique la función `iterar_funcion` para registrar todas las iteraciones # del método para hacer un gráfico de la trayectoria. 
 
@@ -86,6 +84,7 @@ plot(xs, ys, col=1:length(xs), pch=19)
 curve(fun_verdad(x), min(xs), max(xs), add = TRUE)
 
 library(ggplot2)
+library(gganimate)
 ## En ggplot
 p <- ggplot(
   data.frame(x=xs, y=ys, iter = 1:length(xs)), 
