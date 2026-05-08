@@ -1,36 +1,53 @@
 # Módulo nivelador de programación
 
 Material del módulo nivelador de programación en R para la Maestría en
-Estadística Matemática (UBA), edición 2022. El curso cubre las bases del
-lenguaje pensadas para alumnos sin experiencia previa: tipos, vectores,
-funciones, control de flujo, dataframes y un par de aplicaciones numéricas
-(bisección, interpolación de Lagrange).
+Estadística Matemática (UBA). El curso son cinco clases de 90 minutos
+para alumnos sin experiencia previa en programación, con espíritu de
+data science y una buena práctica por clase.
 
-## Estructura
+Sitio público: https://anevolbap.github.io/modulo-nivelador-programacion/
+
+## Plan del curso
+
+| Clase | Tema                                  | Buena práctica                          |
+|-------|---------------------------------------|------------------------------------------|
+| 1     | Tipos de datos y funciones            | Buenos nombres                           |
+| 2     | Condicionales y bucles                | Comentar el porqué, no el qué            |
+| 3     | Estructuras compuestas                | Una función, una responsabilidad         |
+| 4     | Visualización y exploración de datos  | Probar antes de creer (`stopifnot`)      |
+| 5     | Simulación y algoritmos iterativos    | Control de versiones (git)               |
+
+## Estructura del repo
 
 - `clases/`: notebooks Quarto con el material expositivo de cada clase.
 - `ejercicios/`: consignas para alumnos, incluida la entrega final.
-- `soluciones/`: resoluciones del docente (un `.R` por ejercicio y los
-  notebooks que las acompañan).
+- `soluciones/`: resoluciones del docente (un `.R` por ejercicio).
 - `tests/`: tests automáticos de cada `ejercicioN.R` para usar con el
   paquete `corrector`.
-- `datos/`: dataset `bikeshare.csv` que se usa en `clases/dataframe.qmd`.
+- `datos/`: datasets de ejemplo (`bikeshare.csv`).
 - `images/`: imágenes embebidas en los notebooks.
+- `_quarto.yml`, `index.qmd`: configuración del sitio.
 
-## Renderizar los notebooks
+## Renderizar el sitio localmente
 
-Requiere [Quarto](https://quarto.org) y R con los paquetes que carga cada
-notebook (al menos `ISLR2`, `ggplot2`, `gganimate`).
+Requiere [Quarto](https://quarto.org). El sitio se construye con:
+
+```bash
+quarto render        # rinde todo el proyecto a _site/
+quarto preview       # servidor local con auto-reload
+```
+
+Renderizar una sola clase:
 
 ```bash
 quarto render clases/clase1-clase.qmd
 ```
 
-Para renderizar todo el directorio:
+## Publicar
 
-```bash
-quarto render clases/ ejercicios/ soluciones/
-```
+`.github/workflows/publish.yml` rinde y publica a la rama `gh-pages`
+en cada push a `main`. Para activar GitHub Pages la primera vez,
+ir a Settings → Pages y elegir `gh-pages` como branch source.
 
 ## Corregir entregas
 
