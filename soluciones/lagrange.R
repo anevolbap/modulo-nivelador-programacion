@@ -82,10 +82,10 @@ graficar_interpolador <- function(x_train, y_train){
          col = "skyblue3",  # color
          type = "l",  # línea en lugar de puntos
          lwd = 4,     # grosor del trazo
-         xlab = "x",  # etiqueta del eje x 
-         ylab = "y"   # etiqueta del eje y)
-         points(x_train, y_train, col = "orange",
-                pch = 16, # tipo de puntito
-                cex = 2  # factor para aumentar el tamaño del puntito
-                )  
+         xlab = "x",  # etiqueta del eje x
+         ylab = "y")  # etiqueta del eje y
+    points(x_train, y_train,
+           col = "orange",
+           pch = 16, # tipo de puntito
+           cex = 2)  # factor para aumentar el tamaño del puntito
 }
