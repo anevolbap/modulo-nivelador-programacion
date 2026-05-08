@@ -1,292 +1,337 @@
 ---
-title: "Curso Nivelador - Programación"
-subtitle: "Tipos de datos, funciones y condicionales"
-date: "Septiembre, 2022"
-format: revealjs
+title: "Curso Nivelador - Programación en R"
+subtitle: "Clase 1: tipos de datos, estructuras y funciones"
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
 editor: visual
 ---
 
-## R y RStudio
+## Programar es como hablar un idioma
 
--   R es un lenguaje de programación y entorno computacional dedicado a la estadística.
+Aprender un lenguaje de programación se parece a aprender un idioma.
 
--   Aunque podemos usar R directamente, es recomendable instalar y usar un entorno integrado de desarrollo (*IDE*, por sus siglas en inglés). [RStudio](https://www.rstudio.com/) es un IDE, un conjunto de funcionalidades que facilitan el desarrollo de código.
+-   Los **sustantivos** son las **variables**: las cosas con las que trabajamos (un número, un nombre, una tabla).
+-   Los **verbos** son las **funciones**: las acciones que ejecutamos sobre esas cosas (sumar, contar, ordenar).
+-   La **gramática** es la sintaxis: cómo se combinan las palabras para que tengan sentido.
+-   Los **errores de tipeo** existen también: si decimos algo mal, el otro lado no entiende.
 
-## Asignaciones
+. . .
 
-Nuestra primera instrucción:
+Cada idioma tiene sus particularidades. En español el adjetivo va después del sustantivo, en inglés antes. R también tiene las suyas: el primer elemento de un vector es el `1`, no el `0`; la asignación se escribe `<-`. Son convenciones que se aprenden con el uso.
 
-``` r
-variable <- valor
-```
+::: notes
+~5 min. Pedir un ejemplo de oración y traducirla al "verbo + objetos".
+:::
 
-Almacena el valor de `valor` en algún lugar de la memoria de la computadora que identificaremos como `variable` .
+## ¿Qué es R?
 
-### Ejemplos
+R es un **lenguaje de programación** y un **entorno de cómputo** orientado a estadística y análisis de datos.
+
+-   Open source y gratuito.
+-   Comunidad enorme: paquetes para casi cualquier tarea (CRAN, Bioconductor, GitHub).
+-   Pensado para trabajar con datos: vectores, tablas, gráficos.
+-   Lo van a usar mucho a lo largo del programa.
+
+## ¿Y RStudio?
+
+RStudio es un **IDE** (entorno integrado de desarrollo): un programa que envuelve a R y nos hace la vida más fácil.
+
+Cuatro paneles típicos:
+
+1.  **Editor** (arriba-izquierda): donde escribimos los scripts.
+2.  **Consola** (abajo-izquierda): donde se ejecutan las instrucciones.
+3.  **Environment** (arriba-derecha): qué variables tenemos en memoria.
+4.  **Files / Plots / Help** (abajo-derecha): explorador, gráficos y ayuda.
+
+Atajos útiles: `Ctrl+Enter` envía la línea actual a la consola; `Ctrl+L` limpia la consola.
+
+## Asignación: guardar un valor
+
+Lo primero que vamos a hacer es **guardar valores en variables**.
 
 ``` r
 x <- 10
-y <- x
-x <- x + y * 22 / 33
+nombre <- "Ana"
+aprobado <- TRUE
 ```
 
-Para asignar valores a variables podemos usar tanto el símbolo `<-` como el tradicional `=` . Por ahora, a nuestros efectos, son intercambiables.
+`<-` es el operador de asignación: "el valor de la derecha va a la variable de la izquierda". Una vez asignada, la variable se reutiliza:
 
-## Tipos de datos
+``` r
+y <- x + 5     # 15
+nombre         # "Ana"
+```
 
-En R contamos con cuatro tipos de datos básicos, o atómicos:
+Reglas para nombres: empezar con letra, contener solo letras, números, `_` y `.`, sin espacios y sin palabras reservadas (`if`, `for`, `function`, ...).
 
--   `logical` (`TRUE` o `FALSE` , *booleanos*)
+::: notes
+Mostrar en vivo cómo aparece la variable en el panel Environment.
+:::
 
--   `numeric` (números reales, *double*)
+## Cuatro tipos atómicos
 
--   `integer` (números enteros)
+Los **tipos atómicos** son los ladrillos básicos. Hay cuatro que vamos a usar todo el tiempo.
 
--   `character` (cadena texto, *string*)
+| Tipo        | Para qué sirve     | Ejemplo         |
+|-------------|--------------------|-----------------|
+| `logical`   | verdadero o falso  | `TRUE`, `FALSE` |
+| `double`    | números reales     | `3.14`, `-2`    |
+| `integer`   | números enteros    | `5L`, `0L`      |
+| `character` | texto              | `"hola"`, `'a'` |
+
+`class(x)` nos dice de qué tipo es `x`. (Para `double`, `class` devuelve `"numeric"`; `typeof` devuelve `"double"`).
 
 ## logical
 
-Una variable `logical` puede valer `TRUE` o `FALSE`, que se abrevian como `T` o `F.`
+Toma uno de dos valores: `TRUE` o `FALSE`. Aparecen como resultado de comparaciones.
 
 ``` r
-10 == 20 # FALSE
-```
-
-``` {.R .R}
+10 == 20       # FALSE
 sin(pi/2) == 1 # TRUE
+class(TRUE)    # "logical"
 ```
+
+Operadores:
+
+-   lógicos: `&` (y), `|` (o), `!` (no);
+-   de comparación: `==` (igual), `!=` (distinto), `<`, `<=`, `>`, `>=`.
+
+## double y integer
+
+`double` es el tipo numérico por defecto, sirve para reales.
 
 ``` r
-class(10 == 20)
-class(TRUE)
-class(T)
+radio <- 10
+area  <- pi * radio^2
+class(area)        # "numeric"
 ```
 
-## Operaciones con datos `logical`
-
--   `&` , "y"
-
--   `|` , "o"
-
--   `!` , "negación"
-
--   `==` , "son iguales"
-
--   `!=` , "son distintos
-
-## numeric
-
-Representa números reales.
+`integer` se usa para enteros. Para que R lo trate como entero hay que poner una `L` al final.
 
 ``` r
-numero = pi
-radio = 10
-area_circulo = pi * 10^2
-area_circulo
-
-class(area_circulo)
-# numeric
-
-is.numeric(area_circulo)
-# TRUE
+class(40)    # "numeric"
+class(40L)   # "integer"
 ```
 
-## integer
-
--   Representar los números enteros en R.
-
--   Para distinguirlo de un `numeric` debemos añadir la letra L en mayúscula como sufijo.
-
-    ``` r
-    numero1 = 40
-    class(numero1)
-    numero2 = 40L
-    class(numero2)
-
-    is.integer(40)
-    is.numeric(40L)
-    ```
+En la práctica, salvo que importe la performance o la interoperación con otros sistemas, **alcanza con `double`**.
 
 ## character
 
-Los caracteres o las cadenas de caracteres son símbolos, letras, palabras o frases dentro de comillas dobles o simples.
-
-``` {.R .R}
-character <- "a"
-
-typeof(character) # "character"
-
-class(character)  # "character"
-
-is.character(character) # TRUE
-```
-
-## vector
-
--   Una lista ordenada de cosas
-
-    ``` r
-    vec = c(10, 20, 30)
-    ```
-
-<!-- -->
-
--   *los elementos tienen que ser del mismo tipo de datos básico*.
-
-    ``` r
-    class(vec)
-    ```
-
-Por defecto R elige el tipo de datos **logical**, también pueden declararse vectores vacíos de cualquier tipo.
+Texto: símbolos, letras, palabras o frases dentro de comillas (dobles o simples).
 
 ``` r
-vector("logical", 4) # FALSE FALSE FALSE FALSE
-vector("numeric", 4) # 0 0 0 0
-vector("character", 4) # "" "" "" ""
+saludo <- "Hola, mundo"
+class(saludo)             # "character"
+nchar(saludo)             # 11
 ```
 
-## Elementos de un vector
-
-Podemos acceder a sus elementos indicando las coordenadas de varias maneras
-
-``` r
-vec = c(2, 4, 6, 8)
-```
-
-¿Qué hacen las siguientes expresiones?
-
-``` r
-vec[4]
-```
-
-``` r
-vec[c(1, 2)] 
-```
-
-``` r
-vec[4:1]
-```
-
-``` r
-vec[-1] 
-```
-
-``` r
-vec[vec > 5]
-```
-
-Funciones útiles: `seq`, `length`, `c`.
+Funciones útiles: `paste`, `paste0`, `nchar`, `toupper`, `tolower`, `substr`.
 
 ## Coerción de tipos
 
-Cuando se mezclan los tipo de datos, a veces R toma decisiones en nuestro lugar.
+Cuando mezclamos tipos, R toma una decisión por nosotros y convierte todo al tipo más "general".
 
--   Mezlamos `character` con `logical`
-
-    ``` r
-    c("a", TRUE)
-    ```
-
-<!-- -->
-
--   Mezlamos `logical` con `numeric`
-
-    ``` r
-    n = 20
-    variable = sample(n) == 1:n
-    variable + 1
-    ```
-
-## Listas
-
-Una lista es una colección ordenada de diferentes tipos.
+Reglas, de menor a mayor: `logical` → `integer` → `double` → `character`.
 
 ``` r
-una_lista <- list(title = "números", numbers = 1:10, data = TRUE)
+c(TRUE, 1L)         # integer:   1 1
+c(TRUE, 1L, 1.5)    # double:    1.0 1.0 1.5
+c(TRUE, 1, "a")     # character: "TRUE" "1" "a"
 ```
 
-Podemos acceder a los elementos de varias maneras
+Es importante saberlo porque a veces lo causamos sin querer y los resultados se vuelven raros.
+
+## Vectores: lo mismo, varias veces
+
+Un vector es una **lista ordenada de valores del mismo tipo**.
 
 ``` r
-una_lista$title
-una_lista[[2]]
-class(una_lista)
+notas  <- c(7, 8, 5, 9, 6)
+class(notas)             # "numeric"
+length(notas)            # 5
+notas[1]                 # 7
+notas[c(2, 4)]           # 8 9
+notas[notas > 6]         # 7 8 9
 ```
+
+Si mezclamos tipos, R coerciona (slide anterior).
+
+## Listas: cosas distintas, juntas
+
+Una **lista** combina elementos de distintos tipos y largos.
+
+``` r
+alumno <- list(
+  nombre   = "Ana",
+  edad     = 23L,
+  notas    = c(7, 8, 9),
+  aprobado = TRUE
+)
+```
+
+Acceso por nombre o por posición:
+
+``` r
+alumno$nombre        # "Ana"
+alumno[["notas"]]    # c(7, 8, 9)
+alumno[[2]]          # 23
+```
+
+## data.frame: la "tabla" de R
+
+Un `data.frame` es una **tabla**: las filas son observaciones, las columnas son variables.
+
+Por dentro, es una lista donde cada elemento es una columna y **todas las columnas tienen la misma longitud**.
+
+``` r
+estudiantes <- data.frame(
+  nombre   = c("Ana", "Beto", "Cami"),
+  nota     = c(7, 4, 9),
+  aprobado = c(TRUE, FALSE, TRUE)
+)
+estudiantes$nota         # 7 4 9
+estudiantes[1, ]         # primera fila
+estudiantes[, "nombre"]  # columna por nombre
+```
+
+Va a ser la estructura central de la materia.
+
+## Atómicos vs compuestos
+
+| Estructura   | ¿Mismo tipo? | ¿Misma longitud? | Forma                  |
+|--------------|:------------:|:----------------:|------------------------|
+| vector       | sí           | (no aplica)      | unidimensional         |
+| lista        | no           | no               | "cajón con etiquetas"  |
+| `data.frame` | por columna  | sí               | tabla                  |
+
+## Funciones: nuestros propios verbos
+
+Una **función** es un bloque de código con un nombre, que recibe **argumentos** y devuelve una salida.
+
+``` r
+trasladar <- function(x, a) {
+  resultado <- x + a
+  return(resultado)
+}
+
+trasladar(1, 5)      # 6
+trasladar(1:10, 5)   # 6 7 8 ... 15
+```
+
+## Argumentos y valores por defecto
+
+Argumentos pueden pasarse por **posición** o por **nombre**:
+
+``` r
+trasladar(x = 1, a = 5)
+trasladar(a = 5, x = 1)   # equivalente
+```
+
+También se pueden definir **valores por defecto**:
+
+``` r
+trasladar <- function(x, a = 1) {
+  x + a
+}
+
+trasladar(10)      # 11, usa a = 1
+trasladar(10, 3)   # 13
+```
+
+::: notes
+Mostrar el panel Environment después de definir trasladar.
+:::
 
 ## Buscar ayuda
 
--   En la terminal
+``` r
+help(sum)
+?mean
+```
+
+-   En RStudio: panel **Help** (abajo-derecha) o `F1` con el cursor encima de una función.
+-   Google + Stack Overflow: la mayoría de las dudas ya las preguntó alguien.
+-   Cuando preguntan en un foro, incluir un **MWE** (minimum working example): el código mínimo que reproduce el problema.
+
+## Ejercicios en clase
+
+Hacé los siguientes en un script de RStudio.
+
+1.  Asigná tres variables: `nombre` (string con tu nombre), `edad` (entero) y `es_estudiante` (booleano). Usá `class()` para verificar el tipo de cada una.
+
+2.  Sin correrlo, predecí qué hace este código y por qué:
 
     ``` r
-    help(sum)
-
-    ?mean
+    x <- 5
+    y <- "10"
+    x + y
     ```
 
-<!-- -->
+    Después corré y comparalo con tu predicción.
 
--   En RStudio: panel de ayuda.
+3.  Creá un vector con las primeras cinco potencias de 2: `c(2, 4, 8, 16, 32)`. Usando indexado lógico, quedate solo con las que son mayores que `10`.
 
--   Google + stackoverflow + foros: en internet ya está **todo**.
+4.  Escribí una función `bienvenida(nombre)` que devuelva el string `"Hola, <nombre>!"`. Pista: `paste0`.
 
--   Reglas de etiqueta (ROTF):
+5.  Creá un `data.frame` con tres alumnos imaginarios y tres columnas: `nombre`, `nota` y `aprobado`. Mostrá solo la columna `nota`.
 
-    -   precisar la pregunta lo más que se pueda,
+::: notes
+~15 min. Pasar por las mesas. Si terminan rápido: agregar una columna nueva al data.frame.
+:::
 
-    -   proveer un MWE *(minimum working example)*
+## Comprensión: ¿quedó claro?
 
-## Funciones
+Marcá la opción correcta.
 
-Las funciones son unidades de código encargadas de realizar **una** tarea particular.
+1.  ¿Cuál de estos nombres de variable es **válido** en R?
+    a)  `2x`
+    b)  `mi.variable`
+    c)  `mi variable`
+    d)  `for`
 
-### Sintáxis
+2.  ¿Qué devuelve `class(3.14)`?
+    a)  `"integer"`
+    b)  `"double"`
+    c)  `"numeric"`
+    d)  `"real"`
 
-``` r
-mi_funcion = function(arg1, arg2, arg3) {
- # cosas que hace la función
- return(devuelve)
-}
-```
+3.  ¿Cuál es la diferencia clave entre una **lista** y un **`data.frame`**?
+    a)  Las listas no se pueden imprimir.
+    b)  En un `data.frame` todas las columnas deben tener la **misma longitud**.
+    c)  Un `data.frame` solo admite números.
+    d)  No hay diferencia.
 
-### Ejemplo
+4.  ¿Qué devuelve `class(TRUE & FALSE)`?
+    a)  `"boolean"`
+    b)  `"logical"`
+    c)  `"TRUE"`
+    d)  `"vector"`
 
-``` r
-trasladar = function(x, a) {
-  resultado = x + a
-  return(resultado)
- }
-```
+::: notes
+Respuestas: 1-b, 2-c, 3-b, 4-b. Discutir las trampas: `for` es palabra reservada; `class` de un double devuelve `"numeric"` (no `"double"`), aunque `typeof` sí los distingue.
+:::
 
-``` r
-trasladar(1, 5)
-```
+## Apéndice: `=` vs `<-`
 
-``` r
-trasladar(1:10, 5)
-```
-
-``` r
-trasladar("hola", 5)
-```
-
-## Funciones
-
-Los argumentos se ordenan por posición o por nombre
+Para asignar en R hay dos operadores: `<-` y `=`. La mayoría del tiempo son intercambiables.
 
 ``` r
-trasladar(a=5, x=1)
+x <- 10
+y =  20
 ```
 
-Podemos definir valores por defecto
+La diferencia aparece cuando hay una llamada a función de por medio.
 
 ``` r
-trasladar = function(x, a=1) {
-  resultado = x + a
-  return(resultado)
- }
+sum(x = 1:10)    # x es el nombre del argumento, no se asigna nada
+sum(x <- 1:10)   # x queda asignada en el environment global
 ```
 
-``` r
-trasladar(5)
-```
+Convención que vamos a seguir:
 
+-   Usar `<-` para **asignar** variables.
+-   Usar `=` solo para **pasar argumentos nombrados** a una función.
+
+Es una distinción menor, pero ayuda a leer el código sin ambigüedad.
