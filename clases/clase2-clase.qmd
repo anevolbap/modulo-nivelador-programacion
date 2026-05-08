@@ -1,0 +1,341 @@
+---
+title: "Curso Nivelador - Programación en R"
+subtitle: "Clase 2: condicionales y bucles"
+format:
+  revealjs:
+    slide-number: true
+    incremental: false
+editor: visual
+---
+
+## Decidir y repetir
+
+Hasta ahora supimos guardar valores y aplicar funciones. Pero los programas hacían siempre **lo mismo**.
+
+Hoy le damos al programa dos capacidades nuevas:
+
+-   **decidir**: ejecutar (o no) un bloque según una condición. Condicionales: `if`, `else`.
+-   **repetir**: ejecutar un bloque varias veces. Bucles: `for`, `while`.
+
+Volviendo a la analogía: en un idioma decimos "**si** llueve, llevo paraguas" (condicional) o "leí **cada** página del libro" (bucle). Ya tenemos los sustantivos y los verbos, ahora agregamos las conjunciones.
+
+::: notes
+~5 min. Conectar con clase 1: variables (sustantivos) + funciones (verbos) + ahora condicionales y bucles.
+:::
+
+## `if`: ejecutar solo si
+
+``` r
+if (condicion) {
+  # se ejecuta solo si condicion es TRUE
+}
+```
+
+Ejemplo:
+
+``` r
+nota <- 7
+
+if (nota >= 6) {
+  print("aprobado")
+}
+```
+
+`condicion` es una **expresión que evalúa a `TRUE` o `FALSE`** (un `logical`).
+
+## `if` / `else`: dos caminos
+
+``` r
+if (condicion) {
+  # rama TRUE
+} else {
+  # rama FALSE
+}
+```
+
+``` r
+nota <- 4
+
+if (nota >= 6) {
+  print("aprobado")
+} else {
+  print("desaprobado")
+}
+```
+
+## `if` / `else if` / `else`: varios casos
+
+``` r
+if (x > 0) {
+  print("positivo")
+} else if (x < 0) {
+  print("negativo")
+} else {
+  print("cero")
+}
+```
+
+Las condiciones se evalúan **de arriba hacia abajo** y se ejecuta la primera que sea verdadera. Si ninguna lo es, se ejecuta el `else` (si existe).
+
+## Operadores en condiciones
+
+Comparación: `==`, `!=`, `<`, `<=`, `>`, `>=`.
+
+Lógicos: `&` (y), `|` (o), `!` (negación).
+
+``` r
+edad <- 20
+
+if (edad >= 18 & edad < 65) {
+  print("adulto en edad activa")
+}
+```
+
+::: notes
+Recordar que `==` es comparación, `=` es asignación. Confundirlos es el error tipográfico más común en R.
+:::
+
+## Trampa frecuente: `==` vs `=`
+
+``` r
+if (x == 5) ...   # OK: compara x con 5
+if (x = 5) ...    # ERROR de sintaxis
+```
+
+`==` pregunta. `=` declara. Si la palabra "*if*" no funciona como esperaban, casi siempre es esto.
+
+## `ifelse()`: condicional vectorial
+
+Cuando queremos aplicar el mismo `if/else` a cada elemento de un vector, hay un atajo:
+
+``` r
+notas   <- c(7, 4, 9, 5, 6)
+estados <- ifelse(notas >= 6, "aprobado", "desaprobado")
+estados
+# [1] "aprobado"    "desaprobado" "aprobado"    "desaprobado" "aprobado"
+```
+
+`ifelse(test, valor_si_TRUE, valor_si_FALSE)` recorre el vector y elige.
+
+## ¿Qué es un bucle?
+
+Un bucle **ejecuta el mismo bloque de código varias veces**. Sirve, entre otras cosas, para
+
+-   aplicar una transformación a cada elemento de un vector;
+-   repetir un experimento aleatorio muchas veces;
+-   iterar hasta que un proceso converja (bisección, descenso de gradiente).
+
+## `for`: sintaxis
+
+``` r
+for (variable in coleccion) {
+  # se ejecuta una vez por cada elemento de coleccion
+}
+```
+
+En cada iteración, `variable` toma un valor distinto de `coleccion`.
+
+``` r
+for (i in 1:5) {
+  print(i)
+}
+# 1 2 3 4 5
+```
+
+## `for`: recorrer un vector
+
+Por **elemento**:
+
+``` r
+nombres <- c("Ana", "Beto", "Cami")
+for (n in nombres) {
+  print(paste("Hola,", n))
+}
+```
+
+Por **índice** (cuando necesitamos saber la posición):
+
+``` r
+for (i in seq_along(nombres)) {
+  print(paste(i, nombres[i]))
+}
+```
+
+Tip: `seq_along(x)` es más seguro que `1:length(x)`. Si `x` tiene largo cero, `1:length(x)` devuelve `c(1, 0)` y el bucle se ejecuta dos veces sin sentido.
+
+## `for`: acumular en un vector
+
+Patrón estándar: **pre-asignar** el vector y rellenarlo.
+
+``` r
+x <- 1:10
+y <- vector("numeric", length(x))   # pre-asignar
+
+for (i in seq_along(x)) {
+  y[i] <- x[i]^2
+}
+```
+
+**Evitar** crecer el vector dentro del bucle con `y <- c(y, x[i]^2)`: cada paso copia todo, y se vuelve lento muy rápido.
+
+## `for` anidado
+
+Un bucle dentro de otro. Útil para recorrer estructuras 2D.
+
+``` r
+for (i in 1:3) {
+  for (j in 1:3) {
+    print(paste(i, j))
+  }
+}
+```
+
+## `while`: sintaxis
+
+``` r
+while (condicion) {
+  # se ejecuta mientras condicion sea TRUE
+}
+```
+
+Ejemplo: duplicar hasta superar 1000.
+
+``` r
+x <- 1
+
+while (x < 1000) {
+  x <- x * 2
+}
+x   # 1024
+```
+
+A diferencia del `for`, no sabemos de antemano cuántas iteraciones va a hacer.
+
+## El peligro del bucle infinito
+
+La condición del `while` **tiene que poder volverse `FALSE`** en algún momento. Si no, el programa no termina.
+
+``` r
+i <- 1
+
+while (i > 0) {
+  print(i)
+  # i <- i - 1   # FALTA esta linea
+}
+```
+
+En RStudio se corta con `Esc` o el botón rojo de stop en la consola.
+
+## ¿`for` o `while`?
+
+-   `for`: cuando sabemos **cuántas** iteraciones (recorrer un vector, repetir `N` veces).
+-   `while`: cuando NO sabemos cuántas, sino que iteramos **hasta** que algo pase (convergencia, búsqueda, condición de corte).
+
+En la duda, `for` es más seguro porque siempre termina.
+
+## `break` y `next`
+
+-   `break`: salir del bucle inmediatamente.
+-   `next`: saltear la iteración actual y seguir con la próxima.
+
+``` r
+for (i in 1:10) {
+  if (i == 5) break          # corta el bucle
+  if (i %% 2 == 0) next      # saltea pares
+  print(i)
+}
+# 1 3
+```
+
+## Ejercicios en clase
+
+Hacé los siguientes en un script de RStudio.
+
+1.  **FizzBuzz**: para los números de 1 a 30, imprimí `"Fizz"` si es múltiplo de 3, `"Buzz"` si es múltiplo de 5, `"FizzBuzz"` si es múltiplo de ambos, y el número en otro caso. Pista: `i %% 3 == 0`.
+
+2.  Escribí una función `factorial(n)` que calcule `n!` usando un `for`. (Empezá con `resultado <- 1` y multiplicá por cada `i` de 1 a `n`).
+
+3.  Dado el vector `x <- c(4, -1, 7, 0, -3, 2)`, contá cuántos elementos son **estrictamente positivos** usando un `for` y un `if`.
+
+4.  Encontrá el primer múltiplo de 7 que sea mayor que 100 usando un `while`. Empezá en 100 y avanzá de 1 en 1.
+
+5.  Escribí una función `clasificar_nota(nota)` que devuelva:
+    -   `"aprobado"` si `nota >= 6`,
+    -   `"recuperatorio"` si `4 <= nota < 6`,
+    -   `"desaprobado"` si `nota < 4`.
+
+::: notes
+~15 min. Recorrer mesas. Si terminan rápido: re-escribir el ejercicio 3 sin `for`, usando `sum(x > 0)`.
+:::
+
+## Comprensión: ¿quedó claro?
+
+Marcá la opción correcta.
+
+1.  ¿Qué imprime este código?
+
+    ``` r
+    x <- 5
+    if (x > 0) print("positivo") else print("no positivo")
+    ```
+
+    a)  `"positivo"`
+    b)  `"no positivo"`
+    c)  da error
+    d)  no imprime nada
+
+2.  ¿Cuántos números **imprime** este bucle?
+
+    ``` r
+    for (i in 1:10) {
+      if (i == 5) break
+      print(i)
+    }
+    ```
+
+    a)  4
+    b)  5
+    c)  9
+    d)  10
+
+3.  ¿Cuál estructura es más adecuada cuando NO sabés cuántas iteraciones hay que hacer, sino que repetís hasta que ocurra algo?
+
+    a)  `for`
+    b)  `while`
+    c)  `if`
+    d)  `replicate`
+
+4.  ¿Qué problema tiene este código?
+
+    ``` r
+    i <- 1
+    while (i < 10) {
+      print(i)
+    }
+    ```
+
+    a)  Sintaxis inválida.
+    b)  Imprime 9 veces y termina.
+    c)  Es un bucle infinito porque `i` nunca cambia.
+    d)  Imprime una sola vez.
+
+::: notes
+Respuestas: 1-a, 2-a (imprime 1..4 y luego entra en la iteración i=5 donde rompe sin imprimir), 3-b, 4-c.
+:::
+
+## Apéndice: alternativas a `for`
+
+R tiene formas más cortas de aplicar una función a cada elemento.
+
+``` r
+# repetir N veces una expresión
+replicate(5, sample(1:6, 1))
+
+# aplicar una función a cada elemento, devolver lista
+lapply(c(1, 2, 3), function(x) x^2)
+
+# aplicar una función a cada elemento, devolver vector si se puede
+sapply(c(1, 2, 3), function(x) x^2)
+```
+
+No reemplazan al `for`, pero suelen leerse mejor cuando la tarea es "para cada elemento, hacer X". Las vamos a usar más adelante.

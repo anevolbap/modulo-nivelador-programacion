@@ -1,9 +1,16 @@
 ---
-title: "Bucles: `for` y `while`"
+title: "Bucles: `for` y `while` (DEPRECATED)"
 subtitle: "Curso Nivelador - Programación"
 format: revealjs
 editor: visual
 ---
+
+<!--
+DEPRECATED: este material fue reemplazado por clase2-clase.qmd, que cubre
+condicionales y bucles juntos y agrega ejercicios y MCQ. Se mantiene como
+referencia hasta confirmar que la nueva version funciona en clase.
+-->
+
 
 ## ¿Qué es un bucle?
 
