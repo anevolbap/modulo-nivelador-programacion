@@ -38,7 +38,7 @@ Bikeshare
 
 10. Utilice el comando `read.table` o `read.csv` para:
 
-    -   leer el archivo desde el siguiente [link](https://github.com/anevolbap/modulo-nivelador-programacion/blob/master/bikeshare.csv) (vea el argumento `url`)
+    -   leer el archivo desde el siguiente [link](https://github.com/anevolbap/modulo-nivelador-programacion/blob/main/datos/bikeshare.csv) (vea el argumento `url`)
 
     -   leer el archivo desde el disco (descargue el archivo del dataset primero)
 
