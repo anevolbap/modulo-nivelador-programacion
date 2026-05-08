@@ -1,6 +1,6 @@
 # Módulo nivelador de programación
 
-Material del módulo nivelador de programación en R para la Maestría en
+Material (incompleto) del módulo nivelador de programación en R para la Maestría en
 Estadística Matemática (UBA), edición 2022. El curso cubre las bases del
 lenguaje pensadas para alumnos sin experiencia previa: tipos, vectores,
 funciones, control de flujo, dataframes y un par de aplicaciones numéricas
