@@ -265,7 +265,7 @@ Reglas:
 -   Si una decisión no es obvia, escribí en una línea **por qué**.
 -   Borrar comentarios desactualizados es tan importante como escribirlos.
 
-## Ejercicios en clase
+## Ejercicios en clase {.scrollable}
 
 Vamos a usar `airquality` (calidad del aire en NY, mayo a septiembre 1973). Ya viene con R.
 
@@ -295,7 +295,7 @@ head(airquality)
 ~15 min. `replicate` y `sample` son funciones importadas: las usamos como bloque de encastre, no las implementamos. Si terminan rápido: comparar la desviación estándar de las medias bootstrap con `sd(airquality$Wind) / sqrt(length(airquality$Wind))`.
 :::
 
-## Comprensión: ¿quedó claro?
+## Comprensión: ¿quedó claro? {.scrollable}
 
 Marcá la opción correcta.
 
@@ -346,9 +346,12 @@ Marcá la opción correcta.
     c)  Es un bucle infinito porque `i` nunca cambia.
     d)  Imprime una sola vez.
 
-::: notes
-Respuestas: 1-a, 2-a (imprime 1..4 y luego entra en la iteración i=5 donde rompe sin imprimir), 3-b, 4-c.
-:::
+## Respuestas {.scrollable}
+
+1.  **a)** `"positivo"`. La condición `5 > 0` es `TRUE`, así que se ejecuta la rama `if`.
+2.  **a)** Cuatro: imprime `1, 2, 3, 4`. En la iteración con `i = 5` ejecuta `break` antes de llegar a `print`.
+3.  **b)** `while`. `for` requiere conocer la cantidad de iteraciones; `while` itera hasta que la condición se vuelve falsa.
+4.  **c)** Bucle infinito. `i` nunca se modifica adentro, así que `i < 10` es siempre `TRUE`.
 
 ## Apéndice: alternativas a `for`
 

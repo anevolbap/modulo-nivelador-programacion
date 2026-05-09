@@ -153,7 +153,7 @@ prop.table(table(mtcars$cyl))   # proporciones
 
 `aggregate` devuelve un `data.frame`, ideal para encadenar con un gráfico.
 
-## Un EDA mínimo en cuatro pasos
+## Un EDA mínimo en cuatro pasos {.scrollable}
 
 Ante un dataset nuevo:
 
@@ -193,7 +193,7 @@ stopifnot(abs(sd(normalizar(c(1, 2, 3))) - 1)    < 1e-10)   # sd debe ser 1
 
 Un test no garantiza que la función esté bien siempre, pero garantiza que está bien para los casos que probamos.
 
-## Ejercicios en clase
+## Ejercicios en clase {.scrollable}
 
 Trabajamos sobre `airquality` (calidad del aire en NY) y `mtcars`.
 
@@ -221,7 +221,7 @@ Trabajamos sobre `airquality` (calidad del aire en NY) y `mtcars`.
 ~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975))).
 :::
 
-## Comprensión: ¿quedó claro?
+## Comprensión: ¿quedó claro? {.scrollable}
 
 1.  ¿Qué función usás para comparar la **distribución** de una variable numérica entre varios grupos?
 
@@ -251,9 +251,12 @@ Trabajamos sobre `airquality` (calidad del aire en NY) y `mtcars`.
     c)  Para imprimir un mensaje de advertencia.
     d)  Para suprimir errores.
 
-::: notes
-Respuestas: 1-c, 2-c, 3-b, 4-b.
-:::
+## Respuestas
+
+1.  **c)** `boxplot`. `hist` es para una sola variable; `boxplot(y ~ grupo)` compara la distribución de `y` entre niveles de `grupo`.
+2.  **c)** Calcula la media ignorando los `NA`. Sin `na.rm = TRUE`, devuelve `NA` si hay aunque sea un faltante.
+3.  **b)** `abline(lm(...))`. `abline` agrega una recta sobre un gráfico ya abierto.
+4.  **b)** Chequea una condición y corta con error si es falsa. Sirve como test rápido y como validación de argumentos.
 
 ## Apéndice: gramática mínima de `ggplot2`
 

@@ -74,14 +74,14 @@ Mostrar en vivo cómo aparece la variable en el panel Environment.
 
 Los **tipos atómicos** son los ladrillos básicos. Hay cuatro que vamos a usar todo el tiempo.
 
-| Tipo        | Para qué sirve     | Ejemplo         |
-|-------------|--------------------|-----------------|
-| `logical`   | verdadero o falso  | `TRUE`, `FALSE` |
-| `double`    | números reales     | `3.14`, `-2`    |
-| `integer`   | números enteros    | `5L`, `0L`      |
-| `character` | texto              | `"hola"`, `'a'` |
+| Tipo        | Para qué sirve    | Ejemplo  | `class()`     |
+|-------------|-------------------|----------|---------------|
+| `logical`   | verdadero o falso | `TRUE`   | `"logical"`   |
+| `double`    | números reales    | `3.14`   | `"numeric"`   |
+| `integer`   | números enteros   | `5L`     | `"integer"`   |
+| `character` | texto             | `"hola"` | `"character"` |
 
-`class(x)` nos dice de qué tipo es `x`. (Para `double`, `class` devuelve `"numeric"`; `typeof` devuelve `"double"`).
+`class(x)` nos dice qué tipo es `x`. Detalle a recordar: para un `double`, `class` devuelve `"numeric"`, no `"double"`.
 
 ## logical
 
@@ -89,7 +89,7 @@ Toma uno de dos valores: `TRUE` o `FALSE`. Aparecen como resultado de comparacio
 
 ``` r
 10 == 20       # FALSE
-sin(pi/2) == 1 # TRUE
+1 + 1 == 2     # TRUE
 class(TRUE)    # "logical"
 ```
 
@@ -98,24 +98,26 @@ Operadores:
 -   lógicos: `&` (y), `|` (o), `!` (no);
 -   de comparación: `==` (igual), `!=` (distinto), `<`, `<=`, `>`, `>=`.
 
-## double y integer
+## `double`, `integer` y `numeric`
 
-`double` es el tipo numérico por defecto, sirve para reales.
+R distingue dos tipos numéricos por dentro:
 
-``` r
-radio <- 10
-area  <- pi * radio^2
-class(area)        # "numeric"
-```
+-   `double`: números reales (`3.14`, `-2`). Es el por defecto.
+-   `integer`: enteros. Para que R los trate como tales hay que poner `L` al final (`40L`).
 
-`integer` se usa para enteros. Para que R lo trate como entero hay que poner una `L` al final.
+Pero ambos comparten una **clase paraguas**: `numeric`.
 
 ``` r
-class(40)    # "numeric"
-class(40L)   # "integer"
+class(40)        # "numeric"
+class(40L)       # "integer"
+typeof(40)       # "double"
+typeof(40L)      # "integer"
+
+is.numeric(40)   # TRUE
+is.numeric(40L)  # TRUE   (integer es subconjunto de numeric)
 ```
 
-En la práctica, salvo que importe la performance o la interoperación con otros sistemas, **alcanza con `double`**.
+En la práctica, salvo que importe la performance o la interoperación con otros sistemas, **alcanza con trabajar en `double`**.
 
 ## character
 
@@ -220,7 +222,7 @@ trasladar(1, 5)      # 6
 trasladar(1:10, 5)   # 6 7 8 ... 15
 ```
 
-## Argumentos y valores por defecto
+## Argumentos y valores por defecto {.scrollable}
 
 Argumentos pueden pasarse por **posición** o por **nombre**:
 
@@ -277,7 +279,7 @@ Reglas prácticas:
 -   Singular para escalares, plural para vectores: `edad` vs `edades`.
 -   Evitar nombres que pisan funciones de R: `c`, `t`, `T`, `F`, `data`, `df`, `mean`.
 
-## Ejercicios en clase
+## Ejercicios en clase {.scrollable}
 
 Cargá `mtcars` (ya viene con R) y trabajá sobre ese `data.frame`.
 
@@ -306,7 +308,7 @@ head(mtcars)   # mira las primeras filas
 ~15 min. Pasar por las mesas. Si terminan rápido: comparar el consumo medio entre autos manuales (`am == 1`) y automáticos.
 :::
 
-## Comprensión: ¿quedó claro?
+## Comprensión: ¿quedó claro? {.scrollable}
 
 Marcá la opción correcta.
 
@@ -334,9 +336,12 @@ Marcá la opción correcta.
     c)  `"TRUE"`
     d)  `"vector"`
 
-::: notes
-Respuestas: 1-b, 2-c, 3-b, 4-b. Discutir las trampas: `for` es palabra reservada; `class` de un double devuelve `"numeric"` (no `"double"`), aunque `typeof` sí los distingue.
-:::
+## Respuestas
+
+1.  **b)** `mi.variable`. El punto está permitido en nombres en R. `2x` empieza con número, `mi variable` tiene un espacio, `for` es palabra reservada.
+2.  **c)** `"numeric"`. R guarda el valor como `double` (lo confirma `typeof`), pero `class` devuelve `"numeric"`, la clase paraguas para números.
+3.  **b)** Las columnas de un `data.frame` tienen que tener todas la misma longitud. Una lista no.
+4.  **b)** `"logical"`. La operación entre booleanos devuelve un booleano.
 
 ## Apéndice: `=` vs `<-`
 

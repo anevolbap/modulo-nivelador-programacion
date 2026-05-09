@@ -186,7 +186,7 @@ Y cinco buenas prácticas:
 
 Esto es la base. Lo que sigue (`dplyr`, `ggplot2`, `tidyr`, modelos) son herramientas, no conceptos nuevos.
 
-## Ejercicios en clase
+## Ejercicios en clase {.scrollable}
 
 1.  **Función de orden superior**: escribí `iterar(f, x0, n)` que aplique `f` `n` veces a `x0`. Probala con `f = function(x) (x + 2/x) / 2`, `x0 = 1`, `n = 10`. ¿A qué número converge?
 
@@ -204,7 +204,7 @@ Esto es la base. Lo que sigue (`dplyr`, `ggplot2`, `tidyr`, modelos) son herrami
 ~15 min. Si terminan rápido: comparar el IC bootstrap del ejercicio 3 con el clásico (asumiendo normalidad). Suele ser muy parecido cuando n es grande.
 :::
 
-## Comprensión: ¿quedó claro?
+## Comprensión: ¿quedó claro? {.scrollable}
 
 1.  ¿Qué hace `replicate(1000, expr)`?
 
@@ -234,11 +234,14 @@ Esto es la base. Lo que sigue (`dplyr`, `ggplot2`, `tidyr`, modelos) son herrami
     c)  Explica por qué hicimos el cambio.
     d)  No importa, nadie lo lee.
 
-::: notes
-Respuestas: 1-b, 2-b, 3-b, 4-c.
-:::
+## Respuestas
 
-## Apéndice: validar argumentos con `stopifnot`
+1.  **b)** Ejecuta la expresión 1000 veces y devuelve los 1000 resultados. Es la herramienta básica de Monte Carlo.
+2.  **b)** `f(a) * f(b) < 0`. Los signos distintos garantizan, por continuidad, que existe una raíz en `[a, b]`.
+3.  **b)** Re-muestrear con reemplazo desde la propia muestra. La idea es usar la muestra como aproximación de la población.
+4.  **c)** Explica el porqué. El qué ya lo cuenta el diff; el porqué es lo que se pierde si no se escribe.
+
+## Apéndice: validar argumentos con `stopifnot` {.scrollable}
 
 Una función robusta valida sus entradas antes de empezar.
 

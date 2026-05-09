@@ -297,7 +297,7 @@ graficar_resumen  <- function(resumen)        { ... }
 
 Si cada pieza es chica, podés probarla por separado, reusarla en otro contexto y reemplazarla sin romper el resto.
 
-## Ejercicios en clase
+## Ejercicios en clase {.scrollable}
 
 Vamos a usar `iris` (medidas de flores) y `mtcars` (autos), los dos vienen con R.
 
@@ -325,7 +325,7 @@ head(iris)
 ~15 min. `colMeans`, `aggregate`, `table`, `sort` son funciones importadas: bloques de encastre, no las implementan. Si terminan rápido: graficar un boxplot de `Sepal.Length ~ Species` (ya vamos a verlo en clase 4).
 :::
 
-## Comprensión: ¿quedó claro?
+## Comprensión: ¿quedó claro? {.scrollable}
 
 Marcá la opción correcta.
 
@@ -357,9 +357,12 @@ Marcá la opción correcta.
     c)  Siempre, `factor` es más rápido.
     d)  Nunca, `factor` está deprecado.
 
-::: notes
-Respuestas: 1-b, 2-c (por defecto R "drop"ea la dimensión 1 y devuelve vector), 3-b, 4-b.
-:::
+## Respuestas
+
+1.  **b)** `[1]` devuelve una **sub-lista** de un elemento, `[[1]]` devuelve el **contenido**. Atajo mental: `[[ ]]` saca el contenido, `[ ]` saca un sub-cajón.
+2.  **c)** Vector de 2 elementos. Por defecto R "tira" la dimensión cuando queda una sola fila o columna (`drop = TRUE`).
+3.  **b)** `read.csv`. `load` es para `.RData`, `library` carga paquetes.
+4.  **b)** Para variables categóricas con un conjunto fijo de valores. Es lo que esperan los modelos de R y deja claro que no son texto libre.
 
 ## Apéndice: una lista de `data.frame`s
 
