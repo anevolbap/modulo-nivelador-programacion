@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#contexto" id="toc-contexto" class="nav-link active" data-scroll-target="#contexto">Contexto</a></li>
   <li><a href="#ejercicio-1-lista-paciente" id="toc-ejercicio-1-lista-paciente" class="nav-link" data-scroll-target="#ejercicio-1-lista-paciente">Ejercicio 1: lista paciente</a></li>
-  <li><a href="#ejercicio-2-lista-de-pacientes" id="toc-ejercicio-2-lista-de-pacientes" class="nav-link" data-scroll-target="#ejercicio-2-lista-de-pacientes">Ejercicio 2: lista de pacientes</a></li>
+  <li><a href="#ejercicio-2-lista-de-pacientes-con-un-helper" id="toc-ejercicio-2-lista-de-pacientes-con-un-helper" class="nav-link" data-scroll-target="#ejercicio-2-lista-de-pacientes-con-un-helper">Ejercicio 2: lista de pacientes (con un helper)</a></li>
   <li><a href="#ejercicio-3-listas-anidadas" id="toc-ejercicio-3-listas-anidadas" class="nav-link" data-scroll-target="#ejercicio-3-listas-anidadas">Ejercicio 3: listas anidadas</a></li>
   <li><a href="#ejercicio-4-matriz-desde-airquality" id="toc-ejercicio-4-matriz-desde-airquality" class="nav-link" data-scroll-target="#ejercicio-4-matriz-desde-airquality">Ejercicio 4: matriz desde <code>airquality</code></a></li>
   <li><a href="#ejercicio-5-operaciones-con-matrices" id="toc-ejercicio-5-operaciones-con-matrices" class="nav-link" data-scroll-target="#ejercicio-5-operaciones-con-matrices">Ejercicio 5: operaciones con matrices</a></li>
@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ejercicio-15-is.numeric-para-identificar-columnas" id="toc-ejercicio-15-is.numeric-para-identificar-columnas" class="nav-link" data-scroll-target="#ejercicio-15-is.numeric-para-identificar-columnas">Ejercicio 15: <code>is.numeric</code> para identificar columnas</a></li>
   <li><a href="#ejercicio-16-la-columna-con-mayor-amplitud" id="toc-ejercicio-16-la-columna-con-mayor-amplitud" class="nav-link" data-scroll-target="#ejercicio-16-la-columna-con-mayor-amplitud">Ejercicio 16: la columna con mayor amplitud</a></li>
   <li><a href="#ejercicio-17-combinar-listas-y-data.frame" id="toc-ejercicio-17-combinar-listas-y-data.frame" class="nav-link" data-scroll-target="#ejercicio-17-combinar-listas-y-data.frame">Ejercicio 17: combinar listas y <code>data.frame</code></a></li>
-  <li><a href="#ejercicio-18-do.callrbind-...-caja-negra" id="toc-ejercicio-18-do.callrbind-...-caja-negra" class="nav-link" data-scroll-target="#ejercicio-18-do.callrbind-...-caja-negra">Ejercicio 18: <code>do.call(rbind, ...)</code> (caja negra)</a></li>
+  <li><a href="#ejercicio-18-combinar-data.frame-con-do.callrbind-..." id="toc-ejercicio-18-combinar-data.frame-con-do.callrbind-..." class="nav-link" data-scroll-target="#ejercicio-18-combinar-data.frame-con-do.callrbind-...">Ejercicio 18: combinar <code>data.frame</code> con <code>do.call(rbind, ...)</code></a></li>
   <li><a href="#ejercicio-19-medias_por_grupo-sobre-bikeshare" id="toc-ejercicio-19-medias_por_grupo-sobre-bikeshare" class="nav-link" data-scroll-target="#ejercicio-19-medias_por_grupo-sobre-bikeshare">Ejercicio 19: <code>medias_por_grupo</code> sobre bikeshare</a></li>
   <li><a href="#ejercicio-20-una-función-una-responsabilidad" id="toc-ejercicio-20-una-función-una-responsabilidad" class="nav-link" data-scroll-target="#ejercicio-20-una-función-una-responsabilidad">Ejercicio 20: una función, una responsabilidad</a></li>
   </ul>
@@ -280,12 +280,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Reusá <code>clasificar_presion</code> (clase 2) para agregar un campo <code>presion_categoria</code> a la lista. Verificá.</p></li>
 </ol>
 </section>
-<section id="ejercicio-2-lista-de-pacientes" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-2-lista-de-pacientes">Ejercicio 2: lista de pacientes</h2>
+<section id="ejercicio-2-lista-de-pacientes-con-un-helper" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-lista-de-pacientes-con-un-helper">Ejercicio 2: lista de pacientes (con un helper)</h2>
 <ol type="a">
-<li><p>Creá una lista <code>pacientes</code> con tres pacientes (cada uno como en el ejercicio 1).</p></li>
-<li><p>Extraé las edades con <code>sapply(pacientes, function(p) p$edad)</code>. Calculá la edad media.</p></li>
-<li><p>Aplicá <code>clasificar_presion</code> a las presiones de todos los pacientes con <code>sapply</code>. Devolvé un vector de categorías.</p></li>
+<li><p>Cargá <code>auxiliares.R</code> y usá <code>pacientes &lt;- generar_pacientes(n = 10)</code> para obtener una lista de 10 pacientes ficticios. Mirá el código de <code>generar_pacientes</code> para entender qué hace.</p></li>
+<li><p>Extraé las edades de todos con <code>sapply(pacientes, function(p) p$edad)</code>. Calculá la edad media.</p></li>
+<li><p>Aplicá <code>clasificar_presion</code> (clase 2) a las presiones de todos los pacientes con <code>sapply</code>. Devolvé un vector de categorías y resumí con <code>table</code>.</p></li>
 </ol>
 </section>
 <section id="ejercicio-3-listas-anidadas" class="level2">
@@ -408,8 +408,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicá <code>colMeans</code> a cada uno con <code>lapply</code>. ¿Por qué <code>lapply</code> y no <code>sapply</code> aquí?</p></li>
 </ol>
 </section>
-<section id="ejercicio-18-do.callrbind-...-caja-negra" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-18-do.callrbind-...-caja-negra">Ejercicio 18: <code>do.call(rbind, ...)</code> (caja negra)</h2>
+<section id="ejercicio-18-combinar-data.frame-con-do.callrbind-..." class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-18-combinar-data.frame-con-do.callrbind-...">Ejercicio 18: combinar <code>data.frame</code> con <code>do.call(rbind, ...)</code></h2>
 <ol type="a">
 <li><p>Construí tres <code>data.frame</code> chiquitos con la misma estructura (mismas columnas).</p></li>
 <li><p>Combinálos verticalmente con <code>do.call(rbind, lista_de_dfs)</code>. Verificá <code>dim</code>.</p></li>

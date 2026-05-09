@@ -227,9 +227,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ejercicio-13-viajes-por-estación" id="toc-ejercicio-13-viajes-por-estación" class="nav-link" data-scroll-target="#ejercicio-13-viajes-por-estación">Ejercicio 13: viajes por estación</a></li>
   <li><a href="#ejercicio-14-el-ciclo-diario" id="toc-ejercicio-14-el-ciclo-diario" class="nav-link" data-scroll-target="#ejercicio-14-el-ciclo-diario">Ejercicio 14: el ciclo diario</a></li>
   <li><a href="#ejercicio-15-temperatura-y-uso" id="toc-ejercicio-15-temperatura-y-uso" class="nav-link" data-scroll-target="#ejercicio-15-temperatura-y-uso">Ejercicio 15: temperatura y uso</a></li>
-  <li><a href="#ejercicio-16-dos-variables-a-la-vez" id="toc-ejercicio-16-dos-variables-a-la-vez" class="nav-link" data-scroll-target="#ejercicio-16-dos-variables-a-la-vez">Ejercicio 16: dos variables a la vez</a></li>
+  <li><a href="#ejercicio-16-heatmap-por-día-y-hora-con-un-helper" id="toc-ejercicio-16-heatmap-por-día-y-hora-con-un-helper" class="nav-link" data-scroll-target="#ejercicio-16-heatmap-por-día-y-hora-con-un-helper">Ejercicio 16: heatmap por día y hora (con un helper)</a></li>
   <li><a href="#ejercicio-17-bootstrap-con-bikeshare" id="toc-ejercicio-17-bootstrap-con-bikeshare" class="nav-link" data-scroll-target="#ejercicio-17-bootstrap-con-bikeshare">Ejercicio 17: bootstrap con bikeshare</a></li>
-  <li><a href="#ejercicio-18-regresión-simple-caja-negra" id="toc-ejercicio-18-regresión-simple-caja-negra" class="nav-link" data-scroll-target="#ejercicio-18-regresión-simple-caja-negra">Ejercicio 18: regresión simple (caja negra)</a></li>
+  <li><a href="#ejercicio-18-regresión-lineal-múltiple" id="toc-ejercicio-18-regresión-lineal-múltiple" class="nav-link" data-scroll-target="#ejercicio-18-regresión-lineal-múltiple">Ejercicio 18: regresión lineal múltiple</a></li>
   <li><a href="#ejercicio-19-eda_minimo-extendido" id="toc-ejercicio-19-eda_minimo-extendido" class="nav-link" data-scroll-target="#ejercicio-19-eda_minimo-extendido">Ejercicio 19: <code>eda_minimo</code> extendido</a></li>
   <li><a href="#ejercicio-20-probar-antes-de-creer" id="toc-ejercicio-20-probar-antes-de-creer" class="nav-link" data-scroll-target="#ejercicio-20-probar-antes-de-creer">Ejercicio 20: probar antes de creer</a></li>
   </ul>
@@ -290,7 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="ejercicio-3-scatter-con-regresión-lineal">Ejercicio 3: scatter con regresión lineal</h2>
 <ol type="a">
 <li><p>Scatter de <code>mpg ~ hp</code> sobre <code>mtcars</code> con <code>pch = 19, col = "gray60"</code>.</p></li>
-<li><p>Agregá la recta de regresión: <code>abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)</code>. <code>lm</code> es una <strong>caja negra</strong> por ahora.</p></li>
+<li><p>Agregá la recta de regresión: <code>abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)</code>. Para entender <code>lm</code> con detalle, ver <code>?lm</code>; por ahora alcanza con saber que ajusta una recta por mínimos cuadrados.</p></li>
 <li><p>Agregá una línea horizontal en la media de <code>mpg</code> con <code>abline(h = mean(mtcars$mpg), lty = 2)</code> y una leyenda con <code>legend("topright", legend = c(...), col = c(...), lty = c(1, 2))</code>.</p></li>
 </ol>
 </section>
@@ -315,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Reusá <code>medias_por_grupo</code> (clase 3): media de <code>Ozone</code> por <code>Month</code> en <code>airquality</code>.</p></li>
 <li><p>Graficá con <code>barplot(height = ..., names.arg = ..., main = "Ozono medio por mes")</code>.</p></li>
-<li><p>Agregá barras de error con <code>arrows(x0, y0, x1, y1, code = 3, angle = 90)</code>. Calculá los extremos como media ± <code>sd / sqrt(n)</code>. Pista: armá el resumen con <code>aggregate(... , FUN = function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))))</code>.</p></li>
+<li><p>Agregá barras de error usando la función auxiliar <code>barplot_con_error(x, grupo, ...)</code> (de <code>auxiliares.R</code>). Es un helper custom que calcula media y error estándar por grupo y los grafica de un solo viaje. Mirá su código si querés ver cómo se construye con <code>aggregate</code> + <code>arrows</code>.</p></li>
 </ol>
 </section>
 <section id="ejercicio-7-varios-gráficos-con-parmfrow" class="level2">
@@ -387,15 +387,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Scatter de <code>bikers ~ temp</code> sobre <code>bicis</code> con <code>pch = 16, col = rgb(0, 0, 0, 0.05)</code>. ¿Por qué <code>alpha = 0.05</code>?</p></li>
 <li><p>Agregá la recta de regresión <code>abline(lm(bikers ~ temp, data = bicis), col = "red", lwd = 2)</code>.</p></li>
-<li><p>Calculá <code>cor(bicis$bikers, bicis$temp)</code> (caja negra). Interpretá el signo y la magnitud.</p></li>
+<li><p>Calculá <code>cor(bicis$bikers, bicis$temp)</code>. Interpretá el signo y la magnitud (entre -1 y 1).</p></li>
 </ol>
 </section>
-<section id="ejercicio-16-dos-variables-a-la-vez" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-16-dos-variables-a-la-vez">Ejercicio 16: dos variables a la vez</h2>
+<section id="ejercicio-16-heatmap-por-día-y-hora-con-un-helper" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-16-heatmap-por-día-y-hora-con-un-helper">Ejercicio 16: heatmap por día y hora (con un helper)</h2>
 <ol type="a">
-<li><p>Calculá la media de <code>bikers</code> agrupando por <code>weekday</code> y <code>hr</code> con <code>aggregate(bikers ~ weekday + hr, data = bicis, mean)</code>.</p></li>
-<li><p>Convertí el resultado a una matriz con <code>xtabs(media ~ weekday + hr, data = ...)</code>.</p></li>
-<li><p>Graficala con <code>image(t(matriz_xtabs))</code> (heatmap básico). Identificá los picos visualmente.</p></li>
+<li><p>Usá la función auxiliar <code>heatmap_grupo(x, fila, columna, ...)</code> (de <code>auxiliares.R</code>) para graficar la media de <code>bicis$bikers</code> por día de la semana y hora del día. Mirá su código para entender cómo combina <code>aggregate</code>, <code>xtabs</code> e <code>image</code>.</p></li>
+<li><p>Identificá visualmente los picos. ¿Aparecen los dos picos del ciclo diario en días hábiles?</p></li>
+<li><p>Volvé a hacer el heatmap solo con días hábiles (<code>bicis[bicis$workingday, ]</code>) y solo con fines de semana. Compará.</p></li>
 </ol>
 </section>
 <section id="ejercicio-17-bootstrap-con-bikeshare" class="level2">
@@ -406,10 +406,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Graficá el histograma de las medias bootstrap usando la función auxiliar <code>graficar_bootstrap</code> (de <code>auxiliares.R</code>). Mirá su código antes de usarla.</p></li>
 </ol>
 </section>
-<section id="ejercicio-18-regresión-simple-caja-negra" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-18-regresión-simple-caja-negra">Ejercicio 18: regresión simple (caja negra)</h2>
+<section id="ejercicio-18-regresión-lineal-múltiple" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-18-regresión-lineal-múltiple">Ejercicio 18: regresión lineal múltiple</h2>
 <ol type="a">
-<li><p>Ajustá <code>mod &lt;- lm(bikers ~ temp + hum + windspeed, data = bicis)</code>. Mostrá <code>summary(mod)</code>. <code>lm</code> es una caja negra: lo importante es leer la salida.</p></li>
+<li><p>Ajustá <code>mod &lt;- lm(bikers ~ temp + hum + windspeed, data = bicis)</code>. Mostrá <code>summary(mod)</code>. Lo importante en este momento es leer la salida y entender qué reporta.</p></li>
 <li><p>Identificá los coeficientes estimados y su signo. ¿Cuál variable parece tener más peso?</p></li>
 <li><p>Calculá <code>confint(mod)</code> y <code>coef(mod)</code>. Compará intervalos con coeficientes.</p></li>
 </ol>

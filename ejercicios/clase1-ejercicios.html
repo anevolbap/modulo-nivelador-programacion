@@ -227,8 +227,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ejercicio-13-ordenar-por-consumo" id="toc-ejercicio-13-ordenar-por-consumo" class="nav-link" data-scroll-target="#ejercicio-13-ordenar-por-consumo">Ejercicio 13: ordenar por consumo</a></li>
   <li><a href="#ejercicio-14-aplicar-resumen_min-a-varias-columnas" id="toc-ejercicio-14-aplicar-resumen_min-a-varias-columnas" class="nav-link" data-scroll-target="#ejercicio-14-aplicar-resumen_min-a-varias-columnas">Ejercicio 14: aplicar <code>resumen_min</code> a varias columnas</a></li>
   <li><a href="#ejercicio-15-tu-propio-data.frame" id="toc-ejercicio-15-tu-propio-data.frame" class="nav-link" data-scroll-target="#ejercicio-15-tu-propio-data.frame">Ejercicio 15: tu propio <code>data.frame</code></a></li>
-  <li><a href="#ejercicio-16-quantile-caja-negra" id="toc-ejercicio-16-quantile-caja-negra" class="nav-link" data-scroll-target="#ejercicio-16-quantile-caja-negra">Ejercicio 16: <code>quantile</code> (caja negra)</a></li>
-  <li><a href="#ejercicio-17-correlación-con-cor-caja-negra" id="toc-ejercicio-17-correlación-con-cor-caja-negra" class="nav-link" data-scroll-target="#ejercicio-17-correlación-con-cor-caja-negra">Ejercicio 17: correlación con <code>cor</code> (caja negra)</a></li>
+  <li><a href="#ejercicio-16-percentiles-con-quantile" id="toc-ejercicio-16-percentiles-con-quantile" class="nav-link" data-scroll-target="#ejercicio-16-percentiles-con-quantile">Ejercicio 16: percentiles con <code>quantile</code></a></li>
+  <li><a href="#ejercicio-17-correlación-con-cor" id="toc-ejercicio-17-correlación-con-cor" class="nav-link" data-scroll-target="#ejercicio-17-correlación-con-cor">Ejercicio 17: correlación con <code>cor</code></a></li>
   <li><a href="#ejercicio-18-leer-la-documentación" id="toc-ejercicio-18-leer-la-documentación" class="nav-link" data-scroll-target="#ejercicio-18-leer-la-documentación">Ejercicio 18: leer la documentación</a></li>
   <li><a href="#ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos" id="toc-ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos" class="nav-link" data-scroll-target="#ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos">Ejercicio 19: la caja de herramientas sobre datos sintéticos</a></li>
   <li><a href="#ejercicio-20-buenos-nombres" id="toc-ejercicio-20-buenos-nombres" class="nav-link" data-scroll-target="#ejercicio-20-buenos-nombres">Ejercicio 20: buenos nombres</a></li>
@@ -263,7 +263,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Vamos a usar <code>mtcars</code>, un dataset de 32 autos con 11 variables (consumo, cilindros, potencia, peso, etc.). Viene con R, no requiere instalación.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>?mtcars</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: <code>etiquetar_auto</code>, <code>dif_promedio</code>, <code>dentro_rango</code>, <code>resumen_min</code>. Los ejercicios marcados como <strong>caja negra</strong> usan funciones del lenguaje sin pedir que las implementen.</p>
+<p>A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: <code>etiquetar_auto</code>, <code>dif_promedio</code>, <code>dentro_rango</code>, <code>resumen_min</code>.</p>
 </section>
 <section id="ejercicio-1-variables-y-tipos-atómicos" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-variables-y-tipos-atómicos">Ejercicio 1: variables y tipos atómicos</h2>
@@ -385,16 +385,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicá <code>summary()</code> al <code>data.frame</code> completo. Compará la salida con la de <code>resumen_min</code>.</p></li>
 </ol>
 </section>
-<section id="ejercicio-16-quantile-caja-negra" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-16-quantile-caja-negra">Ejercicio 16: <code>quantile</code> (caja negra)</h2>
+<section id="ejercicio-16-percentiles-con-quantile" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-16-percentiles-con-quantile">Ejercicio 16: percentiles con <code>quantile</code></h2>
 <ol type="a">
 <li><p>Aplicá <code>quantile(mtcars$mpg)</code> (sin argumentos extra). Identificá el percentil 25, la mediana y el percentil 75.</p></li>
 <li><p>Aplicá <code>quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9))</code>. ¿Qué representa cada valor?</p></li>
 <li><p>Definí <code>rango_intercuartilico(x)</code> usando <code>quantile</code>. Aplicalo a <code>mtcars$mpg</code> y compará con <code>IQR(mtcars$mpg)</code>.</p></li>
 </ol>
 </section>
-<section id="ejercicio-17-correlación-con-cor-caja-negra" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-17-correlación-con-cor-caja-negra">Ejercicio 17: correlación con <code>cor</code> (caja negra)</h2>
+<section id="ejercicio-17-correlación-con-cor" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-17-correlación-con-cor">Ejercicio 17: correlación con <code>cor</code></h2>
 <ol type="a">
 <li><p>Calculá <code>cor(mtcars$mpg, mtcars$hp)</code>. Interpretá el signo y la magnitud (<code>cor</code> toma valores entre <code>-1</code> y <code>1</code>).</p></li>
 <li><p>Calculá la matriz de correlaciones entre <code>mpg</code>, <code>hp</code>, <code>wt</code> y <code>cyl</code> con <code>cor(mtcars[, c("mpg", "hp", "wt", "cyl")])</code>.</p></li>
@@ -412,7 +412,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos">Ejercicio 19: la caja de herramientas sobre datos sintéticos</h2>
 <ol type="a">
-<li><p>Generá un vector <code>x</code> con <code>rnorm(100, mean = 50, sd = 10)</code> (100 valores normales). <code>rnorm</code> es una caja negra: ver <code>?rnorm</code>.</p></li>
+<li><p>Generá un vector <code>x</code> con <code>rnorm(100, mean = 50, sd = 10)</code> (100 valores normales). Para detalles, <code>?rnorm</code>.</p></li>
 <li><p>Aplicale <code>resumen_min</code>, <code>dif_promedio</code> y <code>dentro_rango</code> con <code>a = 40, b = 60</code>.</p></li>
 <li><p>¿Aproximadamente cuántos valores caen en <code>[40, 60]</code>? Compará con la regla 68-95-99.7 de la distribución normal (esperado: ~68%).</p></li>
 </ol>

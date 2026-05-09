@@ -264,6 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(airquality)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>?airquality</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>A las funciones de la clase 1 (<code>etiquetar_auto</code>, <code>dif_promedio</code>, <code>dentro_rango</code>, <code>resumen_min</code>) sumamos <code>clasificar_temp</code>, <code>contar_eventos</code>, <code>primer_indice_que_cumple</code>, <code>bootstrap_media</code> y <code>clasificar_presion</code>.</p>
+<p>Algunos ejercicios usan helpers de <code>auxiliares.R</code> (cargalo con <code>source("ejercicios/auxiliares.R")</code>). Esos helpers son <strong>piezas custom</strong> que usamos como caja negra para no extender el ejercicio: por ejemplo, <code>benchmark_funcion</code>. Para entenderlos podés leer su código en el archivo.</p>
 </section>
 <section id="ejercicio-1-explorar-el-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-1-explorar-el-dataset">Ejercicio 1: explorar el dataset</h2>
@@ -326,14 +327,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Calculá <code>Ozone^2 - Wind</code> para cada día con un <code>for</code>. Pre-asigná un vector <code>numeric(nrow(airquality))</code> y rellenalo. Cuidado con <code>NA</code> (dejalos como <code>NA</code>).</p></li>
 <li><p>Hacé lo mismo en una línea vectorizada: <code>airquality$Ozone^2 - airquality$Wind</code>. Verificá que coincide.</p></li>
-<li><p>Cronometrá ambas versiones con <code>system.time</code>. Cuantificá la diferencia.</p></li>
+<li><p>Compará el tiempo de las dos versiones con la función auxiliar <code>benchmark_funcion(fn, n_rep = 10)</code> (de <code>auxiliares.R</code>). Reportá la media y el desvío. ¿Cuántas veces más rápida es la versión vectorizada?</p></li>
 </ol>
 </section>
 <section id="ejercicio-9-for-anidado" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-for-anidado">Ejercicio 9: <code>for</code> anidado</h2>
 <ol type="a">
 <li><p>Construí una matriz <code>M</code> de 5x5 donde <code>M[i, j] = i * j</code> con dos <code>for</code> anidados.</p></li>
-<li><p>Verificá con <code>outer(1:5, 1:5, "*")</code> (caja negra). Coinciden.</p></li>
+<li><p>Verificá con <code>outer(1:5, 1:5, "*")</code>. Coinciden.</p></li>
 <li><p>Calculá la suma de los elementos pares de <code>M</code> recorriéndola con dos <code>for</code> anidados.</p></li>
 </ol>
 </section>
@@ -350,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Escribí un <code>while</code> que estime <code>sqrt(2)</code> con la iteración Babilónica: <code>x &lt;- (x + 2/x) / 2</code>, partiendo de <code>x = 1</code>. Detenete cuando <code>abs(x^2 - 2) &lt; 1e-10</code>.</p></li>
 <li><p>Imprimí el resultado y la cantidad de iteraciones.</p></li>
-<li><p>Compará con <code>sqrt(2)</code> (caja negra).</p></li>
+<li><p>Compará con <code>sqrt(2)</code>.</p></li>
 </ol>
 </section>
 <section id="ejercicio-12-break-para-detenerse-al-encontrar" class="level2">
@@ -398,7 +399,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Definí <code>bootstrap_media(x, n_rep = 1000)</code> con <code>replicate</code> y <code>sample</code>. Devolvé el vector de medias bootstrap.</p></li>
 <li><p>Aplicala a <code>airquality$Wind</code> (no tiene <code>NA</code>). La media de las medias debería estar cerca de <code>mean(airquality$Wind)</code>.</p></li>
-<li><p>Calculá un intervalo del 95% por percentiles: <code>quantile(boot, c(0.025, 0.975))</code>. Compará con <code>t.test(airquality$Wind)$conf.int</code> (caja negra).</p></li>
+<li><p>Calculá un intervalo del 95% por percentiles: <code>quantile(boot, c(0.025, 0.975))</code>. Compará con <code>t.test(airquality$Wind)$conf.int</code>.</p></li>
 </ol>
 </section>
 <section id="ejercicio-18-bootstrap-de-una-proporción" class="level2">
@@ -414,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="a">
 <li><p>Aplicá <code>clasificar_temp</code> (ejercicio 4) a <code>airquality$Temp</code> y guardá el resultado en una columna nueva del <code>data.frame</code>.</p></li>
 <li><p>Resumí con <code>table(airquality$temp_categoria)</code>. ¿Qué proporción de días son calurosos?</p></li>
-<li><p>Calculá la media de <code>Ozone</code> por categoría con <code>aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)</code> (caja negra para esta clase). Interpretá.</p></li>
+<li><p>Calculá la media de <code>Ozone</code> por categoría con <code>aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)</code>. Interpretá.</p></li>
 </ol>
 </section>
 <section id="ejercicio-20-comentar-el-porqué" class="level2">

@@ -226,8 +226,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#ejercicio-12-simulación-de-un-experimento" id="toc-ejercicio-12-simulación-de-un-experimento" class="nav-link" data-scroll-target="#ejercicio-12-simulación-de-un-experimento">Ejercicio 12: simulación de un experimento</a></li>
   <li><a href="#ejercicio-13-ley-de-los-grandes-números" id="toc-ejercicio-13-ley-de-los-grandes-números" class="nav-link" data-scroll-target="#ejercicio-13-ley-de-los-grandes-números">Ejercicio 13: ley de los grandes números</a></li>
   <li><a href="#ejercicio-14-monte-carlo-para-integración" id="toc-ejercicio-14-monte-carlo-para-integración" class="nav-link" data-scroll-target="#ejercicio-14-monte-carlo-para-integración">Ejercicio 14: Monte Carlo para integración</a></li>
-  <li><a href="#ejercicio-15-newton-raphson-caja-negra-parcial" id="toc-ejercicio-15-newton-raphson-caja-negra-parcial" class="nav-link" data-scroll-target="#ejercicio-15-newton-raphson-caja-negra-parcial">Ejercicio 15: Newton-Raphson (caja negra parcial)</a></li>
-  <li><a href="#ejercicio-16-t-test-como-caja-negra" id="toc-ejercicio-16-t-test-como-caja-negra" class="nav-link" data-scroll-target="#ejercicio-16-t-test-como-caja-negra">Ejercicio 16: t-test como caja negra</a></li>
+  <li><a href="#ejercicio-15-newton-raphson" id="toc-ejercicio-15-newton-raphson" class="nav-link" data-scroll-target="#ejercicio-15-newton-raphson">Ejercicio 15: Newton-Raphson</a></li>
+  <li><a href="#ejercicio-16-t.test-y-comparación-con-bootstrap" id="toc-ejercicio-16-t.test-y-comparación-con-bootstrap" class="nav-link" data-scroll-target="#ejercicio-16-t.test-y-comparación-con-bootstrap">Ejercicio 16: <code>t.test</code> y comparación con bootstrap</a></li>
   <li><a href="#ejercicio-17-pipeline-de-análisis" id="toc-ejercicio-17-pipeline-de-análisis" class="nav-link" data-scroll-target="#ejercicio-17-pipeline-de-análisis">Ejercicio 17: pipeline de análisis</a></li>
   <li><a href="#ejercicio-18-comparar-dos-pipelines" id="toc-ejercicio-18-comparar-dos-pipelines" class="nav-link" data-scroll-target="#ejercicio-18-comparar-dos-pipelines">Ejercicio 18: comparar dos pipelines</a></li>
   <li><a href="#ejercicio-19-tu-propio-mini-experimento" id="toc-ejercicio-19-tu-propio-mini-experimento" class="nav-link" data-scroll-target="#ejercicio-19-tu-propio-mini-experimento">Ejercicio 19: tu propio mini-experimento</a></li>
@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="ejercicio-3-monte-carlo-con-monedas">Ejercicio 3: Monte Carlo con monedas</h2>
 <ol type="a">
 <li><p>Estimá <code>P(al menos 6 caras de 10 monedas equilibradas)</code> con <code>replicate</code> + <code>sample(c(0, 1), 10, replace = TRUE)</code>. Usá 10000 réplicas.</p></li>
-<li><p>Compará con <code>1 - pbinom(5, 10, 0.5)</code> (caja negra: distribución binomial).</p></li>
+<li><p>Compará con <code>1 - pbinom(5, 10, 0.5)</code> (<code>pbinom</code> da la función de distribución acumulada de una binomial; <code>?pbinom</code> para detalles).</p></li>
 <li><p>Repetí la estimación variando <code>n_rep = c(100, 1000, 10000, 100000)</code>. Graficá la estimación contra <code>n_rep</code> y observá la convergencia.</p></li>
 </ol>
 </section>
@@ -317,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="ejercicio-7-bisección">Ejercicio 7: bisección</h2>
 <ol type="a">
 <li><p>Implementá <code>biseccion(f, a, b, tol = 1e-6)</code> con <code>while</code>. Validá la precondición con <code>stopifnot(f(a) * f(b) &lt; 0)</code>.</p></li>
-<li><p>Encontrá la raíz de <code>f(x) = cos(x) - x</code> en <code>[0, 1]</code>. Compará con <code>uniroot(f, c(0, 1))$root</code> (caja negra).</p></li>
+<li><p>Encontrá la raíz de <code>f(x) = cos(x) - x</code> en <code>[0, 1]</code>. Compará con <code>uniroot(f, c(0, 1))$root</code> (la implementación robusta que trae R).</p></li>
 <li><p>Modificá <code>biseccion</code> para que devuelva una lista con <code>raiz</code>, <code>iteraciones</code> y <code>tolerancia_final</code>.</p></li>
 </ol>
 </section>
@@ -332,9 +332,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="ejercicio-9-bootstrap-del-coeficiente-de-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-bootstrap-del-coeficiente-de-regresión">Ejercicio 9: bootstrap del coeficiente de regresión</h2>
 <ol type="a">
-<li><p>Ajustá <code>mod &lt;- lm(bikers ~ temp, data = bicis)</code> (caja negra). Mostrá <code>coef(mod)</code> y <code>confint(mod)</code>.</p></li>
-<li><p>Hacé bootstrap del coeficiente de <code>temp</code> con <code>replicate</code>. En cada réplica: muestreá filas con reemplazo (<code>sample(seq_len(nrow(bicis)), replace = TRUE)</code>), reajustá <code>lm</code>, extraé <code>coef(...)["temp"]</code>. Usá 500 réplicas.</p></li>
-<li><p>Calculá el IC del 95% por percentiles. Compará con <code>confint(mod)</code>.</p></li>
+<li><p>Ajustá <code>mod &lt;- lm(bikers ~ temp, data = bicis)</code>. Mostrá <code>coef(mod)</code> y <code>confint(mod)</code>.</p></li>
+<li><p>Aplicá la función auxiliar <code>bootstrap_coef(formula, data, variable, n_rep)</code> (de <code>auxiliares.R</code>) sobre <code>bikers ~ temp</code>, con <code>variable = "temp"</code> y 500 réplicas. Mirá su código: muestrea filas con reemplazo, reajusta el <code>lm</code>, extrae el coeficiente. Lo encapsulamos para no repetir el patrón.</p></li>
+<li><p>Calculá el IC del 95% por percentiles del vector que devuelve <code>bootstrap_coef</code>. Compará con <code>confint(mod)</code>.</p></li>
 </ol>
 </section>
 <section id="ejercicio-10-uso-de-bicicletas-como-variable-de-interés" class="level2">
@@ -377,16 +377,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Estimá <code>pi</code> mediante el método del círculo en el cuadrado: muestreá puntos <code>runif</code> en <code>[-1, 1]^2</code>, contá los que caen en el círculo unitario, y multiplicá por 4.</p></li>
 </ol>
 </section>
-<section id="ejercicio-15-newton-raphson-caja-negra-parcial" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-15-newton-raphson-caja-negra-parcial">Ejercicio 15: Newton-Raphson (caja negra parcial)</h2>
+<section id="ejercicio-15-newton-raphson" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-15-newton-raphson">Ejercicio 15: Newton-Raphson</h2>
 <ol type="a">
 <li><p>Implementá <code>newton(f, df, x0, tol = 1e-6, max_iter = 100)</code> donde <code>df</code> es la derivada de <code>f</code>. Iteración: <code>x &lt;- x - f(x) / df(x)</code>.</p></li>
 <li><p>Encontrá la raíz de <code>f(x) = x^2 - 2</code> con <code>df(x) = 2*x</code>, partiendo de <code>x0 = 1</code>.</p></li>
 <li><p>Compará la cantidad de iteraciones con bisección sobre el mismo problema en <code>[1, 2]</code>.</p></li>
 </ol>
 </section>
-<section id="ejercicio-16-t-test-como-caja-negra" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio-16-t-test-como-caja-negra">Ejercicio 16: t-test como caja negra</h2>
+<section id="ejercicio-16-t.test-y-comparación-con-bootstrap" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-16-t.test-y-comparación-con-bootstrap">Ejercicio 16: <code>t.test</code> y comparación con bootstrap</h2>
 <ol type="a">
 <li><p>Hacé <code>t.test(airquality$Wind)</code> y leé la salida. ¿Qué representa <code>mean of x</code>, <code>confidence interval</code>, <code>p-value</code>?</p></li>
 <li><p>Compará el IC del <code>t.test</code> con tu IC bootstrap del ejercicio 4 sobre la misma columna.</p></li>
