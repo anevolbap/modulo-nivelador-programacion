@@ -106,35 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -200,6 +171,18 @@ window.Quarto = {
  <span class="dropdown-text">Clase 2</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../ejercicios/clase3-ejercicios.html">
+ <span class="dropdown-text">Clase 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ejercicios/clase4-ejercicios.html">
+ <span class="dropdown-text">Clase 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ejercicios/clase5-ejercicios.html">
+ <span class="dropdown-text">Clase 5</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../ejercicios/entrega.html">
  <span class="dropdown-text">Entrega final</span></a>
   </li>  
@@ -223,8 +206,24 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#contexto" id="toc-contexto" class="nav-link active" data-scroll-target="#contexto">Contexto</a></li>
+  <li><a href="#ejercicio-1-variables-y-tipos" id="toc-ejercicio-1-variables-y-tipos" class="nav-link" data-scroll-target="#ejercicio-1-variables-y-tipos">Ejercicio 1: variables y tipos</a></li>
+  <li><a href="#ejercicio-2-vector-de-consumos" id="toc-ejercicio-2-vector-de-consumos" class="nav-link" data-scroll-target="#ejercicio-2-vector-de-consumos">Ejercicio 2: vector de consumos</a></li>
+  <li><a href="#ejercicio-3-indexar-mtcars" id="toc-ejercicio-3-indexar-mtcars" class="nav-link" data-scroll-target="#ejercicio-3-indexar-mtcars">Ejercicio 3: indexar <code>mtcars</code></a></li>
+  <li><a href="#ejercicio-4-función-etiquetar_auto" id="toc-ejercicio-4-función-etiquetar_auto" class="nav-link" data-scroll-target="#ejercicio-4-función-etiquetar_auto">Ejercicio 4: función <code>etiquetar_auto</code></a></li>
+  <li><a href="#ejercicio-5-función-dif_promedio" id="toc-ejercicio-5-función-dif_promedio" class="nav-link" data-scroll-target="#ejercicio-5-función-dif_promedio">Ejercicio 5: función <code>dif_promedio</code></a></li>
+  <li><a href="#ejercicio-6-lista-que-describe-un-auto" id="toc-ejercicio-6-lista-que-describe-un-auto" class="nav-link" data-scroll-target="#ejercicio-6-lista-que-describe-un-auto">Ejercicio 6: lista que describe un auto</a></li>
+  <li><a href="#ejercicio-7-función-resumen_min" id="toc-ejercicio-7-función-resumen_min" class="nav-link" data-scroll-target="#ejercicio-7-función-resumen_min">Ejercicio 7: función <code>resumen_min</code></a></li>
+  <li><a href="#ejercicio-8-etiquetas-en-lote" id="toc-ejercicio-8-etiquetas-en-lote" class="nav-link" data-scroll-target="#ejercicio-8-etiquetas-en-lote">Ejercicio 8: etiquetas en lote</a></li>
+  <li><a href="#ejercicio-9-tu-propio-data.frame" id="toc-ejercicio-9-tu-propio-data.frame" class="nav-link" data-scroll-target="#ejercicio-9-tu-propio-data.frame">Ejercicio 9: tu propio <code>data.frame</code></a></li>
+  <li><a href="#ejercicio-10-buenos-nombres" id="toc-ejercicio-10-buenos-nombres" class="nav-link" data-scroll-target="#ejercicio-10-buenos-nombres">Ejercicio 10: buenos nombres</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -232,6 +231,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Clase 1 - Ejercicios</h1>
+<p class="subtitle lead">Tipos de datos, vectores y primeras funciones</p>
 </div>
 
 
@@ -248,82 +248,99 @@ window.Quarto = {
 </header>
 
 
-<ol type="1">
-<li>Escriba</li>
-</ol>
+<section id="contexto" class="level2">
+<h2 class="anchored" data-anchor-id="contexto">Contexto</h2>
+<p>Vamos a usar <code>mtcars</code>, un dataset de 32 autos con 11 columnas (consumo, cilindros, potencia, etc). Viene con R, no hace falta instalar nada.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mtcars)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>?mtcars</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A lo largo de la guía vas a construir una pequeña caja de herramientas: <code>etiquetar_auto</code>, <code>dif_promedio</code>, <code>resumen_min</code>. Las vas a reusar en las clases siguientes.</p>
+</section>
+<section id="ejercicio-1-variables-y-tipos" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-variables-y-tipos">Ejercicio 1: variables y tipos</h2>
 <ol type="a">
-<li>una funciòn que convierta una temperatura en grados Celsius a grados <a href="https://es.wikipedia.org/wiki/Grado_Fahrenheit">Fahrenheit</a></li>
-<li>otro programa que se haga la operación inversa (de Fahrenheit a Celsius)</li>
-<li>verifique que aplicar una función seguida de la otra devuelven el valor original.</li>
+<li><p>Asigná cuatro variables que describan el primer auto de <code>mtcars</code>: <code>nombre_auto</code> (string con <code>rownames(mtcars)[1]</code>), <code>consumo_mpg</code> (double, <code>mtcars$mpg[1]</code>), <code>cilindros</code> (integer, <code>as.integer(mtcars$cyl[1])</code>) y <code>transmision_manual</code> (logical, <code>mtcars$am[1] == 1</code>). Verificá <code>class()</code> y <code>typeof()</code> de cada una.</p></li>
+<li><p>¿Qué devuelve <code>is.numeric(cilindros)</code>? ¿Y <code>is.numeric(transmision_manual)</code>? Justificá.</p></li>
+<li><p>Predecí qué hace <code>consumo_mpg + transmision_manual</code> y <code>consumo_mpg + nombre_auto</code>. Después corrélo y comparalo con tu predicción.</p></li>
 </ol>
-<ol start="2" type="1">
-<li><p>Cree una funciòn que dado un cuadrado, a partir de la variable <code>base</code>, calcule su perímetro y su área.</p></li>
-<li><p>Construya una función <code>es_cuadrado_perfecto</code> que devuelva un <strong>booleano</strong> según el input <code>x</code> es o no un cuadrado perfecto (existe <span class="math inline">\(k\)</span> tal que <span class="math inline">\(k^2\)</span>)</p></li>
-<li><p>Arme una función que dado un vector numérico <code>x</code> devuelve un vector con la media muestral y, la mediana. Use el siguiente modelo como base:</p></li>
-</ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>medias <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">c</span>(<span class="fu">mean</span>(x), <span class="fu">median</span>(x)))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Una vez definida la función <code>medias</code> ejecute la siguente línea:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>replicaciones <span class="ot">=</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, <span class="fu">medias</span>(<span class="fu">rnorm</span>(<span class="dv">100</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>^ Extraiga de la matriz <code>replicaciones</code> la medias y medianas y asígnelas a los vectores <code>las_medias</code> y <code>las_medianas</code> respectivamente. Luego ejecute el siguiente código para graficar.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>colores <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"skyblue3"</span>, <span class="st">"orange"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>densidades <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">30</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># las_medias = ...</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(las_medias, <span class="at">density=</span>densidades[<span class="dv">1</span>], <span class="at">col =</span> colores[<span class="dv">1</span>])</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># las_mediana = ...</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(las_medianas, <span class="at">density=</span>densidades[<span class="dv">2</span>], <span class="at">col =</span> colores[<span class="dv">2</span>], <span class="at">add=</span><span class="cn">TRUE</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"media"</span>, <span class="st">"mediana"</span>), <span class="at">col =</span> colores, <span class="at">density=</span>densidades, <span class="at">fill =</span> colores)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="5" type="1">
-<li>Una empresa regala una heladera al azar entre <span class="math inline">\(N\)</span> personas. Repite el proceso <span class="math inline">\(n\)</span> veces. ¿Cuál es la probabilidad de que una persona reciba dos heladeras?</li>
-</ol>
+</section>
+<section id="ejercicio-2-vector-de-consumos" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-vector-de-consumos">Ejercicio 2: vector de consumos</h2>
 <ol type="a">
-<li>Primero escriba una función que simule una sola realización del sorteo. Usá el siguiente modelo:</li>
+<li><p>Asigná <code>consumos &lt;- mtcars$mpg</code>. ¿Cuántos elementos tiene? ¿Qué tipo?</p></li>
+<li><p>Calculá <code>mean(consumos)</code>, <code>median(consumos)</code>, <code>min(consumos)</code>, <code>max(consumos)</code>. Usá <code>summary(consumos)</code> y compará con los valores anteriores.</p></li>
+<li><p>Quedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son? Pista: <code>sum(consumos &gt; mean(consumos))</code>.</p></li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>una_heladera <span class="ot">=</span> <span class="cf">function</span>(N, n){</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ...</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(dos_heladeras_bool)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="2" type="a">
-<li>Use el siguiente código para obtener un vector con los resultados de correr la función anterior <code>k</code> veces.</li>
-</ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">=</span> <span class="dv">1000</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">=</span> <span class="dv">40000000</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">15000</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">=</span> <span class="fu">replicate</span>(k, <span class="fu">una_heladera</span>(N, n))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="3" type="a">
-<li>Calcule la media muestral de <code>reps</code>, ¿qué representa?.</li>
-</ol>
-<ol start="6" type="1">
-<li>Considere la siguientes tres sucesiones:</li>
-</ol>
-<ul>
-<li><span class="math inline">\(a_n = \frac{1}{\sqrt{n}} + (\frac{1}{2})^n\)</span></li>
-<li><span class="math inline">\(b_n = (-1)^n + 5\)</span></li>
-<li><span class="math inline">\(c_n = \frac{3n-8}{\sqrt{16n^2+n}}\)</span></li>
-</ul>
+</section>
+<section id="ejercicio-3-indexar-mtcars" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-indexar-mtcars">Ejercicio 3: indexar <code>mtcars</code></h2>
 <ol type="a">
-<li>Grafique los primeros <span class="math inline">\(n=100\)</span> términos de cada sucesón.</li>
-<li>Decida si las sucesiones son convergentes y en tal caso agregue una línea horizontal al gráfico.</li>
+<li><p>Mostrá la primera fila de <code>mtcars</code> completa. Mostrá la columna <code>hp</code>. Mostrá la celda fila 5, columna <code>mpg</code>.</p></li>
+<li><p>Encontrá el auto con mayor <code>mpg</code> usando <code>which.max</code>. Mostrá su nombre con <code>rownames(mtcars)[which.max(mtcars$mpg)]</code>.</p></li>
+<li><p>Mostrá las primeras 3 columnas (<code>mpg</code>, <code>cyl</code>, <code>disp</code>) de los primeros 5 autos.</p></li>
 </ol>
-<ol start="7" type="1">
-<li>Considere las siguientes funciones:</li>
+</section>
+<section id="ejercicio-4-función-etiquetar_auto" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-función-etiquetar_auto">Ejercicio 4: función <code>etiquetar_auto</code></h2>
+<ol type="a">
+<li><p>Definí <code>etiquetar_auto(modelo, mpg)</code> que devuelva el string <code>"&lt;modelo&gt;: &lt;mpg&gt; mpg"</code>. Pista: <code>paste0</code>. Probala con <code>"Mazda RX4"</code> y <code>21</code>.</p></li>
+<li><p>Probala con valores extraídos de <code>mtcars</code>: <code>etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1])</code>.</p></li>
+<li><p>Agregale un valor por defecto <code>mpg = NA</code>. ¿Qué devuelve <code>etiquetar_auto("Auto fantasma")</code>?</p></li>
 </ol>
-<ul>
-<li><span class="math inline">\(l_2(x) = x^2\)</span>,</li>
-<li><span class="math inline">\(l_1(x) = |x|\)</span>,</li>
-<li><span class="math inline">\(\rho_k(x) = x^2 * I_{(|x|\leq k)} + 2k|x|-k^2 * I_{(|x| &gt; k)}\)</span>.</li>
-</ul>
-<p>para <span class="math inline">\(x \in [-10, 10]\)</span>. Grafique <span class="math inline">\(p_k\)</span> con <span class="math inline">\(k=5\)</span> junto a las otras funciones con distintos colores y una leyenda.</p>
-<ol start="8" type="1">
-<li>Grafique el polinomio interpolador de Lagranges en <span class="math inline">\(n+1\)</span> puntos equiespaciados en el intervalo <span class="math inline">\([-1,1]\)</span>, con <span class="math inline">\(n= 5, 10, 15\)</span>, para los valores generados por las siguientes funciones:</li>
+</section>
+<section id="ejercicio-5-función-dif_promedio" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-función-dif_promedio">Ejercicio 5: función <code>dif_promedio</code></h2>
+<ol type="a">
+<li><p>Definí <code>dif_promedio(x)</code> que devuelva <code>x - mean(x)</code>. Aplicala a <code>mtcars$mpg</code>. ¿Cuál es la suma de las diferencias?</p></li>
+<li><p>¿Cuántos autos están por encima del promedio? Pista: <code>sum(dif_promedio(mtcars$mpg) &gt; 0)</code>.</p></li>
+<li><p>¿Cuál es el auto que más se aleja del promedio (en valor absoluto)? Pista: <code>which.max(abs(...))</code>.</p></li>
 </ol>
-<ul>
-<li><span class="math inline">\(f_1(x) = \frac{1}{25x^2}\)</span></li>
-<li><span class="math inline">\(f_2(x) = \sin(\pi x)\)</span></li>
-</ul>
+</section>
+<section id="ejercicio-6-lista-que-describe-un-auto" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-lista-que-describe-un-auto">Ejercicio 6: lista que describe un auto</h2>
+<ol type="a">
+<li><p>Creá una lista <code>auto_1</code> con: <code>modelo</code> (string), <code>mpg</code> (double), <code>cilindros</code> (integer), <code>caja</code> (“manual” o “automatica”). Usá los datos del primer auto de <code>mtcars</code>.</p></li>
+<li><p>Accedé a cada campo con <code>$</code> y con <code>[[ ]]</code>. ¿Qué devuelve <code>auto_1["modelo"]</code> y por qué difiere?</p></li>
+<li><p>Cambiale el <code>mpg</code> a <code>auto_1</code> reasignándolo con <code>auto_1$mpg &lt;- ...</code>. Verificá.</p></li>
+</ol>
+</section>
+<section id="ejercicio-7-función-resumen_min" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-función-resumen_min">Ejercicio 7: función <code>resumen_min</code></h2>
+<ol type="a">
+<li><p>Definí <code>resumen_min(x)</code> que reciba un vector numérico y devuelva una lista con <code>media</code>, <code>mediana</code>, <code>min</code>, <code>max</code>. Probala con <code>mtcars$mpg</code>.</p></li>
+<li><p>Aplicala a <code>mtcars$hp</code>. Compará el rango con el de <code>mpg</code>.</p></li>
+<li><p>¿Qué pasa si la pasás <code>c(1, 2, NA, 4)</code>? Probá. ¿Cómo lo arreglarías sin tocar la función? Pista: <code>na.omit</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-8-etiquetas-en-lote" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-etiquetas-en-lote">Ejercicio 8: etiquetas en lote</h2>
+<ol type="a">
+<li><p>Armá un vector con <code>"&lt;modelo&gt;: &lt;mpg&gt; mpg"</code> para los primeros 5 autos. Pista: <code>paste0(rownames(mtcars)[1:5], ": ", mtcars$mpg[1:5], " mpg")</code>.</p></li>
+<li><p>Hacé lo mismo para todos los autos.</p></li>
+<li><p>Recreá el mismo vector usando <code>sapply</code> y la función <code>etiquetar_auto</code> del ejercicio 4. Pista: <code>sapply(seq_len(nrow(mtcars)), function(i) etiquetar_auto(rownames(mtcars)[i], mtcars$mpg[i]))</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-9-tu-propio-data.frame" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-tu-propio-data.frame">Ejercicio 9: tu propio <code>data.frame</code></h2>
+<ol type="a">
+<li><p>Creá <code>mis_autos</code> con 3 filas y columnas <code>modelo</code>, <code>mpg</code>, <code>cilindros</code>, <code>manual</code>. Mezclá un auto real con dos imaginarios.</p></li>
+<li><p>Accedé a la columna <code>mpg</code> con <code>$</code>, con <code>[["mpg"]]</code> y con <code>[, "mpg"]</code>. Confirmá que dan el mismo resultado.</p></li>
+<li><p>Aplicá <code>resumen_min</code> a la columna <code>mpg</code> de <code>mis_autos</code>. ¿Qué tipo de objeto devuelve?</p></li>
+</ol>
+</section>
+<section id="ejercicio-10-buenos-nombres" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-buenos-nombres">Ejercicio 10: buenos nombres</h2>
+<ol type="a">
+<li><p>Mirá este snippet:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> <span class="cf">function</span>(x, y) x <span class="sc">+</span> y <span class="sc">*</span> <span class="fl">0.6213</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">f</span>(<span class="dv">0</span>, a))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Pista: el factor <code>0.6213</code> convierte kilómetros a millas.</p></li>
+<li><p>Reescribilo cambiando <code>f</code>, <code>a</code>, <code>x</code>, <code>y</code> por nombres descriptivos. La intención debería leerse sin comentarios.</p></li>
+<li><p>¿Qué nombres elegiste y por qué? Anotalo en una línea.</p></li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

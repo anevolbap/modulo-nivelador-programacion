@@ -106,35 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -200,6 +171,18 @@ window.Quarto = {
  <span class="dropdown-text">Clase 2</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../ejercicios/clase3-ejercicios.html">
+ <span class="dropdown-text">Clase 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ejercicios/clase4-ejercicios.html">
+ <span class="dropdown-text">Clase 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../ejercicios/clase5-ejercicios.html">
+ <span class="dropdown-text">Clase 5</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../ejercicios/entrega.html">
  <span class="dropdown-text">Entrega final</span></a>
   </li>  
@@ -223,8 +206,24 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#contexto" id="toc-contexto" class="nav-link active" data-scroll-target="#contexto">Contexto</a></li>
+  <li><a href="#ejercicio-1-reconocer-el-dataset" id="toc-ejercicio-1-reconocer-el-dataset" class="nav-link" data-scroll-target="#ejercicio-1-reconocer-el-dataset">Ejercicio 1: reconocer el dataset</a></li>
+  <li><a href="#ejercicio-2-clasificar-temperatura-con-ifelse-ifelse" id="toc-ejercicio-2-clasificar-temperatura-con-ifelse-ifelse" class="nav-link" data-scroll-target="#ejercicio-2-clasificar-temperatura-con-ifelse-ifelse">Ejercicio 2: clasificar temperatura con <code>if/else if/else</code></a></li>
+  <li><a href="#ejercicio-3-contar-alertas" id="toc-ejercicio-3-contar-alertas" class="nav-link" data-scroll-target="#ejercicio-3-contar-alertas">Ejercicio 3: contar alertas</a></li>
+  <li><a href="#ejercicio-4-primer-índice-que-cumple-una-condición" id="toc-ejercicio-4-primer-índice-que-cumple-una-condición" class="nav-link" data-scroll-target="#ejercicio-4-primer-índice-que-cumple-una-condición">Ejercicio 4: primer índice que cumple una condición</a></li>
+  <li><a href="#ejercicio-5-clasificación-de-los-primeros-30-días" id="toc-ejercicio-5-clasificación-de-los-primeros-30-días" class="nav-link" data-scroll-target="#ejercicio-5-clasificación-de-los-primeros-30-días">Ejercicio 5: clasificación de los primeros 30 días</a></li>
+  <li><a href="#ejercicio-6-bootstrap-de-la-media" id="toc-ejercicio-6-bootstrap-de-la-media" class="nav-link" data-scroll-target="#ejercicio-6-bootstrap-de-la-media">Ejercicio 6: bootstrap de la media</a></li>
+  <li><a href="#ejercicio-7-acumular-en-un-vector" id="toc-ejercicio-7-acumular-en-un-vector" class="nav-link" data-scroll-target="#ejercicio-7-acumular-en-un-vector">Ejercicio 7: acumular en un vector</a></li>
+  <li><a href="#ejercicio-8-break-y-next" id="toc-ejercicio-8-break-y-next" class="nav-link" data-scroll-target="#ejercicio-8-break-y-next">Ejercicio 8: <code>break</code> y <code>next</code></a></li>
+  <li><a href="#ejercicio-9-clasificar_presion" id="toc-ejercicio-9-clasificar_presion" class="nav-link" data-scroll-target="#ejercicio-9-clasificar_presion">Ejercicio 9: <code>clasificar_presion</code></a></li>
+  <li><a href="#ejercicio-10-comentar-el-porqué" id="toc-ejercicio-10-comentar-el-porqué" class="nav-link" data-scroll-target="#ejercicio-10-comentar-el-porqué">Ejercicio 10: comentar el porqué</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -232,6 +231,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Clase 2 - Ejercicios</h1>
+<p class="subtitle lead">Condicionales y bucles aplicados a <code>airquality</code></p>
 </div>
 
 
@@ -248,38 +248,95 @@ window.Quarto = {
 </header>
 
 
-<ol type="1">
-<li><p>Escriba una función que sume los primeros <span class="math inline">\(n\)</span> números naturales. Compare su desempeño contra la <code>sum(1:n)</code>. Utilice el siguiente modelo como base:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sumar_naturales <span class="ot">=</span> <span class="cf">function</span>(n) {</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># suma = ...</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(suma)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Un juego consiste en revelar una por una las cartas de un mazo mientras que se repiten los números 1, 2 y 3. Si al revelar la carta coincide con el número cantado, el juego se pierde. Solo se gana si no hay ninguna coincidencia.</p>
-<ol type="1">
-<li><p>Escriba una función que realice una sola repetición del juego. Utilice el siguiente modelo como base:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>juego_123 <span class="ot">=</span> <span class="cf">function</span>() {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ganamos = ... # logical</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ganamos)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Luego, juegue <span class="math inline">\(1000\)</span> veces y calcule la proporción de veces que ganó el juego. Utilice bucles y compare el desempeño contra el siguiente código:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="at">n=</span><span class="dv">1000</span>, <span class="at">expr=</span>juego_123))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-</ol></li>
-<li><p>Escriba una función tal que dada una matriz devuelva su parte triangular superior. Utilice el siguiente modelo como base:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>extraer_trisup <span class="ot">=</span> <span class="cf">function</span>(matriz) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># trisup = ...</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(trisup)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Diseñe una función que dado un vector numérico devuelva un vector que indique, como texto, a qué decil pertenece cada valor. Por ejemplo, para el vector <code>num_vec=1:10</code>, la función debería devolver el vector <code>c("primer decil", "segundo decil", …, "décimo decil")</code> . Utilice el siguiente modelo como base:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>indicar_deciles <span class="ot">=</span> <span class="cf">function</span>(num_vec) {</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># deciles_vec = ...</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(deciles_vec)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
-<li><p>Arme una función que, dado un vector de valores <code>logical</code>, indique si son todos <code>TRUE</code>. Compare su desempeño contra la función <code>all</code> .</p></li>
-<li><p>En la primera página de <a href="https://arxiv.org/pdf/2110.01111.pdf">este</a> trabajo, sus autores proponen un método para ordenar una lista de números de forma creciente. Escriba una función en R que implemente el pseudocódigo de la imagen. ¿Funciona el método propuesto? Compare su desempeño contra la función <code>sort</code> .</p>
-<p><img src="images/paste-BE927DFA.png" class="img-fluid"></p></li>
+<section id="contexto" class="level2">
+<h2 class="anchored" data-anchor-id="contexto">Contexto</h2>
+<p>Vamos a usar <code>airquality</code> (calidad del aire en NY, mayo a septiembre 1973). Tiene 153 filas y 6 columnas. Es un dataset realista: viene con valores faltantes (<code>NA</code>).</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(airquality)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>?airquality</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A las funciones de la clase 1 (<code>etiquetar_auto</code>, <code>dif_promedio</code>, <code>resumen_min</code>) sumamos <code>clasificar_temp</code>, <code>contar_alertas</code>, <code>bootstrap_media</code> y <code>clasificar_presion</code>.</p>
+</section>
+<section id="ejercicio-1-reconocer-el-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-reconocer-el-dataset">Ejercicio 1: reconocer el dataset</h2>
+<ol type="a">
+<li><p>Cargá <code>airquality</code> y mirá <code>head</code>, <code>dim</code>, <code>colnames</code>, <code>?airquality</code>. Anotá qué representa cada columna.</p></li>
+<li><p>¿Cuántos <code>NA</code> tiene la columna <code>Ozone</code>? Pista: <code>sum(is.na(airquality$Ozone))</code>.</p></li>
+<li><p>¿Cuántas filas tienen al menos un <code>NA</code>? Pista: <code>sum(!complete.cases(airquality))</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-2-clasificar-temperatura-con-ifelse-ifelse" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-clasificar-temperatura-con-ifelse-ifelse">Ejercicio 2: clasificar temperatura con <code>if/else if/else</code></h2>
+<ol type="a">
+<li><p>Definí <code>clasificar_temp(x)</code> (en °F) que devuelva <code>"frio"</code> si <code>x &lt; 60</code>, <code>"templado"</code> si <code>60 &lt;= x &lt; 80</code>, <code>"caluroso"</code> si <code>x &gt;= 80</code>.</p></li>
+<li><p>Aplicala dentro de un <code>for</code> a <code>c(50, 70, 90, 100)</code>. Imprimí cada categoría.</p></li>
+<li><p>Hacé lo mismo con <code>ifelse</code> vectorial anidado. Compará legibilidad.</p></li>
+</ol>
+</section>
+<section id="ejercicio-3-contar-alertas" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-contar-alertas">Ejercicio 3: contar alertas</h2>
+<ol type="a">
+<li><p>Usando un <code>for</code>, contá cuántos días <code>airquality$Ozone &gt; 80</code> (umbral OMS para alerta). Cuidado con los <code>NA</code>: salteálos con <code>next</code>.</p></li>
+<li><p>Hacé lo mismo en una línea: <code>sum(airquality$Ozone &gt; 80, na.rm = TRUE)</code>. Verificá que coincide.</p></li>
+<li><p>Generalizá a <code>contar_alertas(x, umbral)</code>. Probá con <code>airquality$Wind</code> y <code>umbral = 15</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-4-primer-índice-que-cumple-una-condición" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-primer-índice-que-cumple-una-condición">Ejercicio 4: primer índice que cumple una condición</h2>
+<ol type="a">
+<li><p>Con un <code>while</code> y <code>seq_along</code>, encontrá el primer día (índice) donde <code>Ozone &gt; 100</code>. Cuidado con <code>NA</code>.</p></li>
+<li><p>Compará con <code>which(airquality$Ozone &gt; 100 &amp; !is.na(airquality$Ozone))[1]</code>.</p></li>
+<li><p>Generalizá: definí <code>primer_indice(x, condicion_fun)</code> donde <code>condicion_fun</code> es una función que devuelve <code>TRUE</code>/<code>FALSE</code> para cada elemento. Probá con <code>function(z) z &gt; 100</code> y con <code>function(z) z &lt; 5</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-5-clasificación-de-los-primeros-30-días" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-clasificación-de-los-primeros-30-días">Ejercicio 5: clasificación de los primeros 30 días</h2>
+<ol type="a">
+<li><p>Para los primeros 30 días, imprimí <code>"Alta"</code> si <code>Ozone &gt; 80</code>, <code>"Baja"</code> si <code>Ozone &lt; 20</code>, el valor numérico en otro caso. Usá <code>for</code> + <code>if/else if/else</code>. Si hay <code>NA</code>, salteálo.</p></li>
+<li><p>Reescribilo con <code>ifelse</code> anidado. ¿Es más fácil de leer o más confuso?</p></li>
+<li><p>¿Cuándo conviene cada uno? Anotá una línea de criterio.</p></li>
+</ol>
+</section>
+<section id="ejercicio-6-bootstrap-de-la-media" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-bootstrap-de-la-media">Ejercicio 6: bootstrap de la media</h2>
+<ol type="a">
+<li><p>Definí <code>bootstrap_media(x, n_rep = 1000)</code> usando <code>replicate</code> + <code>sample</code>. Devolvé el vector de medias bootstrap.</p></li>
+<li><p>Aplicala a <code>airquality$Wind</code> (no tiene <code>NA</code>). La media de las medias debería estar cerca de <code>mean(airquality$Wind)</code>.</p></li>
+<li><p>Calculá un IC del 95% por percentiles: <code>quantile(boot, c(0.025, 0.975))</code>. Compará con <code>t.test(airquality$Wind)$conf.int</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-7-acumular-en-un-vector" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-acumular-en-un-vector">Ejercicio 7: acumular en un vector</h2>
+<ol type="a">
+<li><p>Calculá <code>Ozone^2 - Wind</code> para cada día con un <code>for</code>. Pre-asigná el vector y rellenalo. Si hay <code>NA</code>, dejá <code>NA</code>.</p></li>
+<li><p>Hacelo vectorizado en una línea: <code>airquality$Ozone^2 - airquality$Wind</code>. Verificá que coincide.</p></li>
+<li><p>Cronometrá las dos versiones con <code>system.time</code>. ¿Cuánto más rápido es el vectorizado?</p></li>
+</ol>
+</section>
+<section id="ejercicio-8-break-y-next" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-break-y-next">Ejercicio 8: <code>break</code> y <code>next</code></h2>
+<ol type="a">
+<li><p>Recorré <code>airquality$Ozone</code> con un <code>for</code> y parate al primer <code>NA</code> con <code>break</code>. Imprimí en qué índice paró.</p></li>
+<li><p>Recorré los días impares (saltá los pares con <code>next</code>). Imprimí los primeros 10.</p></li>
+<li><p>Combiná: imprimí los primeros 10 días donde <code>Ozone &gt; 80</code>, salteando <code>NA</code> con <code>next</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-9-clasificar_presion" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-clasificar_presion">Ejercicio 9: <code>clasificar_presion</code></h2>
+<ol type="a">
+<li><p>Definí <code>clasificar_presion(sistolica)</code> según la AHA: <code>&lt; 90</code> hipotenso, <code>90-119</code> normal, <code>120-129</code> elevada, <code>130-139</code> hipertensión 1, <code>&gt;= 140</code> hipertensión 2. Devolvé <code>NA</code> si la entrada es <code>NA</code>.</p></li>
+<li><p>Probala con <code>c(85, 110, 125, 135, 150, NA)</code>. Verificá.</p></li>
+<li><p>Aplicala con <code>sapply</code> a un vector de 100 valores aleatorios <code>runif(100, 70, 180)</code>. Resumí con <code>table</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-10-comentar-el-porqué" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-comentar-el-porqué">Ejercicio 10: comentar el porqué</h2>
+<ol type="a">
+<li><p>Tomá tu solución del ejercicio 6 (bootstrap). Agregá UN comentario que explique POR QUÉ usás <code>quantile(..., c(0.025, 0.975))</code> para el IC.</p></li>
+<li><p>Mirá el resto de tu código del ejercicio 6: borrá los comentarios que solo parafrasean lo que hace cada línea.</p></li>
+<li><p>Compará la versión final con la inicial: ¿se entiende mejor con menos comentarios?</p></li>
 </ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -416,7 +416,7 @@
 <li>Borrar comentarios desactualizados es tan importante como escribirlos.</li>
 </ul>
 </section>
-<section id="ejercicios-en-clase" class="slide level2">
+<section id="ejercicios-en-clase" class="slide level2 scrollable">
 <h2>Ejercicios en clase</h2>
 <p>Vamos a usar <code>airquality</code> (calidad del aire en NY, mayo a septiembre 1973). Ya viene con R.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="fu">head</span>(airquality)</span>
@@ -449,7 +449,7 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="comprensión-quedó-claro" class="slide level2">
+<section id="comprensión-quedó-claro" class="slide level2 scrollable">
 <h2>Comprensión: ¿quedó claro?</h2>
 <p>Marcá la opción correcta.</p>
 <ol type="1">
@@ -492,19 +492,15 @@
 <li>Imprime una sola vez.</li>
 </ol></li>
 </ol>
-<aside class="notes">
-<p>Respuestas: 1-a, 2-a (imprime 1..4 y luego entra en la iteración i=5 donde rompe sin imprimir), 3-b, 4-c.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</section>
+<section id="respuestas" class="slide level2 scrollable">
+<h2>Respuestas</h2>
+<ol type="1">
+<li><strong>a)</strong> <code>"positivo"</code>. La condición <code>5 &gt; 0</code> es <code>TRUE</code>, así que se ejecuta la rama <code>if</code>.</li>
+<li><strong>a)</strong> Cuatro: imprime <code>1, 2, 3, 4</code>. En la iteración con <code>i = 5</code> ejecuta <code>break</code> antes de llegar a <code>print</code>.</li>
+<li><strong>b)</strong> <code>while</code>. <code>for</code> requiere conocer la cantidad de iteraciones; <code>while</code> itera hasta que la condición se vuelve falsa.</li>
+<li><strong>c)</strong> Bucle infinito. <code>i</code> nunca se modifica adentro, así que <code>i &lt; 10</code> es siempre <code>TRUE</code>.</li>
+</ol>
 </section>
 <section id="apéndice-alternativas-a-for" class="slide level2">
 <h2>Apéndice: alternativas a <code>for</code></h2>

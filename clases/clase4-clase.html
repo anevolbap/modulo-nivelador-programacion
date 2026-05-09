@@ -342,7 +342,7 @@
 <span id="cb9-9"><a></a><span class="fu">prop.table</span>(<span class="fu">table</span>(mtcars<span class="sc">$</span>cyl))   <span class="co"># proporciones</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>aggregate</code> devuelve un <code>data.frame</code>, ideal para encadenar con un gráfico.</p>
 </section>
-<section id="un-eda-mínimo-en-cuatro-pasos" class="slide level2">
+<section id="un-eda-mínimo-en-cuatro-pasos" class="slide level2 scrollable">
 <h2>Un EDA mínimo en cuatro pasos</h2>
 <p>Ante un dataset nuevo:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a><span class="co"># 1. estructura</span></span>
@@ -374,7 +374,7 @@
 <p><code>stopifnot</code> corta con error si la condición es falsa. Si pasa silenciosamente, la función pasó <strong>ese</strong> test.</p>
 <p>Un test no garantiza que la función esté bien siempre, pero garantiza que está bien para los casos que probamos.</p>
 </section>
-<section id="ejercicios-en-clase" class="slide level2">
+<section id="ejercicios-en-clase" class="slide level2 scrollable">
 <h2>Ejercicios en clase</h2>
 <p>Trabajamos sobre <code>airquality</code> (calidad del aire en NY) y <code>mtcars</code>.</p>
 <ol type="1">
@@ -403,7 +403,7 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="comprensión-quedó-claro" class="slide level2">
+<section id="comprensión-quedó-claro" class="slide level2 scrollable">
 <h2>Comprensión: ¿quedó claro?</h2>
 <ol type="1">
 <li><p>¿Qué función usás para comparar la <strong>distribución</strong> de una variable numérica entre varios grupos?</p>
@@ -435,19 +435,15 @@
 <li>Para suprimir errores.</li>
 </ol></li>
 </ol>
-<aside class="notes">
-<p>Respuestas: 1-c, 2-c, 3-b, 4-b.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</section>
+<section id="respuestas" class="slide level2">
+<h2>Respuestas</h2>
+<ol type="1">
+<li><strong>c)</strong> <code>boxplot</code>. <code>hist</code> es para una sola variable; <code>boxplot(y ~ grupo)</code> compara la distribución de <code>y</code> entre niveles de <code>grupo</code>.</li>
+<li><strong>c)</strong> Calcula la media ignorando los <code>NA</code>. Sin <code>na.rm = TRUE</code>, devuelve <code>NA</code> si hay aunque sea un faltante.</li>
+<li><strong>b)</strong> <code>abline(lm(...))</code>. <code>abline</code> agrega una recta sobre un gráfico ya abierto.</li>
+<li><strong>b)</strong> Chequea una condición y corta con error si es falsa. Sirve como test rápido y como validación de argumentos.</li>
+</ol>
 </section>
 <section id="apéndice-gramática-mínima-de-ggplot2" class="slide level2">
 <h2>Apéndice: gramática mínima de <code>ggplot2</code></h2>

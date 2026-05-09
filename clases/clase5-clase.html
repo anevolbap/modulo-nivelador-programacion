@@ -354,7 +354,7 @@
 </ol>
 <p>Esto es la base. Lo que sigue (<code>dplyr</code>, <code>ggplot2</code>, <code>tidyr</code>, modelos) son herramientas, no conceptos nuevos.</p>
 </section>
-<section id="ejercicios-en-clase" class="slide level2">
+<section id="ejercicios-en-clase" class="slide level2 scrollable">
 <h2>Ejercicios en clase</h2>
 <ol type="1">
 <li><p><strong>Función de orden superior</strong>: escribí <code>iterar(f, x0, n)</code> que aplique <code>f</code> <code>n</code> veces a <code>x0</code>. Probala con <code>f = function(x) (x + 2/x) / 2</code>, <code>x0 = 1</code>, <code>n = 10</code>. ¿A qué número converge?</p></li>
@@ -378,7 +378,7 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="comprensión-quedó-claro" class="slide level2">
+<section id="comprensión-quedó-claro" class="slide level2 scrollable">
 <h2>Comprensión: ¿quedó claro?</h2>
 <ol type="1">
 <li><p>¿Qué hace <code>replicate(1000, expr)</code>?</p>
@@ -410,21 +410,17 @@
 <li>No importa, nadie lo lee.</li>
 </ol></li>
 </ol>
-<aside class="notes">
-<p>Respuestas: 1-b, 2-b, 3-b, 4-c.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
-<section id="apéndice-validar-argumentos-con-stopifnot" class="slide level2">
+<section id="respuestas" class="slide level2">
+<h2>Respuestas</h2>
+<ol type="1">
+<li><strong>b)</strong> Ejecuta la expresión 1000 veces y devuelve los 1000 resultados. Es la herramienta básica de Monte Carlo.</li>
+<li><strong>b)</strong> <code>f(a) * f(b) &lt; 0</code>. Los signos distintos garantizan, por continuidad, que existe una raíz en <code>[a, b]</code>.</li>
+<li><strong>b)</strong> Re-muestrear con reemplazo desde la propia muestra. La idea es usar la muestra como aproximación de la población.</li>
+<li><strong>c)</strong> Explica el porqué. El qué ya lo cuenta el diff; el porqué es lo que se pierde si no se escribe.</li>
+</ol>
+</section>
+<section id="apéndice-validar-argumentos-con-stopifnot" class="slide level2 scrollable">
 <h2>Apéndice: validar argumentos con <code>stopifnot</code></h2>
 <p>Una función robusta valida sus entradas antes de empezar.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>biseccion <span class="ot">&lt;-</span> <span class="cf">function</span>(f, a, b, <span class="at">tol =</span> <span class="fl">1e-6</span>) {</span>

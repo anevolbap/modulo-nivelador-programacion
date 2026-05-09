@@ -283,38 +283,43 @@
 <th>Tipo</th>
 <th>Para qué sirve</th>
 <th>Ejemplo</th>
+<th><code>class()</code></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>logical</code></td>
 <td>verdadero o falso</td>
-<td><code>TRUE</code>, <code>FALSE</code></td>
+<td><code>TRUE</code></td>
+<td><code>"logical"</code></td>
 </tr>
 <tr class="even">
 <td><code>double</code></td>
 <td>números reales</td>
-<td><code>3.14</code>, <code>-2</code></td>
+<td><code>3.14</code></td>
+<td><code>"numeric"</code></td>
 </tr>
 <tr class="odd">
 <td><code>integer</code></td>
 <td>números enteros</td>
-<td><code>5L</code>, <code>0L</code></td>
+<td><code>5L</code></td>
+<td><code>"integer"</code></td>
 </tr>
 <tr class="even">
 <td><code>character</code></td>
 <td>texto</td>
-<td><code>"hola"</code>, <code>'a'</code></td>
+<td><code>"hola"</code></td>
+<td><code>"character"</code></td>
 </tr>
 </tbody>
 </table>
-<p><code>class(x)</code> nos dice de qué tipo es <code>x</code>. (Para <code>double</code>, <code>class</code> devuelve <code>"numeric"</code>; <code>typeof</code> devuelve <code>"double"</code>).</p>
+<p><code>class(x)</code> nos dice qué tipo es <code>x</code>. Detalle a recordar: para un <code>double</code>, <code>class</code> devuelve <code>"numeric"</code>, no <code>"double"</code>.</p>
 </section>
 <section id="logical" class="slide level2">
 <h2>logical</h2>
 <p>Toma uno de dos valores: <code>TRUE</code> o <code>FALSE</code>. Aparecen como resultado de comparaciones.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a></a><span class="dv">10</span> <span class="sc">==</span> <span class="dv">20</span>       <span class="co"># FALSE</span></span>
-<span id="cb3-2"><a></a><span class="fu">sin</span>(pi<span class="sc">/</span><span class="dv">2</span>) <span class="sc">==</span> <span class="dv">1</span> <span class="co"># TRUE</span></span>
+<span id="cb3-2"><a></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span> <span class="sc">==</span> <span class="dv">2</span>     <span class="co"># TRUE</span></span>
 <span id="cb3-3"><a></a><span class="fu">class</span>(<span class="cn">TRUE</span>)    <span class="co"># "logical"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Operadores:</p>
 <ul>
@@ -322,71 +327,77 @@
 <li>de comparación: <code>==</code> (igual), <code>!=</code> (distinto), <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>.</li>
 </ul>
 </section>
-<section id="double-y-integer" class="slide level2">
-<h2>double y integer</h2>
-<p><code>double</code> es el tipo numérico por defecto, sirve para reales.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a>radio <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb4-2"><a></a>area  <span class="ot">&lt;-</span> pi <span class="sc">*</span> radio<span class="sc">^</span><span class="dv">2</span></span>
-<span id="cb4-3"><a></a><span class="fu">class</span>(area)        <span class="co"># "numeric"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>integer</code> se usa para enteros. Para que R lo trate como entero hay que poner una <code>L</code> al final.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a><span class="fu">class</span>(<span class="dv">40</span>)    <span class="co"># "numeric"</span></span>
-<span id="cb5-2"><a></a><span class="fu">class</span>(<span class="dv">40</span>L)   <span class="co"># "integer"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>En la práctica, salvo que importe la performance o la interoperación con otros sistemas, <strong>alcanza con <code>double</code></strong>.</p>
+<section id="double-integer-y-numeric" class="slide level2">
+<h2><code>double</code>, <code>integer</code> y <code>numeric</code></h2>
+<p>R distingue dos tipos numéricos por dentro:</p>
+<ul>
+<li><code>double</code>: números reales (<code>3.14</code>, <code>-2</code>). Es el por defecto.</li>
+<li><code>integer</code>: enteros. Para que R los trate como tales hay que poner <code>L</code> al final (<code>40L</code>).</li>
+</ul>
+<p>Pero ambos comparten una <strong>clase paraguas</strong>: <code>numeric</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a></a><span class="fu">class</span>(<span class="dv">40</span>)        <span class="co"># "numeric"</span></span>
+<span id="cb4-2"><a></a><span class="fu">class</span>(<span class="dv">40</span>L)       <span class="co"># "integer"</span></span>
+<span id="cb4-3"><a></a><span class="fu">typeof</span>(<span class="dv">40</span>)       <span class="co"># "double"</span></span>
+<span id="cb4-4"><a></a><span class="fu">typeof</span>(<span class="dv">40</span>L)      <span class="co"># "integer"</span></span>
+<span id="cb4-5"><a></a></span>
+<span id="cb4-6"><a></a><span class="fu">is.numeric</span>(<span class="dv">40</span>)   <span class="co"># TRUE</span></span>
+<span id="cb4-7"><a></a><span class="fu">is.numeric</span>(<span class="dv">40</span>L)  <span class="co"># TRUE   (integer es subconjunto de numeric)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>En la práctica, salvo que importe la performance o la interoperación con otros sistemas, <strong>alcanza con trabajar en <code>double</code></strong>.</p>
 </section>
 <section id="character" class="slide level2">
 <h2>character</h2>
 <p>Texto: símbolos, letras, palabras o frases dentro de comillas (dobles o simples).</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a>saludo <span class="ot">&lt;-</span> <span class="st">"Hola, mundo"</span></span>
-<span id="cb6-2"><a></a><span class="fu">class</span>(saludo)             <span class="co"># "character"</span></span>
-<span id="cb6-3"><a></a><span class="fu">nchar</span>(saludo)             <span class="co"># 11</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a></a>saludo <span class="ot">&lt;-</span> <span class="st">"Hola, mundo"</span></span>
+<span id="cb5-2"><a></a><span class="fu">class</span>(saludo)             <span class="co"># "character"</span></span>
+<span id="cb5-3"><a></a><span class="fu">nchar</span>(saludo)             <span class="co"># 11</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Funciones útiles: <code>paste</code>, <code>paste0</code>, <code>nchar</code>, <code>toupper</code>, <code>tolower</code>, <code>substr</code>.</p>
 </section>
 <section id="coerción-de-tipos" class="slide level2">
 <h2>Coerción de tipos</h2>
 <p>Cuando mezclamos tipos, R toma una decisión por nosotros y convierte todo al tipo más “general”.</p>
 <p>Reglas, de menor a mayor: <code>logical</code> → <code>integer</code> → <code>double</code> → <code>character</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>L)         <span class="co"># integer:   1 1</span></span>
-<span id="cb7-2"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>L, <span class="fl">1.5</span>)    <span class="co"># double:    1.0 1.0 1.5</span></span>
-<span id="cb7-3"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>, <span class="st">"a"</span>)     <span class="co"># character: "TRUE" "1" "a"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>L)         <span class="co"># integer:   1 1</span></span>
+<span id="cb6-2"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>L, <span class="fl">1.5</span>)    <span class="co"># double:    1.0 1.0 1.5</span></span>
+<span id="cb6-3"><a></a><span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="dv">1</span>, <span class="st">"a"</span>)     <span class="co"># character: "TRUE" "1" "a"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Es importante saberlo porque a veces lo causamos sin querer y los resultados se vuelven raros.</p>
 </section>
 <section id="vectores-lo-mismo-varias-veces" class="slide level2">
 <h2>Vectores: lo mismo, varias veces</h2>
 <p>Un vector es una <strong>lista ordenada de valores del mismo tipo</strong>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>notas  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">6</span>)</span>
-<span id="cb8-2"><a></a><span class="fu">class</span>(notas)             <span class="co"># "numeric"</span></span>
-<span id="cb8-3"><a></a><span class="fu">length</span>(notas)            <span class="co"># 5</span></span>
-<span id="cb8-4"><a></a>notas[<span class="dv">1</span>]                 <span class="co"># 7</span></span>
-<span id="cb8-5"><a></a>notas[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]           <span class="co"># 8 9</span></span>
-<span id="cb8-6"><a></a>notas[notas <span class="sc">&gt;</span> <span class="dv">6</span>]         <span class="co"># 7 8 9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a>notas  <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">6</span>)</span>
+<span id="cb7-2"><a></a><span class="fu">class</span>(notas)             <span class="co"># "numeric"</span></span>
+<span id="cb7-3"><a></a><span class="fu">length</span>(notas)            <span class="co"># 5</span></span>
+<span id="cb7-4"><a></a>notas[<span class="dv">1</span>]                 <span class="co"># 7</span></span>
+<span id="cb7-5"><a></a>notas[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)]           <span class="co"># 8 9</span></span>
+<span id="cb7-6"><a></a>notas[notas <span class="sc">&gt;</span> <span class="dv">6</span>]         <span class="co"># 7 8 9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si mezclamos tipos, R coerciona (slide anterior).</p>
 </section>
 <section id="listas-cosas-distintas-juntas" class="slide level2">
 <h2>Listas: cosas distintas, juntas</h2>
 <p>Una <strong>lista</strong> combina elementos de distintos tipos y largos.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>alumno <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb9-2"><a></a>  <span class="at">nombre   =</span> <span class="st">"Ana"</span>,</span>
-<span id="cb9-3"><a></a>  <span class="at">edad     =</span> <span class="dv">23</span>L,</span>
-<span id="cb9-4"><a></a>  <span class="at">notas    =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>),</span>
-<span id="cb9-5"><a></a>  <span class="at">aprobado =</span> <span class="cn">TRUE</span></span>
-<span id="cb9-6"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a></a>alumno <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb8-2"><a></a>  <span class="at">nombre   =</span> <span class="st">"Ana"</span>,</span>
+<span id="cb8-3"><a></a>  <span class="at">edad     =</span> <span class="dv">23</span>L,</span>
+<span id="cb8-4"><a></a>  <span class="at">notas    =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>),</span>
+<span id="cb8-5"><a></a>  <span class="at">aprobado =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-6"><a></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Acceso por nombre o por posición:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>alumno<span class="sc">$</span>nombre        <span class="co"># "Ana"</span></span>
-<span id="cb10-2"><a></a>alumno[[<span class="st">"notas"</span>]]    <span class="co"># c(7, 8, 9)</span></span>
-<span id="cb10-3"><a></a>alumno[[<span class="dv">2</span>]]          <span class="co"># 23</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a></a>alumno<span class="sc">$</span>nombre        <span class="co"># "Ana"</span></span>
+<span id="cb9-2"><a></a>alumno[[<span class="st">"notas"</span>]]    <span class="co"># c(7, 8, 9)</span></span>
+<span id="cb9-3"><a></a>alumno[[<span class="dv">2</span>]]          <span class="co"># 23</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="data.frame-la-tabla-de-r" class="slide level2">
 <h2>data.frame: la “tabla” de R</h2>
 <p>Un <code>data.frame</code> es una <strong>tabla</strong>: las filas son observaciones, las columnas son variables.</p>
 <p>Por dentro, es una lista donde cada elemento es una columna y <strong>todas las columnas tienen la misma longitud</strong>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>estudiantes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb11-2"><a></a>  <span class="at">nombre   =</span> <span class="fu">c</span>(<span class="st">"Ana"</span>, <span class="st">"Beto"</span>, <span class="st">"Cami"</span>),</span>
-<span id="cb11-3"><a></a>  <span class="at">nota     =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">9</span>),</span>
-<span id="cb11-4"><a></a>  <span class="at">aprobado =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb11-5"><a></a>)</span>
-<span id="cb11-6"><a></a>estudiantes<span class="sc">$</span>nota         <span class="co"># 7 4 9</span></span>
-<span id="cb11-7"><a></a>estudiantes[<span class="dv">1</span>, ]         <span class="co"># primera fila</span></span>
-<span id="cb11-8"><a></a>estudiantes[, <span class="st">"nombre"</span>]  <span class="co"># columna por nombre</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a></a>estudiantes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb10-2"><a></a>  <span class="at">nombre   =</span> <span class="fu">c</span>(<span class="st">"Ana"</span>, <span class="st">"Beto"</span>, <span class="st">"Cami"</span>),</span>
+<span id="cb10-3"><a></a>  <span class="at">nota     =</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">4</span>, <span class="dv">9</span>),</span>
+<span id="cb10-4"><a></a>  <span class="at">aprobado =</span> <span class="fu">c</span>(<span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb10-5"><a></a>)</span>
+<span id="cb10-6"><a></a>estudiantes<span class="sc">$</span>nota         <span class="co"># 7 4 9</span></span>
+<span id="cb10-7"><a></a>estudiantes[<span class="dv">1</span>, ]         <span class="co"># primera fila</span></span>
+<span id="cb10-8"><a></a>estudiantes[, <span class="st">"nombre"</span>]  <span class="co"># columna por nombre</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Va a ser la estructura central de la materia.</p>
 </section>
 <section id="atómicos-vs-compuestos" class="slide level2">
@@ -431,26 +442,26 @@
 <section id="funciones-nuestros-propios-verbos" class="slide level2">
 <h2>Funciones: nuestros propios verbos</h2>
 <p>Una <strong>función</strong> es un bloque de código con un nombre, que recibe <strong>argumentos</strong> y devuelve una salida.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>trasladar <span class="ot">&lt;-</span> <span class="cf">function</span>(x, a) {</span>
-<span id="cb12-2"><a></a>  resultado <span class="ot">&lt;-</span> x <span class="sc">+</span> a</span>
-<span id="cb12-3"><a></a>  <span class="fu">return</span>(resultado)</span>
-<span id="cb12-4"><a></a>}</span>
-<span id="cb12-5"><a></a></span>
-<span id="cb12-6"><a></a><span class="fu">trasladar</span>(<span class="dv">1</span>, <span class="dv">5</span>)      <span class="co"># 6</span></span>
-<span id="cb12-7"><a></a><span class="fu">trasladar</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">5</span>)   <span class="co"># 6 7 8 ... 15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a></a>trasladar <span class="ot">&lt;-</span> <span class="cf">function</span>(x, a) {</span>
+<span id="cb11-2"><a></a>  resultado <span class="ot">&lt;-</span> x <span class="sc">+</span> a</span>
+<span id="cb11-3"><a></a>  <span class="fu">return</span>(resultado)</span>
+<span id="cb11-4"><a></a>}</span>
+<span id="cb11-5"><a></a></span>
+<span id="cb11-6"><a></a><span class="fu">trasladar</span>(<span class="dv">1</span>, <span class="dv">5</span>)      <span class="co"># 6</span></span>
+<span id="cb11-7"><a></a><span class="fu">trasladar</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">5</span>)   <span class="co"># 6 7 8 ... 15</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
-<section id="argumentos-y-valores-por-defecto" class="slide level2">
+<section id="argumentos-y-valores-por-defecto" class="slide level2 scrollable">
 <h2>Argumentos y valores por defecto</h2>
 <p>Argumentos pueden pasarse por <strong>posición</strong> o por <strong>nombre</strong>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="fu">trasladar</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">a =</span> <span class="dv">5</span>)</span>
-<span id="cb13-2"><a></a><span class="fu">trasladar</span>(<span class="at">a =</span> <span class="dv">5</span>, <span class="at">x =</span> <span class="dv">1</span>)   <span class="co"># equivalente</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">trasladar</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">a =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a></a><span class="fu">trasladar</span>(<span class="at">a =</span> <span class="dv">5</span>, <span class="at">x =</span> <span class="dv">1</span>)   <span class="co"># equivalente</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>También se pueden definir <strong>valores por defecto</strong>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a>trasladar <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">a =</span> <span class="dv">1</span>) {</span>
-<span id="cb14-2"><a></a>  x <span class="sc">+</span> a</span>
-<span id="cb14-3"><a></a>}</span>
-<span id="cb14-4"><a></a></span>
-<span id="cb14-5"><a></a><span class="fu">trasladar</span>(<span class="dv">10</span>)      <span class="co"># 11, usa a = 1</span></span>
-<span id="cb14-6"><a></a><span class="fu">trasladar</span>(<span class="dv">10</span>, <span class="dv">3</span>)   <span class="co"># 13</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a>trasladar <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">a =</span> <span class="dv">1</span>) {</span>
+<span id="cb13-2"><a></a>  x <span class="sc">+</span> a</span>
+<span id="cb13-3"><a></a>}</span>
+<span id="cb13-4"><a></a></span>
+<span id="cb13-5"><a></a><span class="fu">trasladar</span>(<span class="dv">10</span>)      <span class="co"># 11, usa a = 1</span></span>
+<span id="cb13-6"><a></a><span class="fu">trasladar</span>(<span class="dv">10</span>, <span class="dv">3</span>)   <span class="co"># 13</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <aside class="notes">
 <p>Mostrar el panel Environment después de definir trasladar.</p>
 <style type="text/css">
@@ -467,8 +478,8 @@
 </section>
 <section id="buscar-ayuda" class="slide level2">
 <h2>Buscar ayuda</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="fu">help</span>(sum)</span>
-<span id="cb15-2"><a></a>?mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="fu">help</span>(sum)</span>
+<span id="cb14-2"><a></a>?mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ul>
 <li>En RStudio: panel <strong>Help</strong> (abajo-derecha) o <code>F1</code> con el cursor encima de una función.</li>
 <li>Google + Stack Overflow: la mayoría de las dudas ya las preguntó alguien.</li>
@@ -478,15 +489,15 @@
 <section id="buena-práctica-nombres-descriptivos" class="slide level2">
 <h2>Buena práctica: nombres descriptivos</h2>
 <p>El nombre de una variable es la <strong>primera línea de documentación</strong> del código. Si los nombres son buenos, casi no hace falta comentar.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="co"># poco claro</span></span>
-<span id="cb16-2"><a></a>x  <span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb16-3"><a></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos.csv"</span>)</span>
-<span id="cb16-4"><a></a>n  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb16-5"><a></a></span>
-<span id="cb16-6"><a></a><span class="co"># claro</span></span>
-<span id="cb16-7"><a></a>edad_paciente   <span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb16-8"><a></a>pacientes       <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos.csv"</span>)</span>
-<span id="cb16-9"><a></a>n_simulaciones  <span class="ot">&lt;-</span> <span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a></a><span class="co"># poco claro</span></span>
+<span id="cb15-2"><a></a>x  <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb15-3"><a></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos.csv"</span>)</span>
+<span id="cb15-4"><a></a>n  <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb15-5"><a></a></span>
+<span id="cb15-6"><a></a><span class="co"># claro</span></span>
+<span id="cb15-7"><a></a>edad_paciente   <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb15-8"><a></a>pacientes       <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"datos.csv"</span>)</span>
+<span id="cb15-9"><a></a>n_simulaciones  <span class="ot">&lt;-</span> <span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Reglas prácticas:</p>
 <ul>
 <li><code>snake_case</code> (palabras separadas por <code>_</code>).</li>
@@ -494,17 +505,17 @@
 <li>Evitar nombres que pisan funciones de R: <code>c</code>, <code>t</code>, <code>T</code>, <code>F</code>, <code>data</code>, <code>df</code>, <code>mean</code>.</li>
 </ul>
 </section>
-<section id="ejercicios-en-clase" class="slide level2">
+<section id="ejercicios-en-clase" class="slide level2 scrollable">
 <h2>Ejercicios en clase</h2>
 <p>Cargá <code>mtcars</code> (ya viene con R) y trabajá sobre ese <code>data.frame</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a><span class="fu">head</span>(mtcars)   <span class="co"># mira las primeras filas</span></span>
-<span id="cb17-2"><a></a>?mtcars        <span class="co"># qué representa cada columna</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a></a><span class="fu">head</span>(mtcars)   <span class="co"># mira las primeras filas</span></span>
+<span id="cb16-2"><a></a>?mtcars        <span class="co"># qué representa cada columna</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <ol type="1">
 <li><p>Asigná tres variables que describan <strong>un</strong> auto: <code>consumo_mpg</code>, <code>cilindros</code> (entero) y <code>transmision_manual</code> (booleano). Verificá el tipo de cada una con <code>class()</code>. Elegí los nombres pensando que los va a leer otra persona.</p></li>
 <li><p>Sin correrlo, predecí qué hace este código y por qué. Después corré y comparalo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>consumo <span class="ot">&lt;-</span> <span class="dv">20</span></span>
-<span id="cb18-2"><a></a>auto    <span class="ot">&lt;-</span> <span class="st">"Toyota"</span></span>
-<span id="cb18-3"><a></a>consumo <span class="sc">+</span> auto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a></a>consumo <span class="ot">&lt;-</span> <span class="dv">20</span></span>
+<span id="cb17-2"><a></a>auto    <span class="ot">&lt;-</span> <span class="st">"Toyota"</span></span>
+<span id="cb17-3"><a></a>consumo <span class="sc">+</span> auto</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p>Sobre el vector <code>mtcars$mpg</code> (consumo en miles por galón), quedate con los autos cuyo consumo supera el promedio. Pista: <code>mean(mtcars$mpg)</code> te da el promedio; usá indexado lógico.</p></li>
 <li><p>Escribí una función <code>etiquetar_auto(modelo, consumo)</code> que devuelva el string <code>"&lt;modelo&gt;: &lt;consumo&gt; mpg"</code>. Pista: <code>paste0</code>.</p></li>
 <li><p>Creá una <strong>lista</strong> <code>mi_auto</code> con cuatro campos: <code>modelo</code> (string), <code>cilindros</code> (integer), <code>consumo</code> (double) y <code>manual</code> (logical). Accedé al modelo con <code>$</code> y con <code>[[ ]]</code>.</p></li>
@@ -523,7 +534,7 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="comprensión-quedó-claro" class="slide level2">
+<section id="comprensión-quedó-claro" class="slide level2 scrollable">
 <h2>Comprensión: ¿quedó claro?</h2>
 <p>Marcá la opción correcta.</p>
 <ol type="1">
@@ -556,28 +567,24 @@
 <li><code>"vector"</code></li>
 </ol></li>
 </ol>
-<aside class="notes">
-<p>Respuestas: 1-b, 2-c, 3-b, 4-b. Discutir las trampas: <code>for</code> es palabra reservada; <code>class</code> de un double devuelve <code>"numeric"</code> (no <code>"double"</code>), aunque <code>typeof</code> sí los distingue.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</section>
+<section id="respuestas" class="slide level2">
+<h2>Respuestas</h2>
+<ol type="1">
+<li><strong>b)</strong> <code>mi.variable</code>. El punto está permitido en nombres en R. <code>2x</code> empieza con número, <code>mi variable</code> tiene un espacio, <code>for</code> es palabra reservada.</li>
+<li><strong>c)</strong> <code>"numeric"</code>. R guarda el valor como <code>double</code> (lo confirma <code>typeof</code>), pero <code>class</code> devuelve <code>"numeric"</code>, la clase paraguas para números.</li>
+<li><strong>b)</strong> Las columnas de un <code>data.frame</code> tienen que tener todas la misma longitud. Una lista no.</li>
+<li><strong>b)</strong> <code>"logical"</code>. La operación entre booleanos devuelve un booleano.</li>
+</ol>
 </section>
 <section id="apéndice-vs--" class="slide level2">
 <h2>Apéndice: <code>=</code> vs <code>&lt;-</code></h2>
 <p>Para asignar en R hay dos operadores: <code>&lt;-</code> y <code>=</code>. La mayoría del tiempo son intercambiables.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb19-2"><a></a>y <span class="ot">=</span>  <span class="dv">20</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a></a>x <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb18-2"><a></a>y <span class="ot">=</span>  <span class="dv">20</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La diferencia aparece cuando hay una llamada a función de por medio.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a></a><span class="fu">sum</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)    <span class="co"># x es el nombre del argumento, no se asigna nada</span></span>
-<span id="cb20-2"><a></a><span class="fu">sum</span>(x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)   <span class="co"># x queda asignada en el environment global</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a></a><span class="fu">sum</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)    <span class="co"># x es el nombre del argumento, no se asigna nada</span></span>
+<span id="cb19-2"><a></a><span class="fu">sum</span>(x <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)   <span class="co"># x queda asignada en el environment global</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Convención que vamos a seguir:</p>
 <ul>
 <li>Usar <code>&lt;-</code> para <strong>asignar</strong> variables.</li>

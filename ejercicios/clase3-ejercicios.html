@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Polinomio interpolador de Lagrange – Curso Nivelador - Programación en R</title>
+<title>Clase 3 - Ejercicios – Curso Nivelador - Programación en R</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -106,35 +106,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -235,15 +206,32 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#contexto" id="toc-contexto" class="nav-link active" data-scroll-target="#contexto">Contexto</a></li>
+  <li><a href="#ejercicio-1-lista-paciente" id="toc-ejercicio-1-lista-paciente" class="nav-link" data-scroll-target="#ejercicio-1-lista-paciente">Ejercicio 1: lista paciente</a></li>
+  <li><a href="#ejercicio-2-lista-de-pacientes" id="toc-ejercicio-2-lista-de-pacientes" class="nav-link" data-scroll-target="#ejercicio-2-lista-de-pacientes">Ejercicio 2: lista de pacientes</a></li>
+  <li><a href="#ejercicio-3-matriz-desde-airquality" id="toc-ejercicio-3-matriz-desde-airquality" class="nav-link" data-scroll-target="#ejercicio-3-matriz-desde-airquality">Ejercicio 3: matriz desde <code>airquality</code></a></li>
+  <li><a href="#ejercicio-4-filtrar-y-modificar-airquality" id="toc-ejercicio-4-filtrar-y-modificar-airquality" class="nav-link" data-scroll-target="#ejercicio-4-filtrar-y-modificar-airquality">Ejercicio 4: filtrar y modificar <code>airquality</code></a></li>
+  <li><a href="#ejercicio-5-medias_por_grupo" id="toc-ejercicio-5-medias_por_grupo" class="nav-link" data-scroll-target="#ejercicio-5-medias_por_grupo">Ejercicio 5: <code>medias_por_grupo</code></a></li>
+  <li><a href="#ejercicio-6-top_grupo" id="toc-ejercicio-6-top_grupo" class="nav-link" data-scroll-target="#ejercicio-6-top_grupo">Ejercicio 6: <code>top_grupo</code></a></li>
+  <li><a href="#ejercicio-7-factor-con-orden" id="toc-ejercicio-7-factor-con-orden" class="nav-link" data-scroll-target="#ejercicio-7-factor-con-orden">Ejercicio 7: <code>factor</code> con orden</a></li>
+  <li><a href="#ejercicio-8-cargar_y_describir" id="toc-ejercicio-8-cargar_y_describir" class="nav-link" data-scroll-target="#ejercicio-8-cargar_y_describir">Ejercicio 8: <code>cargar_y_describir</code></a></li>
+  <li><a href="#ejercicio-9-mini-eda-encadenado" id="toc-ejercicio-9-mini-eda-encadenado" class="nav-link" data-scroll-target="#ejercicio-9-mini-eda-encadenado">Ejercicio 9: mini-EDA encadenado</a></li>
+  <li><a href="#ejercicio-10-una-función-una-responsabilidad" id="toc-ejercicio-10-una-función-una-responsabilidad" class="nav-link" data-scroll-target="#ejercicio-10-una-función-una-responsabilidad">Ejercicio 10: una función, una responsabilidad</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Polinomio interpolador de Lagrange</h1>
+<h1 class="title">Clase 3 - Ejercicios</h1>
+<p class="subtitle lead">Listas, matrices, <code>data.frame</code> y <code>factor</code></p>
 </div>
 
 
@@ -260,65 +248,96 @@ window.Quarto = {
 </header>
 
 
-<p>El objetivo de la actividad es implementar el <a href="https://es.wikipedia.org/wiki/Interpolaci%C3%B3n_polin%C3%B3mica_de_Lagrange#:~:text=En%20an%C3%A1lisis%20num%C3%A9rico%2C%20el%20polinomio,por%20Leonhard%20Euler%20en%201783.">polinomio interpolador de Lagrange</a>.</p>
-<p>Dados <span class="math inline">\(n\)</span> pares de puntos <span class="math inline">\((x_1,y_1), \dots, (x_n, y_n)\)</span>, el polinomio interpolador de Lagrange, es decir el único polinomio <span class="math inline">\(f(x)\)</span> de grado <span class="math inline">\(n+1\)</span> tal que <span class="math inline">\(f(x_i)=y_i\)</span> para todo <span class="math inline">\(i=1,\dots,n\)</span>. Su expresión viene dada por: <span class="math display">\[ f(x) = y_1 \cdot p_1(x) + \dots + y_n \cdot p_n(x) \]</span> donde cada <span class="math inline">\(p_j\)</span> es el j-ésimo polinomio de Lagrange: <span class="math display">\[ p_j(x) = \prod_{i \neq j} \frac{x-x_j}{x_i-x_j} \]</span> 1. Escriba una función que calcule el <span class="math inline">\(j\)</span>-ésimo polinomio de Lagrange <span class="math inline">\(p_j(x)\)</span>. Debe recibir,</p>
-<ul>
-<li>el punto <code>x</code> donde será evaluado,</li>
-<li>un vector <code>xi</code> con las abscisas de los puntos a interpolar,</li>
-<li>el índice <code>idx</code> del polinomio de Lagrange buscado,</li>
-</ul>
-<p>y debe devolver el valor del polinomio evaluado <span class="math inline">\(p_j(x)\)</span>. Use el siguiente modelo como base,</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pol_lagrange <span class="cf">function</span>(x xi, idx){</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># res = p_idx(j)...</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">return</span>(res)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Funciones útiles</strong>: <code>sum</code>, <code>prod</code>.</p>
-<ol start="2" type="1">
-<li>Escriba una función que reciba un vectores <code>xi</code> e <code>yi</code> con las coordenadas de los puntos a interpolar y devuelva, como función, al correspondiente polinomio interpolador de Lagrange. Use el siguiente modelo como base:</li>
+<section id="contexto" class="level2">
+<h2 class="anchored" data-anchor-id="contexto">Contexto</h2>
+<p>En esta guía organizamos datos en estructuras compuestas y reusamos las funciones que armaste antes (<code>clasificar_temp</code>, <code>clasificar_presion</code>, <code>resumen_min</code>).</p>
+<p>Dataset principal: <code>airquality</code>. Para algunos ejercicios usamos <code>iris</code> y <code>mtcars</code>. Para el bonus al final, <code>bikeshare.csv</code> que vive en <code>datos/</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(airquality)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(iris)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Funciones nuevas que vas a construir: <code>medias_por_grupo</code>, <code>top_grupo</code>, <code>cargar_y_describir</code>.</p>
+</section>
+<section id="ejercicio-1-lista-paciente" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-1-lista-paciente">Ejercicio 1: lista paciente</h2>
+<ol type="a">
+<li><p>Creá una lista <code>paciente</code> con: <code>id</code> (integer), <code>edad</code> (double), <code>sintomas</code> (vector de strings), <code>tiene_diagnostico</code> (logical), <code>presion_sistolica</code> (double).</p></li>
+<li><p>Accedé al primer síntoma con <code>$</code>, con <code>[[ ]]</code> y con <code>[ ]</code>. Mostrá la <code>class</code> de cada resultado y explicá la diferencia.</p></li>
+<li><p>Reusá <code>clasificar_presion</code> (clase 2) para agregarle a la lista un campo <code>presion_categoria</code> con la categoría correspondiente. Verificá.</p></li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>interpolador <span class="ot">=</span> <span class="cf">function</span>(xi, yi) {</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># f = function(x) ...</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(f)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Funciones útiles:</strong> <code>length</code>, <code>source</code>.</p>
-<p><strong>Sugerencia:</strong> use la función <code>eval_pol_lagrange()</code> del archivo <code>helpers_clase1.R</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>eval_pol_lagrange <span class="ot">=</span> <span class="cf">function</span>(x, x_train, pol_lagrange) {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Evalua todos los polinomios de Lagrange calculados para x_train usando los</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># polinomios generados por build_plot_lagrange()</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Input</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x: punto donde quiero evaluar.</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># x_train: vector de xs a interpolar.</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># build_plot_lagrange: función que genera el j-ésimo polinomio</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">#                      de Lagrange calcularo para x_train (como función).</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Output</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># res: vector de las evaluaciones en x de los polinomios de Lagrange.</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">=</span> <span class="fu">c</span>()</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (iter <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x_train)) {</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        pol <span class="ot">=</span> <span class="fu">pol_lagrange</span>(x, x_train, iter)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        res <span class="ot">=</span> <span class="fu">c</span>(res, pol)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(res)</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<ol start="3" type="1">
-<li>Escriba una función que reciba <code>xi</code>, <code>yi</code> y grafique su polinomio interpolador. Cambie los colores, agrege un título y etiquetas a los ejes.</li>
+</section>
+<section id="ejercicio-2-lista-de-pacientes" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-2-lista-de-pacientes">Ejercicio 2: lista de pacientes</h2>
+<ol type="a">
+<li><p>Creá una lista <code>pacientes</code> que contenga 3 pacientes (cada uno como en el ejercicio 1).</p></li>
+<li><p>Extraé las edades con <code>sapply(pacientes, function(p) p$edad)</code>. Calculá la edad media.</p></li>
+<li><p>Aplicá <code>clasificar_presion</code> (clase 2) a las presiones de todos los pacientes con <code>sapply</code>. Devolvé un vector de categorías.</p></li>
 </ol>
-<p><strong>Funciones útiles:</strong> <code>plot</code>, <code>seq</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>graficar_interpolador <span class="ot">=</span> <span class="cf">function</span>(xi, yi) {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Datos los puntos (xi, yi), grafica su polinomio interpolador de Lagrange.</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Defino una grilla de valores para graficar</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    xs <span class="ot">=</span> <span class="fu">seq</span>(<span class="fu">min</span>(x_train), <span class="fu">max</span>(x_train), <span class="at">length =</span> <span class="fl">1e2</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calculo el valor del polinomio en la grilla</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    ys <span class="ot">=</span> <span class="fu">Map</span>(<span class="fu">interpolador</span>(x_train, y_train), xs)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Grafico</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot(...)</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="ejercicio-3-matriz-desde-airquality" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-3-matriz-desde-airquality">Ejercicio 3: matriz desde <code>airquality</code></h2>
+<ol type="a">
+<li><p>Convertí las columnas numéricas de <code>airquality</code> (<code>Ozone</code>, <code>Solar.R</code>, <code>Wind</code>, <code>Temp</code>) en una matriz. Pista: <code>as.matrix(airquality[, 1:4])</code>.</p></li>
+<li><p>Calculá la media por columna con <code>colMeans</code> (ojo con <code>NA</code>, usá <code>na.rm = TRUE</code>).</p></li>
+<li><p>Sacá las filas con <code>NA</code> (<code>na.omit</code>) y calculá <code>t(M) %*% M / nrow(M)</code>. ¿Qué representa cada celda? Pista: producto interno por columna.</p></li>
+</ol>
+</section>
+<section id="ejercicio-4-filtrar-y-modificar-airquality" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-4-filtrar-y-modificar-airquality">Ejercicio 4: filtrar y modificar <code>airquality</code></h2>
+<ol type="a">
+<li><p>Quedate con los días de junio (<code>Month == 6</code>). ¿Cuántas filas quedan? ¿Cuántos <code>NA</code> en <code>Ozone</code>?</p></li>
+<li><p>Agregale al subset una columna <code>temp_categoria</code> aplicando <code>clasificar_temp</code> (clase 2) a <code>Temp</code>. Convertila en <code>factor</code> con <code>factor(...)</code>.</p></li>
+<li><p>Mostrá <code>table(temp_categoria)</code>. ¿Qué proporción de días son calurosos?</p></li>
+</ol>
+</section>
+<section id="ejercicio-5-medias_por_grupo" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-5-medias_por_grupo">Ejercicio 5: <code>medias_por_grupo</code></h2>
+<ol type="a">
+<li><p>Definí <code>medias_por_grupo(df, columna_numerica, columna_grupo)</code> que devuelva un <code>data.frame</code> con dos columnas: <code>grupo</code> y <code>media</code>. Usá <code>aggregate</code>. Manejá <code>NA</code> con <code>na.rm = TRUE</code>.</p></li>
+<li><p>Aplicala a <code>airquality</code>: media de <code>Ozone</code> por <code>Month</code>.</p></li>
+<li><p>Aplicala a <code>iris</code>: media de <code>Sepal.Length</code> por <code>Species</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-6-top_grupo" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-6-top_grupo">Ejercicio 6: <code>top_grupo</code></h2>
+<ol type="a">
+<li><p>Definí <code>top_grupo(resumen)</code> que reciba la salida de <code>medias_por_grupo</code> y devuelva el nombre del grupo con la media más alta.</p></li>
+<li><p>Aplicala al resultado del 5b. ¿Qué mes tiene mayor ozono medio?</p></li>
+<li><p>Aplicala al resultado del 5c. ¿Qué especie tiene los sépalos más largos?</p></li>
+</ol>
+</section>
+<section id="ejercicio-7-factor-con-orden" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-7-factor-con-orden">Ejercicio 7: <code>factor</code> con orden</h2>
+<ol type="a">
+<li><p>Convertí <code>mtcars$cyl</code> en <code>factor</code>. Mostrá <code>levels</code>.</p></li>
+<li><p>Convertilo en <code>factor</code> ordenado <code>c("4", "6", "8")</code> con <code>ordered = TRUE</code>. Verificá que <code>mtcars$cyl[1] &lt; "8"</code> da <code>TRUE</code> cuando es ordenado.</p></li>
+<li><p>Aplicá <code>medias_por_grupo(mtcars, "mpg", "cyl")</code>. ¿Confirma la intuición de que más cilindros implica menos <code>mpg</code>?</p></li>
+</ol>
+</section>
+<section id="ejercicio-8-cargar_y_describir" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-8-cargar_y_describir">Ejercicio 8: <code>cargar_y_describir</code></h2>
+<ol type="a">
+<li><p>Definí <code>cargar_y_describir(archivo)</code> que devuelva una <strong>lista</strong> con: <code>df</code> (el <code>data.frame</code>), <code>dimensiones</code> (vector de 2), <code>tipos</code> (vector con <code>class</code> por columna), <code>n_na</code> (vector con <code>sum(is.na)</code> por columna).</p></li>
+<li><p>Aplicala a <code>bikeshare.csv</code> (en <code>datos/</code>). Pista: <code>read.csv("datos/bikeshare.csv")</code>.</p></li>
+<li><p>Mostrá los tipos de cada columna y las que tienen más de 0 <code>NA</code>.</p></li>
+</ol>
+</section>
+<section id="ejercicio-9-mini-eda-encadenado" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-9-mini-eda-encadenado">Ejercicio 9: mini-EDA encadenado</h2>
+<ol type="a">
+<li><p>Sobre el <code>df</code> cargado en 8b, identificá las columnas numéricas. Pista: <code>sapply(df, is.numeric)</code>.</p></li>
+<li><p>Aplicá <code>resumen_min</code> (clase 1) a cada columna numérica. Guardá el resultado en una lista nombrada por nombre de columna.</p></li>
+<li><p>¿Cuál columna numérica tiene la mayor amplitud (<code>max - min</code>)? Mostrala.</p></li>
+</ol>
+</section>
+<section id="ejercicio-10-una-función-una-responsabilidad" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio-10-una-función-una-responsabilidad">Ejercicio 10: una función, una responsabilidad</h2>
+<ol type="a">
+<li><p>Mirá tu <code>cargar_y_describir</code>: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.</p></li>
+<li><p>Partila en cuatro funciones más chicas: <code>cargar_csv</code>, <code>dimensiones_df</code>, <code>tipos_columnas</code>, <code>na_por_columna</code>. Reescribí <code>cargar_y_describir</code> para que llame a las cuatro.</p></li>
+<li><p>Justificá: ¿qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?</p></li>
+</ol>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

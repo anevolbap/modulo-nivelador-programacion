@@ -491,7 +491,7 @@ Cuándo evitar: para tratar como texto libre.</p>
 <span id="cb20-8"><a></a>graficar_resumen  <span class="ot">&lt;-</span> <span class="cf">function</span>(resumen)        { ... }</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si cada pieza es chica, podés probarla por separado, reusarla en otro contexto y reemplazarla sin romper el resto.</p>
 </section>
-<section id="ejercicios-en-clase" class="slide level2">
+<section id="ejercicios-en-clase" class="slide level2 scrollable">
 <h2>Ejercicios en clase</h2>
 <p>Vamos a usar <code>iris</code> (medidas de flores) y <code>mtcars</code> (autos), los dos vienen con R.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a></a><span class="fu">head</span>(iris)</span>
@@ -522,7 +522,7 @@ Cuándo evitar: para tratar como texto libre.</p>
           display:block!important;
       }</style></aside>
 </section>
-<section id="comprensión-quedó-claro" class="slide level2">
+<section id="comprensión-quedó-claro" class="slide level2 scrollable">
 <h2>Comprensión: ¿quedó claro?</h2>
 <p>Marcá la opción correcta.</p>
 <ol type="1">
@@ -555,19 +555,15 @@ Cuándo evitar: para tratar como texto libre.</p>
 <li>Nunca, <code>factor</code> está deprecado.</li>
 </ol></li>
 </ol>
-<aside class="notes">
-<p>Respuestas: 1-b, 2-c (por defecto R “drop”ea la dimensión 1 y devuelve vector), 3-b, 4-b.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</section>
+<section id="respuestas" class="slide level2">
+<h2>Respuestas</h2>
+<ol type="1">
+<li><strong>b)</strong> <code>[1]</code> devuelve una <strong>sub-lista</strong> de un elemento, <code>[[1]]</code> devuelve el <strong>contenido</strong>. Atajo mental: <code>[[ ]]</code> saca el contenido, <code>[ ]</code> saca un sub-cajón.</li>
+<li><strong>c)</strong> Vector de 2 elementos. Por defecto R “tira” la dimensión cuando queda una sola fila o columna (<code>drop = TRUE</code>).</li>
+<li><strong>b)</strong> <code>read.csv</code>. <code>load</code> es para <code>.RData</code>, <code>library</code> carga paquetes.</li>
+<li><strong>b)</strong> Para variables categóricas con un conjunto fijo de valores. Es lo que esperan los modelos de R y deja claro que no son texto libre.</li>
+</ol>
 </section>
 <section id="apéndice-una-lista-de-data.frames" class="slide level2">
 <h2>Apéndice: una lista de <code>data.frame</code>s</h2>
