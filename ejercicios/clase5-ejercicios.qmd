@@ -38,7 +38,7 @@ c)  Aplicala a `f <- function(x) (x + 2/x) / 2`. ¿Cuántas iteraciones tarda en
 
 a)  Estimá `P(al menos 6 caras de 10 monedas equilibradas)` con `replicate` + `sample(c(0, 1), 10, replace = TRUE)`. Usá 10000 réplicas.
 
-b)  Compará con `1 - pbinom(5, 10, 0.5)` (caja negra: distribución binomial).
+b)  Compará con `1 - pbinom(5, 10, 0.5)` (`pbinom` da la función de distribución acumulada de una binomial; `?pbinom` para detalles).
 
 c)  Repetí la estimación variando `n_rep = c(100, 1000, 10000, 100000)`. Graficá la estimación contra `n_rep` y observá la convergencia.
 
@@ -70,7 +70,7 @@ c)  Encontrá el `n` mínimo para `P > 0.5` recorriendo de uno en uno con un `wh
 
 a)  Implementá `biseccion(f, a, b, tol = 1e-6)` con `while`. Validá la precondición con `stopifnot(f(a) * f(b) < 0)`.
 
-b)  Encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot(f, c(0, 1))$root` (caja negra).
+b)  Encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot(f, c(0, 1))$root` (la implementación robusta que trae R).
 
 c)  Modificá `biseccion` para que devuelva una lista con `raiz`, `iteraciones` y `tolerancia_final`.
 
@@ -84,11 +84,11 @@ c)  ¿Por qué la simulación introduce ruido? ¿Cómo afecta a la bisección?
 
 ## Ejercicio 9: bootstrap del coeficiente de regresión
 
-a)  Ajustá `mod <- lm(bikers ~ temp, data = bicis)` (caja negra). Mostrá `coef(mod)` y `confint(mod)`.
+a)  Ajustá `mod <- lm(bikers ~ temp, data = bicis)`. Mostrá `coef(mod)` y `confint(mod)`.
 
-b)  Hacé bootstrap del coeficiente de `temp` con `replicate`. En cada réplica: muestreá filas con reemplazo (`sample(seq_len(nrow(bicis)), replace = TRUE)`), reajustá `lm`, extraé `coef(...)["temp"]`. Usá 500 réplicas.
+b)  Aplicá la función auxiliar `bootstrap_coef(formula, data, variable, n_rep)` (de `auxiliares.R`) sobre `bikers ~ temp`, con `variable = "temp"` y 500 réplicas. Mirá su código: muestrea filas con reemplazo, reajusta el `lm`, extrae el coeficiente. Lo encapsulamos para no repetir el patrón.
 
-c)  Calculá el IC del 95% por percentiles. Compará con `confint(mod)`.
+c)  Calculá el IC del 95% por percentiles del vector que devuelve `bootstrap_coef`. Compará con `confint(mod)`.
 
 ## Ejercicio 10: uso de bicicletas como variable de interés
 
@@ -130,7 +130,7 @@ b)  Estimá `integral_0^1 sin(pi*x) dx = 2/pi` por Monte Carlo. Compará.
 
 c)  Estimá `pi` mediante el método del círculo en el cuadrado: muestreá puntos `runif` en `[-1, 1]^2`, contá los que caen en el círculo unitario, y multiplicá por 4.
 
-## Ejercicio 15: Newton-Raphson (caja negra parcial)
+## Ejercicio 15: Newton-Raphson
 
 a)  Implementá `newton(f, df, x0, tol = 1e-6, max_iter = 100)` donde `df` es la derivada de `f`. Iteración: `x <- x - f(x) / df(x)`.
 
@@ -138,7 +138,7 @@ b)  Encontrá la raíz de `f(x) = x^2 - 2` con `df(x) = 2*x`, partiendo de `x0 =
 
 c)  Compará la cantidad de iteraciones con bisección sobre el mismo problema en `[1, 2]`.
 
-## Ejercicio 16: t-test como caja negra
+## Ejercicio 16: `t.test` y comparación con bootstrap
 
 a)  Hacé `t.test(airquality$Wind)` y leé la salida. ¿Qué representa `mean of x`, `confidence interval`, `p-value`?
 

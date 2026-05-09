@@ -42,7 +42,7 @@ c)  ¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rang
 
 a)  Scatter de `mpg ~ hp` sobre `mtcars` con `pch = 19, col = "gray60"`.
 
-b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)`. `lm` es una **caja negra** por ahora.
+b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)`. Para entender `lm` con detalle, ver `?lm`; por ahora alcanza con saber que ajusta una recta por mínimos cuadrados.
 
 c)  Agregá una línea horizontal en la media de `mpg` con `abline(h = mean(mtcars$mpg), lty = 2)` y una leyenda con `legend("topright", legend = c(...), col = c(...), lty = c(1, 2))`.
 
@@ -68,7 +68,7 @@ a)  Reusá `medias_por_grupo` (clase 3): media de `Ozone` por `Month` en `airqua
 
 b)  Graficá con `barplot(height = ..., names.arg = ..., main = "Ozono medio por mes")`.
 
-c)  Agregá barras de error con `arrows(x0, y0, x1, y1, code = 3, angle = 90)`. Calculá los extremos como media ± `sd / sqrt(n)`. Pista: armá el resumen con `aggregate(... , FUN = function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))))`.
+c)  Agregá barras de error usando la función auxiliar `barplot_con_error(x, grupo, ...)` (de `auxiliares.R`). Es un helper custom que calcula media y error estándar por grupo y los grafica de un solo viaje. Mirá su código si querés ver cómo se construye con `aggregate` + `arrows`.
 
 ## Ejercicio 7: varios gráficos con `par(mfrow)`
 
@@ -140,15 +140,15 @@ a)  Scatter de `bikers ~ temp` sobre `bicis` con `pch = 16, col = rgb(0, 0, 0, 0
 
 b)  Agregá la recta de regresión `abline(lm(bikers ~ temp, data = bicis), col = "red", lwd = 2)`.
 
-c)  Calculá `cor(bicis$bikers, bicis$temp)` (caja negra). Interpretá el signo y la magnitud.
+c)  Calculá `cor(bicis$bikers, bicis$temp)`. Interpretá el signo y la magnitud (entre -1 y 1).
 
-## Ejercicio 16: dos variables a la vez
+## Ejercicio 16: heatmap por día y hora (con un helper)
 
-a)  Calculá la media de `bikers` agrupando por `weekday` y `hr` con `aggregate(bikers ~ weekday + hr, data = bicis, mean)`.
+a)  Usá la función auxiliar `heatmap_grupo(x, fila, columna, ...)` (de `auxiliares.R`) para graficar la media de `bicis$bikers` por día de la semana y hora del día. Mirá su código para entender cómo combina `aggregate`, `xtabs` e `image`.
 
-b)  Convertí el resultado a una matriz con `xtabs(media ~ weekday + hr, data = ...)`.
+b)  Identificá visualmente los picos. ¿Aparecen los dos picos del ciclo diario en días hábiles?
 
-c)  Graficala con `image(t(matriz_xtabs))` (heatmap básico). Identificá los picos visualmente.
+c)  Volvé a hacer el heatmap solo con días hábiles (`bicis[bicis$workingday, ]`) y solo con fines de semana. Compará.
 
 ## Ejercicio 17: bootstrap con bikeshare
 
@@ -158,9 +158,9 @@ b)  Calculá un IC del 95% por percentiles.
 
 c)  Graficá el histograma de las medias bootstrap usando la función auxiliar `graficar_bootstrap` (de `auxiliares.R`). Mirá su código antes de usarla.
 
-## Ejercicio 18: regresión simple (caja negra)
+## Ejercicio 18: regresión lineal múltiple
 
-a)  Ajustá `mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)`. Mostrá `summary(mod)`. `lm` es una caja negra: lo importante es leer la salida.
+a)  Ajustá `mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)`. Mostrá `summary(mod)`. Lo importante en este momento es leer la salida y entender qué reporta.
 
 b)  Identificá los coeficientes estimados y su signo. ¿Cuál variable parece tener más peso?
 

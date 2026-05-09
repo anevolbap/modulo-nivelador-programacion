@@ -33,13 +33,13 @@ b)  Accedé al primer síntoma con `$`, con `[[ ]]` y con `[ ]`. Mostrá `class(
 
 c)  Reusá `clasificar_presion` (clase 2) para agregar un campo `presion_categoria` a la lista. Verificá.
 
-## Ejercicio 2: lista de pacientes
+## Ejercicio 2: lista de pacientes (con un helper)
 
-a)  Creá una lista `pacientes` con tres pacientes (cada uno como en el ejercicio 1).
+a)  Cargá `auxiliares.R` y usá `pacientes <- generar_pacientes(n = 10)` para obtener una lista de 10 pacientes ficticios. Mirá el código de `generar_pacientes` para entender qué hace.
 
-b)  Extraé las edades con `sapply(pacientes, function(p) p$edad)`. Calculá la edad media.
+b)  Extraé las edades de todos con `sapply(pacientes, function(p) p$edad)`. Calculá la edad media.
 
-c)  Aplicá `clasificar_presion` a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías.
+c)  Aplicá `clasificar_presion` (clase 2) a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías y resumí con `table`.
 
 ## Ejercicio 3: listas anidadas
 
@@ -161,7 +161,7 @@ b)  Aplicá `nrow` a cada uno con `sapply`.
 
 c)  Aplicá `colMeans` a cada uno con `lapply`. ¿Por qué `lapply` y no `sapply` aquí?
 
-## Ejercicio 18: `do.call(rbind, ...)` (caja negra)
+## Ejercicio 18: combinar `data.frame` con `do.call(rbind, ...)`
 
 a)  Construí tres `data.frame` chiquitos con la misma estructura (mismas columnas).
 

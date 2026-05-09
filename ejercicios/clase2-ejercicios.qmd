@@ -18,6 +18,8 @@ head(airquality)
 
 A las funciones de la clase 1 (`etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`) sumamos `clasificar_temp`, `contar_eventos`, `primer_indice_que_cumple`, `bootstrap_media` y `clasificar_presion`.
 
+Algunos ejercicios usan helpers de `auxiliares.R` (cargalo con `source("ejercicios/auxiliares.R")`). Esos helpers son **piezas custom** que usamos como caja negra para no extender el ejercicio: por ejemplo, `benchmark_funcion`. Para entenderlos podés leer su código en el archivo.
+
 ## Ejercicio 1: explorar el dataset
 
 a)  Verificá `dim(airquality)`, `colnames(airquality)`, `?airquality`. Anotá qué representa cada columna y sus unidades.
@@ -80,13 +82,13 @@ a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná un vector
 
 b)  Hacé lo mismo en una línea vectorizada: `airquality$Ozone^2 - airquality$Wind`. Verificá que coincide.
 
-c)  Cronometrá ambas versiones con `system.time`. Cuantificá la diferencia.
+c)  Compará el tiempo de las dos versiones con la función auxiliar `benchmark_funcion(fn, n_rep = 10)` (de `auxiliares.R`). Reportá la media y el desvío. ¿Cuántas veces más rápida es la versión vectorizada?
 
 ## Ejercicio 9: `for` anidado
 
 a)  Construí una matriz `M` de 5x5 donde `M[i, j] = i * j` con dos `for` anidados.
 
-b)  Verificá con `outer(1:5, 1:5, "*")` (caja negra). Coinciden.
+b)  Verificá con `outer(1:5, 1:5, "*")`. Coinciden.
 
 c)  Calculá la suma de los elementos pares de `M` recorriéndola con dos `for` anidados.
 
@@ -104,7 +106,7 @@ a)  Escribí un `while` que estime `sqrt(2)` con la iteración Babilónica: `x <
 
 b)  Imprimí el resultado y la cantidad de iteraciones.
 
-c)  Compará con `sqrt(2)` (caja negra).
+c)  Compará con `sqrt(2)`.
 
 ## Ejercicio 12: `break` para detenerse al encontrar
 
@@ -152,7 +154,7 @@ a)  Definí `bootstrap_media(x, n_rep = 1000)` con `replicate` y `sample`. Devol
 
 b)  Aplicala a `airquality$Wind` (no tiene `NA`). La media de las medias debería estar cerca de `mean(airquality$Wind)`.
 
-c)  Calculá un intervalo del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int` (caja negra).
+c)  Calculá un intervalo del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int`.
 
 ## Ejercicio 18: bootstrap de una proporción
 
@@ -168,7 +170,7 @@ a)  Aplicá `clasificar_temp` (ejercicio 4) a `airquality$Temp` y guardá el res
 
 b)  Resumí con `table(airquality$temp_categoria)`. ¿Qué proporción de días son calurosos?
 
-c)  Calculá la media de `Ozone` por categoría con `aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)` (caja negra para esta clase). Interpretá.
+c)  Calculá la media de `Ozone` por categoría con `aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)`. Interpretá.
 
 ## Ejercicio 20: comentar el porqué
 

@@ -16,7 +16,7 @@ head(mtcars)
 ?mtcars
 ```
 
-A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: `etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`. Los ejercicios marcados como **caja negra** usan funciones del lenguaje sin pedir que las implementen.
+A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: `etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`.
 
 ## Ejercicio 1: variables y tipos atómicos
 
@@ -138,7 +138,7 @@ b)  Aplicá `resumen_min` a la columna `edad`.
 
 c)  Aplicá `summary()` al `data.frame` completo. Compará la salida con la de `resumen_min`.
 
-## Ejercicio 16: `quantile` (caja negra)
+## Ejercicio 16: percentiles con `quantile`
 
 a)  Aplicá `quantile(mtcars$mpg)` (sin argumentos extra). Identificá el percentil 25, la mediana y el percentil 75.
 
@@ -146,7 +146,7 @@ b)  Aplicá `quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9))`. ¿Qué representa 
 
 c)  Definí `rango_intercuartilico(x)` usando `quantile`. Aplicalo a `mtcars$mpg` y compará con `IQR(mtcars$mpg)`.
 
-## Ejercicio 17: correlación con `cor` (caja negra)
+## Ejercicio 17: correlación con `cor`
 
 a)  Calculá `cor(mtcars$mpg, mtcars$hp)`. Interpretá el signo y la magnitud (`cor` toma valores entre `-1` y `1`).
 
@@ -164,7 +164,7 @@ c)  Probá `lapply(1:5, function(i) i^2)`. Compará con la salida de `sapply` y 
 
 ## Ejercicio 19: la caja de herramientas sobre datos sintéticos
 
-a)  Generá un vector `x` con `rnorm(100, mean = 50, sd = 10)` (100 valores normales). `rnorm` es una caja negra: ver `?rnorm`.
+a)  Generá un vector `x` con `rnorm(100, mean = 50, sd = 10)` (100 valores normales). Para detalles, `?rnorm`.
 
 b)  Aplicale `resumen_min`, `dif_promedio` y `dentro_rango` con `a = 40, b = 60`.
 
