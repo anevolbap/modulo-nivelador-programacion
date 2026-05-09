@@ -1,9 +1,12 @@
 # Módulo nivelador de programación
 
 Material del módulo nivelador de programación en R para la Maestría en
-Estadística Matemática (UBA). El curso son cinco clases de 90 minutos
-para alumnos sin experiencia previa en programación, con espíritu de
-data science y una buena práctica por clase.
+Estadística Matemática (UBA). Esta versión es una **revisita** del curso
+dictado en 2022: mismo lugar y misma audiencia, ejercicios con espíritu
+de data science y una buena práctica de programación por clase.
+
+Cinco clases de 90 minutos para alumnos sin experiencia previa en
+programación.
 
 Sitio público: https://anevolbap.github.io/modulo-nivelador-programacion/
 
@@ -24,7 +27,9 @@ Sitio público: https://anevolbap.github.io/modulo-nivelador-programacion/
 - `soluciones/`: resoluciones del docente (un `.R` por ejercicio).
 - `tests/`: tests automáticos de cada `ejercicioN.R` para usar con el
   paquete `corrector`.
-- `datos/`: datasets de ejemplo (`bikeshare.csv`).
+- `datos/`: datasets de ejemplo (`bikeshare.csv`). El bonus de clase 4
+  baja la [encuesta sysarmy de salarios IT](https://github.com/openqube/openqube-sueldos)
+  directamente desde el repo de openqube.
 - `images/`: imágenes embebidas en los notebooks.
 - `_quarto.yml`, `index.qmd`: configuración del sitio.
 
