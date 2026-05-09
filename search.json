@@ -1,0 +1,779 @@
+[
+  {
+    "objectID": "soluciones/biseccion.html",
+    "href": "soluciones/biseccion.html",
+    "title": "Método de bisección",
+    "section": "",
+    "text": "Dada una función continua \\(f\\) definida en un intervalo \\([a,b]\\), si \\(f(a)*f(b) &lt; 0\\) entonces existe \\(x_0\\) tal que \\(f(x_0) = 0\\). El método de bisección repite el siguiente pasos:\n\nElijo un punto del intervalo para crear dos subintervalos.\nDescarto el intervalo en cuyos extremos \\(f\\) toma valores con distinto signo.\nSi el intervalo resultante tiene ancho menor a una tolerancia, declaramos que cualquiera de los extremos es raíz de \\(f\\).\n\n\nEscriba una función que haga un paso de bisección. Debe recibir función fun cuya raíz buscamos, un vector intervalo cuyas coordenadas sean los extremos del intervalo inicial y una tolerancia tol para declarar que una raíz fue encontrada. Use el siguiente modelo como base:\n\nbiseccion_un_paso = function(fun, intervalo, tol = 1e-4){\n    # Punto medio del intervalo\n    medio = ...\n    # Evaluo la función en los tres puntos\n    f_medio = ...\n    f_izq = ...\n    f_der = ...\n    z Defino el siguiente intervalo\n    intervalo_nuevo = ...\n    # Chequeo la tolerancia\n    flag = ...\n    # Devuelvo el\n    return(list(fun = fun,\n                intervalo = intervalo_nuevo,\n                flag = flag))\n}\n\nUtilice la función iterar_funcion para aplicar la función biseccion_un_paso.\n\niterar_funcion = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {\n    intervalo = intervalo_inicial\n    salida = FALSE\n    while (!salida) {\n        res = fun_iterar(fun, intervalo, tol)\n        intervalo = res$intervalo\n        salida = res$flag\n    }\n    return(res)\n}\n\nUna forma de evitar la implementación de un bucle es la recursión.\n\nbiseccion_recursiva = function(fun, intervalo, tol = 1e-4){\n    \n    ## ... código de la función anterior....\n    \n    ## Llamo a la misma función!\n    if (!flag) {\n        ret = biseccion_recursiva(fun, intervalo_nuevo)\n    }\n    # Cuando termina devuelvo el último resultado\n    return(ret)\n}\n\nModifique la función iterar_funcion para registrar todas las iteraciones del método para hacer un gráfico de la trayectoria.\n\niterar_funcion_track = function(fun_iterar, fun, intervalo_inicial, tol=1e-4) {\n    intervalo = intervalo_inicial\n    salida = FALSE\n    trace = c()\n    while (!salida) {\n        res = fun_iterar(fun, intervalo, tol)\n        intervalo = res$intervalo\n        salida = res$flag\n        trace = c(trace, mean(intervalo))\n    }\n    return(trace)\n}"
+  },
+  {
+    "objectID": "soluciones/lagrange.html",
+    "href": "soluciones/lagrange.html",
+    "title": "Polinomio interpolador de Lagrange",
+    "section": "",
+    "text": "El objetivo de la actividad es implementar el polinomio interpolador de Lagrange.\nDados \\(n\\) pares de puntos \\((x_1,y_1), \\dots, (x_n, y_n)\\), el polinomio interpolador de Lagrange, es decir el único polinomio \\(f(x)\\) de grado \\(n+1\\) tal que \\(f(x_i)=y_i\\) para todo \\(i=1,\\dots,n\\). Su expresión viene dada por: \\[ f(x) = y_1 \\cdot p_1(x) + \\dots + y_n \\cdot p_n(x) \\] donde cada \\(p_j\\) es el j-ésimo polinomio de Lagrange: \\[ p_j(x) = \\prod_{i \\neq j} \\frac{x-x_j}{x_i-x_j} \\] 1. Escriba una función que calcule el \\(j\\)-ésimo polinomio de Lagrange \\(p_j(x)\\). Debe recibir,\n\nel punto x donde será evaluado,\nun vector xi con las abscisas de los puntos a interpolar,\nel índice idx del polinomio de Lagrange buscado,\n\ny debe devolver el valor del polinomio evaluado \\(p_j(x)\\). Use el siguiente modelo como base,\npol_lagrange function(x xi, idx){\n# res = p_idx(j)...\nreturn(res)\n}\nFunciones útiles: sum, prod.\n\nEscriba una función que reciba un vectores xi e yi con las coordenadas de los puntos a interpolar y devuelva, como función, al correspondiente polinomio interpolador de Lagrange. Use el siguiente modelo como base:\n\ninterpolador = function(xi, yi) {\n    # f = function(x) ...\n    return(f)\n}\nFunciones útiles: length, source.\nSugerencia: use la función eval_pol_lagrange() del archivo helpers_clase1.R.\neval_pol_lagrange = function(x, x_train, pol_lagrange) {\n    # Evalua todos los polinomios de Lagrange calculados para x_train usando los\n    # polinomios generados por build_plot_lagrange()\n    #\n    # Input\n    #\n    # x: punto donde quiero evaluar.\n    # x_train: vector de xs a interpolar.\n    # build_plot_lagrange: función que genera el j-ésimo polinomio\n    #                      de Lagrange calcularo para x_train (como función).\n    #\n    # Output\n    #\n    # res: vector de las evaluaciones en x de los polinomios de Lagrange.\n    res = c()\n    for (iter in 1:length(x_train)) {\n        pol = pol_lagrange(x, x_train, iter)\n        res = c(res, pol)\n    }\n    return(res)\n}\n\nEscriba una función que reciba xi, yi y grafique su polinomio interpolador. Cambie los colores, agrege un título y etiquetas a los ejes.\n\nFunciones útiles: plot, seq.\ngraficar_interpolador = function(xi, yi) {\n    # Datos los puntos (xi, yi), grafica su polinomio interpolador de Lagrange.\n    \n    # Defino una grilla de valores para graficar\n    xs = seq(min(x_train), max(x_train), length = 1e2)\n    # Calculo el valor del polinomio en la grilla\n    ys = Map(interpolador(x_train, y_train), xs)\n    # Grafico\n    # plot(...)\n}"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "",
+    "text": "Material del módulo nivelador de programación en R para la Maestría en Estadística Matemática (UBA). Esta versión es una revisión del curso dictado en 2022.\nEl curso son cinco clases de 90 minutos pensadas para alumnos sin experiencia previa en programación. Cada clase combina material expositivo, ejercicios para hacer en clase y un checkpoint de comprensión, y deja una buena práctica de programación instalada."
+  },
+  {
+    "objectID": "index.html#clases",
+    "href": "index.html#clases",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Clases",
+    "text": "Clases\n\nTipos de datos y funciones\nCondicionales y bucles\nEstructuras compuestas\nVisualización y exploración de datos\nSimulación y algoritmos iterativos"
+  },
+  {
+    "objectID": "index.html#ejercicios",
+    "href": "index.html#ejercicios",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios",
+    "text": "Ejercicios\n\nClase 1\nClase 2\nEntrega final"
+  },
+  {
+    "objectID": "index.html#repositorio",
+    "href": "index.html#repositorio",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Repositorio",
+    "text": "Repositorio\nEl código fuente está en GitHub."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#de-un-valor-a-una-colección",
+    "href": "clases/clase3-clase.html#de-un-valor-a-una-colección",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "De un valor a una colección",
+    "text": "De un valor a una colección\nEn clase 1 vimos los tipos atómicos: logical, double, integer, character. Cada variable guardaba un valor (o un vector de valores del mismo tipo).\nHoy vamos a ver cómo guardar colecciones más ricas:\n\nlista: cosas distintas, juntas, con nombre.\nmatriz: tabla rectangular de valores del mismo tipo.\ndata.frame: tabla rectangular donde cada columna puede tener su tipo.\nfactor: variable categórica con un conjunto fijo de valores posibles.\n\n\n~5 min. Recordar la analogía: hasta ahora teníamos sustantivos sueltos, ahora armamos “frases compuestas”."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#un-mapa-de-las-estructuras",
+    "href": "clases/clase3-clase.html#un-mapa-de-las-estructuras",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Un mapa de las estructuras",
+    "text": "Un mapa de las estructuras\n\n\n\nEstructura\nDimensiones\n¿Mismo tipo?\n\n\n\n\nvector\n1\nsí\n\n\nmatriz\n2\nsí\n\n\narray\nn\nsí\n\n\nlista\n1\nno\n\n\ndata.frame\n2\npor columna\n\n\nfactor\n1\nsí (entero)\n\n\n\nvector y matriz son rígidos: todo del mismo tipo. lista y data.frame son flexibles."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#vectores-con-nombre-puente",
+    "href": "clases/clase3-clase.html#vectores-con-nombre-puente",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Vectores con nombre (puente)",
+    "text": "Vectores con nombre (puente)\nUn vector puede tener nombres en sus posiciones:\nedades &lt;- c(ana = 23, beto = 31, cami = 19)\nedades[\"beto\"]    # 31\nnames(edades)     # \"ana\"  \"beto\" \"cami\"\nEsto ya empieza a parecerse a una lista. La diferencia: los elementos siguen teniendo que ser del mismo tipo."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#listas-motivación",
+    "href": "clases/clase3-clase.html#listas-motivación",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Listas: motivación",
+    "text": "Listas: motivación\nCuando una “cosa” tiene piezas heterogéneas, necesitamos una lista.\nPor ejemplo, un alumno tiene un nombre (string), una edad (entero), un vector de notas y un booleano de aprobado.\nalumno &lt;- list(\n  nombre   = \"Ana\",\n  edad     = 23L,\n  notas    = c(7, 8, 9),\n  aprobado = TRUE\n)\nUna lista es como un cajón con etiquetas: cada compartimento puede contener algo distinto."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#listas-tres-formas-de-acceder",
+    "href": "clases/clase3-clase.html#listas-tres-formas-de-acceder",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Listas: tres formas de acceder",
+    "text": "Listas: tres formas de acceder\nalumno$nombre        # \"Ana\"          (por nombre, atajo)\nalumno[[\"nombre\"]]   # \"Ana\"          (por nombre, forma larga)\nalumno[[1]]          # \"Ana\"          (por posición)\nY la forma “que parece igual pero no”:\nalumno[\"nombre\"]     # lista de un elemento, no el string\nclass(alumno[\"nombre\"])    # \"list\"\nclass(alumno[[\"nombre\"]])  # \"character\"\nRegla mental: [[ ]] saca el contenido; [ ] saca un sub-cajón.\n\nEsta es LA trampa de listas. Insistir con un par de ejemplos."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#listas-anidadas",
+    "href": "clases/clase3-clase.html#listas-anidadas",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Listas anidadas",
+    "text": "Listas anidadas\nUna lista puede contener otras listas. Útil cuando los datos tienen jerarquía.\ncurso &lt;- list(\n  nombre  = \"Nivelador\",\n  alumnos = list(\n    list(nombre = \"Ana\",  nota = 7),\n    list(nombre = \"Beto\", nota = 5)\n  )\n)\n\ncurso$alumnos[[1]]$nombre    # \"Ana\""
+  },
+  {
+    "objectID": "clases/clase3-clase.html#matrices",
+    "href": "clases/clase3-clase.html#matrices",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Matrices",
+    "text": "Matrices\nUna matriz es una tabla rectangular de valores del mismo tipo.\nM &lt;- matrix(1:12, nrow = 3, ncol = 4)\nM\n#      [,1] [,2] [,3] [,4]\n# [1,]    1    4    7   10\n# [2,]    2    5    8   11\n# [3,]    3    6    9   12\nPor defecto se rellena por columna. Para rellenar por fila:\nmatrix(1:12, nrow = 3, byrow = TRUE)"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#acceso-en-matrices",
+    "href": "clases/clase3-clase.html#acceso-en-matrices",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Acceso en matrices",
+    "text": "Acceso en matrices\nM[fila, columna]. Vacío en una posición = “todas”.\nM[1, 2]    # 4   (fila 1, columna 2)\nM[1, ]     # 1 4 7 10  (fila 1 entera)\nM[, 2]     # 4 5 6     (columna 2 entera)\nM[1:2, ]   # primeras dos filas\n\ndim(M)     # 3 4\nnrow(M)    # 3\nncol(M)    # 4\nt(M)       # traspuesta\nM %*% t(M) # producto matricial"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#data.frame-la-tabla-de-r",
+    "href": "clases/clase3-clase.html#data.frame-la-tabla-de-r",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "data.frame: la tabla de R",
+    "text": "data.frame: la tabla de R\nUn data.frame es una tabla donde:\n\nlas filas son observaciones,\nlas columnas son variables,\ncada columna puede tener su propio tipo.\n\nPor dentro es una lista donde cada elemento es una columna y todas tienen la misma longitud.\nestudiantes &lt;- data.frame(\n  nombre   = c(\"Ana\", \"Beto\", \"Cami\"),\n  nota     = c(7, 4, 9),\n  aprobado = c(TRUE, FALSE, TRUE)\n)"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#acceso-a-un-data.frame",
+    "href": "clases/clase3-clase.html#acceso-a-un-data.frame",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Acceso a un data.frame",
+    "text": "Acceso a un data.frame\nestudiantes$nota              # columna como vector\nestudiantes[, \"nombre\"]       # columna por nombre\nestudiantes[1, ]              # primera fila\nestudiantes[2, \"nota\"]        # celda fila 2, columna \"nota\"\nestudiantes[, c(\"nombre\", \"nota\")]   # varias columnas\n$ es el atajo más usado para columnas. [fila, columna] es general."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#filtrar-filas-con-condición-lógica",
+    "href": "clases/clase3-clase.html#filtrar-filas-con-condición-lógica",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Filtrar filas con condición lógica",
+    "text": "Filtrar filas con condición lógica\nestudiantes[estudiantes$nota &gt;= 6, ]\n#   nombre nota aprobado\n# 1    Ana    7     TRUE\n# 3   Cami    9     TRUE\nLa idea: estudiantes$nota &gt;= 6 es un vector logical, y se usa como índice de filas.\nestudiantes$nota &gt;= 6   # TRUE FALSE TRUE"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#modificar-un-data.frame",
+    "href": "clases/clase3-clase.html#modificar-un-data.frame",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Modificar un data.frame",
+    "text": "Modificar un data.frame\nAgregar columna:\nestudiantes$bonus &lt;- estudiantes$nota + 1\nQuitar columna (asignar NULL):\nestudiantes$bonus &lt;- NULL\nAgregar fila con rbind:\nnuevo &lt;- data.frame(nombre = \"Dani\", nota = 6, aprobado = TRUE)\nestudiantes &lt;- rbind(estudiantes, nuevo)"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#inspección-rápida",
+    "href": "clases/clase3-clase.html#inspección-rápida",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Inspección rápida",
+    "text": "Inspección rápida\nPara ver qué hay adentro sin imprimir todo:\nhead(estudiantes)    # primeras 6 filas\ntail(estudiantes)    # últimas 6 filas\ndim(estudiantes)     # filas, columnas\nstr(estudiantes)     # estructura por columna\nsummary(estudiantes) # resumen estadístico\ncolnames(estudiantes)\nstr() es el más útil al recibir un dataset nuevo: en una mirada se ve cuántas filas, qué columnas y de qué tipo."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#cargar-datos-de-un-archivo",
+    "href": "clases/clase3-clase.html#cargar-datos-de-un-archivo",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Cargar datos de un archivo",
+    "text": "Cargar datos de un archivo\nPara CSV (lo más común):\ndf &lt;- read.csv(\"datos/bikeshare.csv\")\nArgumentos útiles:\n\nheader = TRUE (por defecto): primera fila son nombres de columnas.\nsep = \",\" (por defecto): separador. En español a veces es \";\".\nstringsAsFactors = FALSE (por defecto desde R 4.0): los strings quedan como character, no factor.\n\nDespués suele convenir un str(df) o head(df) para confirmar que se cargó como esperábamos."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#factor-variables-categóricas",
+    "href": "clases/clase3-clase.html#factor-variables-categóricas",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "factor: variables categóricas",
+    "text": "factor: variables categóricas\nUn factor representa una variable que toma valores en un conjunto fijo (categorías).\nnivel &lt;- factor(c(\"alto\", \"bajo\", \"alto\", \"medio\"))\nnivel\n# [1] alto  bajo  alto  medio\n# Levels: alto bajo medio\n\nlevels(nivel)    # \"alto\" \"bajo\" \"medio\"\nPor dentro, R guarda enteros y una tabla de niveles. Es eficiente y deja claro que los valores son categorías."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#factor-con-orden",
+    "href": "clases/clase3-clase.html#factor-con-orden",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "factor con orden",
+    "text": "factor con orden\nSi las categorías tienen un orden natural (“bajo” &lt; “medio” &lt; “alto”), se puede declarar:\nnivel &lt;- factor(\n  c(\"alto\", \"bajo\", \"alto\", \"medio\"),\n  levels  = c(\"bajo\", \"medio\", \"alto\"),\n  ordered = TRUE\n)\n\nnivel[1] &gt; nivel[2]   # TRUE: \"alto\" &gt; \"bajo\"\nCuándo conviene: variables categóricas en modelos (lm, glm), ejes de gráficos, agrupaciones.\nCuándo evitar: para tratar como texto libre."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#para-elegir-estructura",
+    "href": "clases/clase3-clase.html#para-elegir-estructura",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Para elegir estructura",
+    "text": "Para elegir estructura\n\n\n\nQuerés…\nUsá\n\n\n\n\nuna secuencia de valores del mismo tipo\nvector\n\n\nuna tabla rectangular numérica\nmatrix\n\n\nuna “ficha” con campos heterogéneos\nlist\n\n\nuna tabla de datos (mezcla de tipos por col.)\ndata.frame\n\n\nuna variable categórica con valores fijos\nfactor"
+  },
+  {
+    "objectID": "clases/clase3-clase.html#buena-práctica-una-función-una-responsabilidad",
+    "href": "clases/clase3-clase.html#buena-práctica-una-función-una-responsabilidad",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buena práctica: una función, una responsabilidad",
+    "text": "Buena práctica: una función, una responsabilidad\nSi una función “carga el CSV, le saca outliers, calcula la media y grafica”, es difícil de probar, reusar y debuggear.\nMejor partirla en cuatro funciones chicas:\n# malo: hace de todo\nanalizar_pacientes &lt;- function(archivo) { ... }\n\n# bueno: una responsabilidad cada una\ncargar_pacientes  &lt;- function(archivo)        { ... }\nfiltrar_outliers  &lt;- function(df, columna)    { ... }\ncalcular_resumen  &lt;- function(df)             { ... }\ngraficar_resumen  &lt;- function(resumen)        { ... }\nSi cada pieza es chica, podés probarla por separado, reusarla en otro contexto y reemplazarla sin romper el resto."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#ejercicios-en-clase",
+    "href": "clases/clase3-clase.html#ejercicios-en-clase",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios en clase",
+    "text": "Ejercicios en clase\nVamos a usar iris (medidas de flores) y mtcars (autos), los dos vienen con R.\nhead(iris)\n?iris\n\nLista paciente con cuatro campos: id (integer), edad (double), sintomas (vector de strings) y tiene_diagnostico (logical). Accedé al primer síntoma con $ y con [[ ]]. Mostrá la diferencia con [ ].\nConvertí iris en una matriz quedándote con las cuatro columnas numéricas: M &lt;- as.matrix(iris[, 1:4]). Calculá el promedio de cada columna usando colMeans(M).\nFiltrá iris para quedarte solo con las flores virginica con Petal.Length &gt; 6. Pista: iris[iris$Species == \"virginica\" & iris$Petal.Length &gt; 6, ].\nConvertí la columna iris$Species (que ya es factor) en un vector ordenado por la frecuencia de aparición de cada especie. Pista: table(iris$Species) te da los conteos; sort() ordena.\nAplicando la buena práctica, escribí estas dos funciones por separado:\n\nmedias_por_grupo(df, columna_numerica, columna_grupo) que devuelva un data.frame con dos columnas, grupo y media. Pista: aggregate.\ntop_grupo(resumen) que reciba la salida de la función anterior y devuelva el grupo con la media más alta.\n\nProbalas con medias_por_grupo(mtcars, \"mpg\", \"cyl\").\n\n\n~15 min. colMeans, aggregate, table, sort son funciones importadas: bloques de encastre, no las implementan. Si terminan rápido: graficar un boxplot de Sepal.Length ~ Species (ya vamos a verlo en clase 4)."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#comprensión-quedó-claro",
+    "href": "clases/clase3-clase.html#comprensión-quedó-claro",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Comprensión: ¿quedó claro?",
+    "text": "Comprensión: ¿quedó claro?\nMarcá la opción correcta.\n\n¿Cuál es la diferencia entre mi_lista[1] y mi_lista[[1]]?\n\nNo hay diferencia.\n[1] devuelve una lista de un elemento; [[1]] devuelve el elemento mismo.\n[[1]] da error si la lista tiene más de un elemento.\n[1] da error si la lista no tiene nombres.\n\nSi M &lt;- matrix(1:6, nrow = 2), ¿qué devuelve M[, 2]?\n\nUn escalar.\nUna matriz de 2x1.\nUn vector de 2 elementos.\nUn error.\n\nPara cargar un archivo CSV en R conviene usar:\n\nload(\"archivo.csv\")\nread.csv(\"archivo.csv\")\nlibrary(\"archivo.csv\")\nimport(\"archivo.csv\")\n\n¿Cuándo conviene usar un factor en lugar de un character?\n\nCuando los datos son números.\nCuando son categorías con un conjunto fijo de valores.\nSiempre, factor es más rápido.\nNunca, factor está deprecado.\n\n\n\nRespuestas: 1-b, 2-c (por defecto R “drop”ea la dimensión 1 y devuelve vector), 3-b, 4-b."
+  },
+  {
+    "objectID": "clases/clase3-clase.html#apéndice-una-lista-de-data.frames",
+    "href": "clases/clase3-clase.html#apéndice-una-lista-de-data.frames",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Apéndice: una lista de data.frames",
+    "text": "Apéndice: una lista de data.frames\nCuando manejamos varios datasets a la vez, una lista de data.frames es muy práctica.\ndatasets &lt;- list(\n  norte = read.csv(\"datos/norte.csv\"),\n  sur   = read.csv(\"datos/sur.csv\")\n)\n\n# aplicar una función a cada uno\nsapply(datasets, nrow)\n#  norte    sur\n#    100    150\nCombinarlos verticalmente:\ntodo &lt;- do.call(rbind, datasets)\nEsta combinación de listas + data.frames + sapply aparece todo el tiempo en análisis de datos."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#decidir-y-repetir",
+    "href": "clases/clase2-clase.html#decidir-y-repetir",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Decidir y repetir",
+    "text": "Decidir y repetir\nHasta ahora supimos guardar valores y aplicar funciones. Pero los programas hacían siempre lo mismo.\nHoy le damos al programa dos capacidades nuevas:\n\ndecidir: ejecutar (o no) un bloque según una condición. Condicionales: if, else.\nrepetir: ejecutar un bloque varias veces. Bucles: for, while.\n\nVolviendo a la analogía: en un idioma decimos “si llueve, llevo paraguas” (condicional) o “leí cada página del libro” (bucle). Ya tenemos los sustantivos y los verbos, ahora agregamos las conjunciones.\n\n~5 min. Conectar con clase 1: variables (sustantivos) + funciones (verbos) + ahora condicionales y bucles."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#if-ejecutar-solo-si",
+    "href": "clases/clase2-clase.html#if-ejecutar-solo-si",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "if: ejecutar solo si",
+    "text": "if: ejecutar solo si\nif (condicion) {\n  # se ejecuta solo si condicion es TRUE\n}\nEjemplo:\nnota &lt;- 7\n\nif (nota &gt;= 6) {\n  print(\"aprobado\")\n}\ncondicion es una expresión que evalúa a TRUE o FALSE (un logical)."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#if-else-dos-caminos",
+    "href": "clases/clase2-clase.html#if-else-dos-caminos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "if / else: dos caminos",
+    "text": "if / else: dos caminos\nif (condicion) {\n  # rama TRUE\n} else {\n  # rama FALSE\n}\nnota &lt;- 4\n\nif (nota &gt;= 6) {\n  print(\"aprobado\")\n} else {\n  print(\"desaprobado\")\n}"
+  },
+  {
+    "objectID": "clases/clase2-clase.html#if-else-if-else-varios-casos",
+    "href": "clases/clase2-clase.html#if-else-if-else-varios-casos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "if / else if / else: varios casos",
+    "text": "if / else if / else: varios casos\nif (x &gt; 0) {\n  print(\"positivo\")\n} else if (x &lt; 0) {\n  print(\"negativo\")\n} else {\n  print(\"cero\")\n}\nLas condiciones se evalúan de arriba hacia abajo y se ejecuta la primera que sea verdadera. Si ninguna lo es, se ejecuta el else (si existe)."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#operadores-en-condiciones",
+    "href": "clases/clase2-clase.html#operadores-en-condiciones",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Operadores en condiciones",
+    "text": "Operadores en condiciones\nComparación: ==, !=, &lt;, &lt;=, &gt;, &gt;=.\nLógicos: & (y), | (o), ! (negación).\nedad &lt;- 20\n\nif (edad &gt;= 18 & edad &lt; 65) {\n  print(\"adulto en edad activa\")\n}\n\nRecordar que == es comparación, = es asignación. Confundirlos es el error tipográfico más común en R."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#trampa-frecuente-vs",
+    "href": "clases/clase2-clase.html#trampa-frecuente-vs",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Trampa frecuente: == vs =",
+    "text": "Trampa frecuente: == vs =\nif (x == 5) ...   # OK: compara x con 5\nif (x = 5) ...    # ERROR de sintaxis\n== pregunta. = declara. Si la palabra “if” no funciona como esperaban, casi siempre es esto."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#ifelse-condicional-vectorial",
+    "href": "clases/clase2-clase.html#ifelse-condicional-vectorial",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "ifelse(): condicional vectorial",
+    "text": "ifelse(): condicional vectorial\nCuando queremos aplicar el mismo if/else a cada elemento de un vector, hay un atajo:\nnotas   &lt;- c(7, 4, 9, 5, 6)\nestados &lt;- ifelse(notas &gt;= 6, \"aprobado\", \"desaprobado\")\nestados\n# [1] \"aprobado\"    \"desaprobado\" \"aprobado\"    \"desaprobado\" \"aprobado\"\nifelse(test, valor_si_TRUE, valor_si_FALSE) recorre el vector y elige."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#qué-es-un-bucle",
+    "href": "clases/clase2-clase.html#qué-es-un-bucle",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "¿Qué es un bucle?",
+    "text": "¿Qué es un bucle?\nUn bucle ejecuta el mismo bloque de código varias veces. Sirve, entre otras cosas, para\n\naplicar una transformación a cada elemento de un vector;\nrepetir un experimento aleatorio muchas veces;\niterar hasta que un proceso converja (bisección, descenso de gradiente)."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#for-sintaxis",
+    "href": "clases/clase2-clase.html#for-sintaxis",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "for: sintaxis",
+    "text": "for: sintaxis\nfor (variable in coleccion) {\n  # se ejecuta una vez por cada elemento de coleccion\n}\nEn cada iteración, variable toma un valor distinto de coleccion.\nfor (i in 1:5) {\n  print(i)\n}\n# 1 2 3 4 5"
+  },
+  {
+    "objectID": "clases/clase2-clase.html#for-recorrer-un-vector",
+    "href": "clases/clase2-clase.html#for-recorrer-un-vector",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "for: recorrer un vector",
+    "text": "for: recorrer un vector\nPor elemento:\nnombres &lt;- c(\"Ana\", \"Beto\", \"Cami\")\nfor (n in nombres) {\n  print(paste(\"Hola,\", n))\n}\nPor índice (cuando necesitamos saber la posición):\nfor (i in seq_along(nombres)) {\n  print(paste(i, nombres[i]))\n}\nTip: seq_along(x) es más seguro que 1:length(x). Si x tiene largo cero, 1:length(x) devuelve c(1, 0) y el bucle se ejecuta dos veces sin sentido."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#for-acumular-en-un-vector",
+    "href": "clases/clase2-clase.html#for-acumular-en-un-vector",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "for: acumular en un vector",
+    "text": "for: acumular en un vector\nPatrón estándar: pre-asignar el vector y rellenarlo.\nx &lt;- 1:10\ny &lt;- vector(\"numeric\", length(x))   # pre-asignar\n\nfor (i in seq_along(x)) {\n  y[i] &lt;- x[i]^2\n}\nEvitar crecer el vector dentro del bucle con y &lt;- c(y, x[i]^2): cada paso copia todo, y se vuelve lento muy rápido."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#for-anidado",
+    "href": "clases/clase2-clase.html#for-anidado",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "for anidado",
+    "text": "for anidado\nUn bucle dentro de otro. Útil para recorrer estructuras 2D.\nfor (i in 1:3) {\n  for (j in 1:3) {\n    print(paste(i, j))\n  }\n}"
+  },
+  {
+    "objectID": "clases/clase2-clase.html#while-sintaxis",
+    "href": "clases/clase2-clase.html#while-sintaxis",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "while: sintaxis",
+    "text": "while: sintaxis\nwhile (condicion) {\n  # se ejecuta mientras condicion sea TRUE\n}\nEjemplo: duplicar hasta superar 1000.\nx &lt;- 1\n\nwhile (x &lt; 1000) {\n  x &lt;- x * 2\n}\nx   # 1024\nA diferencia del for, no sabemos de antemano cuántas iteraciones va a hacer."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#el-peligro-del-bucle-infinito",
+    "href": "clases/clase2-clase.html#el-peligro-del-bucle-infinito",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "El peligro del bucle infinito",
+    "text": "El peligro del bucle infinito\nLa condición del while tiene que poder volverse FALSE en algún momento. Si no, el programa no termina.\ni &lt;- 1\n\nwhile (i &gt; 0) {\n  print(i)\n  # i &lt;- i - 1   # FALTA esta linea\n}\nEn RStudio se corta con Esc o el botón rojo de stop en la consola."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#for-o-while",
+    "href": "clases/clase2-clase.html#for-o-while",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "¿for o while?",
+    "text": "¿for o while?\n\nfor: cuando sabemos cuántas iteraciones (recorrer un vector, repetir N veces).\nwhile: cuando NO sabemos cuántas, sino que iteramos hasta que algo pase (convergencia, búsqueda, condición de corte).\n\nEn la duda, for es más seguro porque siempre termina."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#break-y-next",
+    "href": "clases/clase2-clase.html#break-y-next",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "break y next",
+    "text": "break y next\n\nbreak: salir del bucle inmediatamente.\nnext: saltear la iteración actual y seguir con la próxima.\n\nfor (i in 1:10) {\n  if (i == 5) break          # corta el bucle\n  if (i %% 2 == 0) next      # saltea pares\n  print(i)\n}\n# 1 3"
+  },
+  {
+    "objectID": "clases/clase2-clase.html#buena-práctica-comentar-el-porqué-no-el-qué",
+    "href": "clases/clase2-clase.html#buena-práctica-comentar-el-porqué-no-el-qué",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buena práctica: comentar el porqué, no el qué",
+    "text": "Buena práctica: comentar el porqué, no el qué\nSi los nombres son buenos, el código ya cuenta qué hace. Los comentarios son para explicar por qué ese código está así: una decisión, una excepción, un dato externo.\n# parafrasea: no agrega informacion\nx &lt;- 5  # asigno 5 a x\n\n# explica el porqué: agrega información\nedad_minima_aprobado &lt;- 18  # mayoria de edad civil en Argentina (Cod. Civ. art 25)\nReglas:\n\nSi tenés que parafrasear el código, mejorá el nombre.\nSi una decisión no es obvia, escribí en una línea por qué.\nBorrar comentarios desactualizados es tan importante como escribirlos."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#ejercicios-en-clase",
+    "href": "clases/clase2-clase.html#ejercicios-en-clase",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios en clase",
+    "text": "Ejercicios en clase\nVamos a usar airquality (calidad del aire en NY, mayo a septiembre 1973). Ya viene con R.\nhead(airquality)\n?airquality\n\nRecorrer airquality$Ozone con un for y contar cuántos días superan los 80 ppb (umbral OMS para alerta). Comparalo con sum(airquality$Ozone &gt; 80, na.rm = TRUE).\nClasificar cada valor de airquality$Temp (en °F) en \"frio\", \"templado\" o \"caluroso\" usando if/else if/else dentro de un for. Umbrales: &lt;60, 60-80, &gt;80. Comparalo con ifelse vectorial.\nBootstrap a mano: estimar la media de airquality$Wind con 1000 muestras con reemplazo. Pista: replicate(1000, mean(sample(airquality$Wind, replace = TRUE))). La media de las medias muestrales debería estar cerca de mean(airquality$Wind).\nEncontrar el primer día en que airquality$Ozone supera 100 usando un while con seq_along. Comparalo con which(airquality$Ozone &gt; 100)[1].\nFunción clasificar_presion(sistolica) (mmHg, criterio de la AHA):\n\n\"normal\" si &lt; 120,\n\"elevada\" si 120 &lt;= x &lt; 130,\n\"hipertensión 1\" si 130 &lt;= x &lt; 140,\n\"hipertensión 2\" si &gt;= 140.\n\nProbala con c(115, 122, 135, 150).\n\n\n~15 min. replicate y sample son funciones importadas: las usamos como bloque de encastre, no las implementamos. Si terminan rápido: comparar la desviación estándar de las medias bootstrap con sd(airquality$Wind) / sqrt(length(airquality$Wind))."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#comprensión-quedó-claro",
+    "href": "clases/clase2-clase.html#comprensión-quedó-claro",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Comprensión: ¿quedó claro?",
+    "text": "Comprensión: ¿quedó claro?\nMarcá la opción correcta.\n\n¿Qué imprime este código?\nx &lt;- 5\nif (x &gt; 0) print(\"positivo\") else print(\"no positivo\")\n\n\"positivo\"\n\"no positivo\"\nda error\nno imprime nada\n\n¿Cuántos números imprime este bucle?\nfor (i in 1:10) {\n  if (i == 5) break\n  print(i)\n}\n\n4\n5\n9\n10\n\n¿Cuál estructura es más adecuada cuando NO sabés cuántas iteraciones hay que hacer, sino que repetís hasta que ocurra algo?\n\nfor\nwhile\nif\nreplicate\n\n¿Qué problema tiene este código?\ni &lt;- 1\nwhile (i &lt; 10) {\n  print(i)\n}\n\nSintaxis inválida.\nImprime 9 veces y termina.\nEs un bucle infinito porque i nunca cambia.\nImprime una sola vez.\n\n\n\nRespuestas: 1-a, 2-a (imprime 1..4 y luego entra en la iteración i=5 donde rompe sin imprimir), 3-b, 4-c."
+  },
+  {
+    "objectID": "clases/clase2-clase.html#apéndice-alternativas-a-for",
+    "href": "clases/clase2-clase.html#apéndice-alternativas-a-for",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Apéndice: alternativas a for",
+    "text": "Apéndice: alternativas a for\nR tiene formas más cortas de aplicar una función a cada elemento.\n# repetir N veces una expresión\nreplicate(5, sample(1:6, 1))\n\n# aplicar una función a cada elemento, devolver lista\nlapply(c(1, 2, 3), function(x) x^2)\n\n# aplicar una función a cada elemento, devolver vector si se puede\nsapply(c(1, 2, 3), function(x) x^2)\nNo reemplazan al for, pero suelen leerse mejor cuando la tarea es “para cada elemento, hacer X”. Las vamos a usar más adelante."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#de-un-experimento-a-muchos",
+    "href": "clases/clase5-clase.html#de-un-experimento-a-muchos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "De un experimento a muchos",
+    "text": "De un experimento a muchos\nEn estadística muchas preguntas se responden mejor simulando que con cuentas analíticas: ¿cuál es la probabilidad de tal evento?, ¿cuánta dispersión tiene esta estimación?\nY muchos problemas no tienen fórmula cerrada, pero sí un algoritmo iterativo que se acerca a la respuesta: bisección, Newton, optimización numérica.\nHoy vemos los dos:\n\nsimulación con replicate (Monte Carlo, bootstrap),\nalgoritmos iterativos con while y tolerancia (bisección como caso de estudio).\n\nY cerramos con una buena práctica de programación: control de versiones.\n\n~5 min. Conectar con bucles de clase 2 (replicate y while son sus parientes naturales)."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#funciones-que-reciben-funciones",
+    "href": "clases/clase5-clase.html#funciones-que-reciben-funciones",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Funciones que reciben funciones",
+    "text": "Funciones que reciben funciones\nUna función puede recibir otra función como argumento. Es la herramienta que hace todo lo demás posible.\naplicar_dos_veces &lt;- function(f, x) {\n  f(f(x))\n}\n\naplicar_dos_veces(sqrt, 16)   # sqrt(sqrt(16)) = 2\naplicar_dos_veces(sin, 0)     # sin(sin(0))    = 0\nf no es un valor, es una función. Esto se llama “función de orden superior”. replicate, lapply, sapply, optimize, uniroot son ejemplos."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#replicate-monte-carlo-en-una-línea",
+    "href": "clases/clase5-clase.html#replicate-monte-carlo-en-una-línea",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "replicate: Monte Carlo en una línea",
+    "text": "replicate: Monte Carlo en una línea\nreplicate(n, expr) ejecuta expr n veces y devuelve el resultado.\n# tirar un dado equilibrado 10000 veces\ntiradas &lt;- replicate(10000, sample(1:6, 1))\nmean(tiradas)        # ~ 3.5 (esperanza teorica)\ntable(tiradas) / 10000   # frecuencias relativas\nIdea de Monte Carlo: si no sé la probabilidad analíticamente, repito el experimento muchas veces y la estimo por la frecuencia."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#caso-clásico-paradoja-del-cumpleaños",
+    "href": "clases/clase5-clase.html#caso-clásico-paradoja-del-cumpleaños",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Caso clásico: paradoja del cumpleaños",
+    "text": "Caso clásico: paradoja del cumpleaños\n¿Cuál es la probabilidad de que en un grupo de n personas haya al menos dos con el mismo cumpleaños?\n# una realizacion: ¿hay coincidencia en un grupo de n?\nhay_coincidencia &lt;- function(n) {\n  cumples &lt;- sample(1:365, n, replace = TRUE)\n  any(duplicated(cumples))\n}\n\n# estimar la probabilidad para n = 23\nmean(replicate(10000, hay_coincidencia(23)))\n# ~ 0.507  (la respuesta clasica)\nPara n = 23 la probabilidad ya es mayor que el 50%, contraintuitivo."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#bootstrap-la-dispersión-de-un-estimador",
+    "href": "clases/clase5-clase.html#bootstrap-la-dispersión-de-un-estimador",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Bootstrap: la dispersión de un estimador",
+    "text": "Bootstrap: la dispersión de un estimador\nSi tenemos una muestra de tamaño n y queremos saber cuán precisa es nuestra estimación, hacemos bootstrap: re-muestreamos con reemplazo y vemos cómo varía.\nmuestra &lt;- airquality$Wind   # viento diario en NY\n\n# 1000 re-muestreos, calcular la media de cada uno\nmedias_boot &lt;- replicate(1000,\n  mean(sample(muestra, replace = TRUE))\n)\n\n# intervalo de confianza del 95% por percentiles\nquantile(medias_boot, c(0.025, 0.975))\nLo lindo: no hicimos ningún supuesto sobre la distribución del viento. La idea funciona para cualquier estimador."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#algoritmos-iterativos-bisección",
+    "href": "clases/clase5-clase.html#algoritmos-iterativos-bisección",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Algoritmos iterativos: bisección",
+    "text": "Algoritmos iterativos: bisección\nPara encontrar una raíz de f en [a, b] cuando f(a) * f(b) &lt; 0:\n\nCalculamos el punto medio m = (a + b) / 2.\nDecidimos si la raíz está en [a, m] o en [m, b] mirando el signo de f.\nRepetimos hasta que el intervalo sea más chico que una tolerancia.\n\nbiseccion &lt;- function(f, a, b, tol = 1e-6) {\n  stopifnot(f(a) * f(b) &lt; 0)        # precondicion\n  while ((b - a) / 2 &gt; tol) {\n    m &lt;- (a + b) / 2\n    if (f(a) * f(m) &lt; 0) {\n      b &lt;- m\n    } else {\n      a &lt;- m\n    }\n  }\n  (a + b) / 2\n}"
+  },
+  {
+    "objectID": "clases/clase5-clase.html#bisección-en-acción",
+    "href": "clases/clase5-clase.html#bisección-en-acción",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Bisección en acción",
+    "text": "Bisección en acción\n# raiz de x^3 - x - 1 entre 1 y 2\nbiseccion(function(x) x^3 - x - 1, 1, 2)\n# 1.324718\nstopifnot(f(a) * f(b) &lt; 0) es la precondición: si los signos no son distintos, el método no aplica. Mejor cortar con error claro que devolver basura."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#ya-estaba-hecho-uniroot",
+    "href": "clases/clase5-clase.html#ya-estaba-hecho-uniroot",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "“Ya estaba hecho”: uniroot",
+    "text": "“Ya estaba hecho”: uniroot\nR trae una raíz numérica robusta. La nuestra fue para entender; la de R es para producir.\nuniroot(function(x) x^3 - x - 1, c(1, 2))$root\n# 1.324718\nMisma respuesta. La diferencia: uniroot está más probado, maneja mejor casos límite, no tenemos que mantenerlo.\nImplementar para aprender, importar para producir. Es la regla."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#buena-práctica-control-de-versiones",
+    "href": "clases/clase5-clase.html#buena-práctica-control-de-versiones",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buena práctica: control de versiones",
+    "text": "Buena práctica: control de versiones\nGit permite guardar fotos de tu código a lo largo del tiempo. ¿Por qué importa?\n\nVolver atrás cuando algo deja de funcionar.\nVer qué cambió y por qué.\nCompartir el código con otra gente.\n\nComandos básicos (en la terminal de RStudio):\ngit init                     # primera vez en una carpeta\ngit status                   # que cambio desde la ultima foto\ngit add ejercicio1.R         # marcar para guardar\ngit commit -m \"mensaje\"      # sacar la foto\ngit log                      # historial"
+  },
+  {
+    "objectID": "clases/clase5-clase.html#mensajes-de-commit-que-sirven",
+    "href": "clases/clase5-clase.html#mensajes-de-commit-que-sirven",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Mensajes de commit que sirven",
+    "text": "Mensajes de commit que sirven\nMensaje útil = explica el porqué, no parafrasea el qué.\nmalo:  \"cambios\"\nmalo:  \"fix biseccion\"\nmejor: \"fix(biseccion): bajar tolerancia a 1e-8 porque\n        no convergia con datos chicos\"\nUna foto cada vez que terminás algo coherente: una función nueva, un bug arreglado, un experimento que corre. No “una foto cada cinco minutos” ni “una foto cada tres semanas”."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#cierre",
+    "href": "clases/clase5-clase.html#cierre",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Cierre",
+    "text": "Cierre\nLo que vimos en cinco clases:\n\nTipos de datos y funciones (clase 1).\nDecisiones y repetición (clase 2).\nEstructuras compuestas (clase 3).\nVisualización y exploración (clase 4).\nSimulación y algoritmos (hoy).\n\nY cinco buenas prácticas:\n\nBuenos nombres.\nComentar el porqué.\nFunciones chicas, una responsabilidad cada una.\nProbar antes de creer.\nControl de versiones.\n\nEsto es la base. Lo que sigue (dplyr, ggplot2, tidyr, modelos) son herramientas, no conceptos nuevos."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#ejercicios-en-clase",
+    "href": "clases/clase5-clase.html#ejercicios-en-clase",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios en clase",
+    "text": "Ejercicios en clase\n\nFunción de orden superior: escribí iterar(f, x0, n) que aplique f n veces a x0. Probala con f = function(x) (x + 2/x) / 2, x0 = 1, n = 10. ¿A qué número converge?\nMonte Carlo: estimá la probabilidad de obtener al menos 6 caras al tirar 10 monedas equilibradas. Pista: sample(c(0, 1), 10, replace = TRUE) simula una tirada. Comparalo con 1 - pbinom(5, 10, 0.5).\nBootstrap: usando mtcars$mpg, estimá un IC del 95% para la media con 1000 réplicas bootstrap. Comparalo con el IC analítico t.test(mtcars$mpg)$conf.int.\nBisección: usando la función biseccion de la slide, encontrá la raíz de f(x) = cos(x) - x en [0, 1]. Compará con uniroot(f, c(0, 1))$root.\nCumpleaños: escribí una función prob_coincidencia(n, n_sim = 10000) que estime la probabilidad para distintos n. Ejecutala para n = 5, 10, 15, 20, 23, 30, 50 y graficá los resultados con plot(n, p, type = \"b\").\nGit: en RStudio, en una carpeta nueva, hacé git init, agregá los ejercicios anteriores y hacé tres commits con mensajes claros.\n\n\n~15 min. Si terminan rápido: comparar el IC bootstrap del ejercicio 3 con el clásico (asumiendo normalidad). Suele ser muy parecido cuando n es grande."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#comprensión-quedó-claro",
+    "href": "clases/clase5-clase.html#comprensión-quedó-claro",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Comprensión: ¿quedó claro?",
+    "text": "Comprensión: ¿quedó claro?\n\n¿Qué hace replicate(1000, expr)?\n\nRepite expr 1000 veces y descarta el resultado.\nEjecuta expr 1000 veces y devuelve los 1000 resultados.\nEjecuta expr una vez con un argumento de 1000.\nCrea un vector de tamaño 1000 con expr.\n\n¿Qué condición tiene que cumplir el intervalo [a, b] para que la bisección funcione?\n\nf(a) &gt; 0 y f(b) &gt; 0.\nf(a) * f(b) &lt; 0 (signos distintos).\na &lt; b solamente.\nf(a) == f(b).\n\n¿Cuál es la idea central del bootstrap?\n\nGenerar datos sintéticos con una distribución conocida.\nRe-muestrear con reemplazo desde la propia muestra para estimar la dispersión de un estimador.\nRepetir un experimento aleatorio en condiciones nuevas.\nAplicar una función dos veces seguidas.\n\nUn mensaje de commit útil:\n\nEs lo más corto posible.\nParafrasea el código.\nExplica por qué hicimos el cambio.\nNo importa, nadie lo lee.\n\n\n\nRespuestas: 1-b, 2-b, 3-b, 4-c."
+  },
+  {
+    "objectID": "clases/clase5-clase.html#apéndice-validar-argumentos-con-stopifnot",
+    "href": "clases/clase5-clase.html#apéndice-validar-argumentos-con-stopifnot",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Apéndice: validar argumentos con stopifnot",
+    "text": "Apéndice: validar argumentos con stopifnot\nUna función robusta valida sus entradas antes de empezar.\nbiseccion &lt;- function(f, a, b, tol = 1e-6) {\n  stopifnot(\n    is.function(f),\n    is.numeric(a), is.numeric(b),\n    a &lt; b,\n    f(a) * f(b) &lt; 0,\n    tol &gt; 0\n  )\n  # ... cuerpo\n}\nBeneficios:\n\nMensaje de error claro cuando alguien la usa mal.\nSirve como documentación ejecutable de los supuestos.\nEvita resultados silenciosamente incorrectos.\n\nMás serio aún: el paquete testthat para escribir tests automáticos. Lo van a ver más adelante."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html",
+    "href": "ejercicios/clase2-ejercicios.html",
+    "title": "Clase 2 - Ejercicios",
+    "section": "",
+    "text": "Escriba una función que sume los primeros \\(n\\) números naturales. Compare su desempeño contra la sum(1:n). Utilice el siguiente modelo como base:\nsumar_naturales = function(n) {\n  # suma = ...\n  return(suma)\n}\nUn juego consiste en revelar una por una las cartas de un mazo mientras que se repiten los números 1, 2 y 3. Si al revelar la carta coincide con el número cantado, el juego se pierde. Solo se gana si no hay ninguna coincidencia.\n\nEscriba una función que realice una sola repetición del juego. Utilice el siguiente modelo como base:\njuego_123 = function() {\n  # ganamos = ... # logical\n  return(ganamos)\n}\nLuego, juegue \\(1000\\) veces y calcule la proporción de veces que ganó el juego. Utilice bucles y compare el desempeño contra el siguiente código:\nmean(replicate(n=1000, expr=juego_123))\n\nEscriba una función tal que dada una matriz devuelva su parte triangular superior. Utilice el siguiente modelo como base:\nextraer_trisup = function(matriz) {\n  # trisup = ...\n  return(trisup)\n}\nDiseñe una función que dado un vector numérico devuelva un vector que indique, como texto, a qué decil pertenece cada valor. Por ejemplo, para el vector num_vec=1:10, la función debería devolver el vector c(\"primer decil\", \"segundo decil\", …, \"décimo decil\") . Utilice el siguiente modelo como base:\nindicar_deciles = function(num_vec) {\n  # deciles_vec = ...\n  return(deciles_vec)\n}\nArme una función que, dado un vector de valores logical, indique si son todos TRUE. Compare su desempeño contra la función all .\nEn la primera página de este trabajo, sus autores proponen un método para ordenar una lista de números de forma creciente. Escriba una función en R que implemente el pseudocódigo de la imagen. ¿Funciona el método propuesto? Compare su desempeño contra la función sort ."
+  },
+  {
+    "objectID": "ejercicios/entrega.html",
+    "href": "ejercicios/entrega.html",
+    "title": "Entrega de ejercicios",
+    "section": "",
+    "text": "Instrucciones\n\nLos ejercicios deberán ser entregados a través del campus virtual en archivos separados respectivamente bajo los nombres:\n\nejercicio1.R\nejercicio2.R\n…\nejercicio5.R\n\nUtilice los modelos indicados en cada ejercicio, respete los nombres y tipos de variables sugeridos.\nComente en el código las soluciones propuestas.\n\n\n\nEjercicio 1 - Fórmula cuadrática\nDado el polinomio de grado \\(2\\), \\(p(x) = a x^2 + b x + c\\), decimos que \\(x_0\\) es un cero o raíz del polinomio si \\(p(x_0) = 0\\). Tenga presente que según el valor de \\(\\Delta = b^2 - 4ac\\) el polinomio podría tener una raíz múltiple o inclusive no tener raíces.\nEscriba una función que reciba los coeficientes del polinomio y devuelva un vector con las posibles raíces del polinomios. Use el siguiente modelo:\nceros_cuadratica = function(a, b, c){\n    # raices = ...\n    return(raices)\n}\n\n\nEjercicio 2 - Valores únicos\nDada una lista de palabras, queremos encontrar el subconjunto resultante de eliminar todas las repetidas. Es decir, buscamos el conjunto de valores únicos de la lista. Por ejemplo, en la lista\nlista_de_palabras = c(\"aca\", \"hay\", \"una\", \"una\", \"duplicada\")\nhay una palabra duplicada, \"una\". La salida esperada es c(\"aca\", \"hay\", \"una\", \"duplicada\").\nEscriba una función que decida si una palabra pertenece a una lista de palabras. Use el siguiente modelo:\nbuscar_una_palabra = function(palabra, lista_de_palabras){\n  # si_esta_la_palabra = ...  # logical\n  return(si_esta_la_palabra)\n}\n\n\nEjercicio 3 - Algoritmo de ordenamiento\nEn la primera página de este trabajo, sus autores proponen un método para ordenar una lista de números de forma creciente. Escriba una función en R que implemente el pseudocódigo de la imagen. Use el siguiente modelo:\nordenar = function(lista_de_numeros){\n  # ...\n  return(lista_ordenada)\n}\n\n\nEjercicio 4 - Amigo invisible\nEscriba una función sorteo_valido que reciba como entrada la cantidad de personas, simule la extracción de los papelitos y devuelva TRUE si nadie sacó su propio papelito y FALSE en caso contrario. Use el siguiente modelo:\nsorteo_valido = function(n_personas){\n  # es_valido = ...  # logical\n  return(es_valido)\n}\n\n\nEjercicio 5 - Dataframes\nEscriba una función que, dado un dataframe, transforme una columna numérica a elección en una columna con solo dos categorías, “bajo” y “alto”, según los valores sean menores que un umbral predeterminado. Use el siguiente modelo como ejemplo:\ntransformar_columna(dataframe, nombre_columna, umbral){ \n  # ... \n  return(dataframe)\n}"
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html",
+    "href": "ejercicios/clase1-ejercicios.html",
+    "title": "Clase 1 - Ejercicios",
+    "section": "",
+    "text": "Escriba\n\n\nuna funciòn que convierta una temperatura en grados Celsius a grados Fahrenheit\notro programa que se haga la operación inversa (de Fahrenheit a Celsius)\nverifique que aplicar una función seguida de la otra devuelven el valor original.\n\n\nCree una funciòn que dado un cuadrado, a partir de la variable base, calcule su perímetro y su área.\nConstruya una función es_cuadrado_perfecto que devuelva un booleano según el input x es o no un cuadrado perfecto (existe \\(k\\) tal que \\(k^2\\))\nArme una función que dado un vector numérico x devuelve un vector con la media muestral y, la mediana. Use el siguiente modelo como base:\n\nmedias = function(x) {\n  return(c(mean(x), median(x)))\n}\nUna vez definida la función medias ejecute la siguente línea:\nreplicaciones = replicate(10000, medias(rnorm(100)))\n^ Extraiga de la matriz replicaciones la medias y medianas y asígnelas a los vectores las_medias y las_medianas respectivamente. Luego ejecute el siguiente código para graficar.\ncolores = c(\"skyblue3\", \"orange\")\ndensidades = c(50, 30)\n# las_medias = ...\nhist(las_medias, density=densidades[1], col = colores[1])\n# las_mediana = ...\nhist(las_medianas, density=densidades[2], col = colores[2], add=TRUE)\nlegend(\"topright\", legend=c(\"media\", \"mediana\"), col = colores, density=densidades, fill = colores)\n\nUna empresa regala una heladera al azar entre \\(N\\) personas. Repite el proceso \\(n\\) veces. ¿Cuál es la probabilidad de que una persona reciba dos heladeras?\n\n\nPrimero escriba una función que simule una sola realización del sorteo. Usá el siguiente modelo:\n\nuna_heladera = function(N, n){\n# ...\nreturn(dos_heladeras_bool)\n}\n\nUse el siguiente código para obtener un vector con los resultados de correr la función anterior k veces.\n\nk = 1000\nN = 40000000\nn = 15000\nreps = replicate(k, una_heladera(N, n))\n\nCalcule la media muestral de reps, ¿qué representa?.\n\n\nConsidere la siguientes tres sucesiones:\n\n\n\\(a_n = \\frac{1}{\\sqrt{n}} + (\\frac{1}{2})^n\\)\n\\(b_n = (-1)^n + 5\\)\n\\(c_n = \\frac{3n-8}{\\sqrt{16n^2+n}}\\)\n\n\nGrafique los primeros \\(n=100\\) términos de cada sucesón.\nDecida si las sucesiones son convergentes y en tal caso agregue una línea horizontal al gráfico.\n\n\nConsidere las siguientes funciones:\n\n\n\\(l_2(x) = x^2\\),\n\\(l_1(x) = |x|\\),\n\\(\\rho_k(x) = x^2 * I_{(|x|\\leq k)} + 2k|x|-k^2 * I_{(|x| &gt; k)}\\).\n\npara \\(x \\in [-10, 10]\\). Grafique \\(p_k\\) con \\(k=5\\) junto a las otras funciones con distintos colores y una leyenda.\n\nGrafique el polinomio interpolador de Lagranges en \\(n+1\\) puntos equiespaciados en el intervalo \\([-1,1]\\), con \\(n= 5, 10, 15\\), para los valores generados por las siguientes funciones:\n\n\n\\(f_1(x) = \\frac{1}{25x^2}\\)\n\\(f_2(x) = \\sin(\\pi x)\\)"
+  },
+  {
+    "objectID": "clases/clase1-clase.html#programar-es-como-hablar-un-idioma",
+    "href": "clases/clase1-clase.html#programar-es-como-hablar-un-idioma",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Programar es como hablar un idioma",
+    "text": "Programar es como hablar un idioma\nAprender un lenguaje de programación se parece a aprender un idioma.\n\nLos sustantivos son las variables: las cosas con las que trabajamos (un número, un nombre, una tabla).\nLos verbos son las funciones: las acciones que ejecutamos sobre esas cosas (sumar, contar, ordenar).\nLa gramática es la sintaxis: cómo se combinan las palabras para que tengan sentido.\nLos errores de tipeo existen también: si decimos algo mal, el otro lado no entiende.\n\n\nCada idioma tiene sus particularidades. En español el adjetivo va después del sustantivo, en inglés antes. R también tiene las suyas: el primer elemento de un vector es el 1, no el 0; la asignación se escribe &lt;-. Son convenciones que se aprenden con el uso.\n\n~5 min. Pedir un ejemplo de oración y traducirla al “verbo + objetos”."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#qué-es-r",
+    "href": "clases/clase1-clase.html#qué-es-r",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "¿Qué es R?",
+    "text": "¿Qué es R?\nR es un lenguaje de programación y un entorno de cómputo orientado a estadística y análisis de datos.\n\nOpen source y gratuito.\nComunidad enorme: paquetes para casi cualquier tarea (CRAN, Bioconductor, GitHub).\nPensado para trabajar con datos: vectores, tablas, gráficos.\nLo van a usar mucho a lo largo del programa."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#y-rstudio",
+    "href": "clases/clase1-clase.html#y-rstudio",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "¿Y RStudio?",
+    "text": "¿Y RStudio?\nRStudio es un IDE (entorno integrado de desarrollo): un programa que envuelve a R y nos hace la vida más fácil.\nCuatro paneles típicos:\n\nEditor (arriba-izquierda): donde escribimos los scripts.\nConsola (abajo-izquierda): donde se ejecutan las instrucciones.\nEnvironment (arriba-derecha): qué variables tenemos en memoria.\nFiles / Plots / Help (abajo-derecha): explorador, gráficos y ayuda.\n\nAtajos útiles: Ctrl+Enter envía la línea actual a la consola; Ctrl+L limpia la consola."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#asignación-guardar-un-valor",
+    "href": "clases/clase1-clase.html#asignación-guardar-un-valor",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Asignación: guardar un valor",
+    "text": "Asignación: guardar un valor\nLo primero que vamos a hacer es guardar valores en variables.\nx &lt;- 10\nnombre &lt;- \"Ana\"\naprobado &lt;- TRUE\n&lt;- es el operador de asignación: “el valor de la derecha va a la variable de la izquierda”. Una vez asignada, la variable se reutiliza:\ny &lt;- x + 5     # 15\nnombre         # \"Ana\"\nReglas para nombres: empezar con letra, contener solo letras, números, _ y ., sin espacios y sin palabras reservadas (if, for, function, …).\n\nMostrar en vivo cómo aparece la variable en el panel Environment."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#cuatro-tipos-atómicos",
+    "href": "clases/clase1-clase.html#cuatro-tipos-atómicos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Cuatro tipos atómicos",
+    "text": "Cuatro tipos atómicos\nLos tipos atómicos son los ladrillos básicos. Hay cuatro que vamos a usar todo el tiempo.\n\n\n\nTipo\nPara qué sirve\nEjemplo\n\n\n\n\nlogical\nverdadero o falso\nTRUE, FALSE\n\n\ndouble\nnúmeros reales\n3.14, -2\n\n\ninteger\nnúmeros enteros\n5L, 0L\n\n\ncharacter\ntexto\n\"hola\", 'a'\n\n\n\nclass(x) nos dice de qué tipo es x. (Para double, class devuelve \"numeric\"; typeof devuelve \"double\")."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#logical",
+    "href": "clases/clase1-clase.html#logical",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "logical",
+    "text": "logical\nToma uno de dos valores: TRUE o FALSE. Aparecen como resultado de comparaciones.\n10 == 20       # FALSE\nsin(pi/2) == 1 # TRUE\nclass(TRUE)    # \"logical\"\nOperadores:\n\nlógicos: & (y), | (o), ! (no);\nde comparación: == (igual), != (distinto), &lt;, &lt;=, &gt;, &gt;=."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#double-y-integer",
+    "href": "clases/clase1-clase.html#double-y-integer",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "double y integer",
+    "text": "double y integer\ndouble es el tipo numérico por defecto, sirve para reales.\nradio &lt;- 10\narea  &lt;- pi * radio^2\nclass(area)        # \"numeric\"\ninteger se usa para enteros. Para que R lo trate como entero hay que poner una L al final.\nclass(40)    # \"numeric\"\nclass(40L)   # \"integer\"\nEn la práctica, salvo que importe la performance o la interoperación con otros sistemas, alcanza con double."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#character",
+    "href": "clases/clase1-clase.html#character",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "character",
+    "text": "character\nTexto: símbolos, letras, palabras o frases dentro de comillas (dobles o simples).\nsaludo &lt;- \"Hola, mundo\"\nclass(saludo)             # \"character\"\nnchar(saludo)             # 11\nFunciones útiles: paste, paste0, nchar, toupper, tolower, substr."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#coerción-de-tipos",
+    "href": "clases/clase1-clase.html#coerción-de-tipos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Coerción de tipos",
+    "text": "Coerción de tipos\nCuando mezclamos tipos, R toma una decisión por nosotros y convierte todo al tipo más “general”.\nReglas, de menor a mayor: logical → integer → double → character.\nc(TRUE, 1L)         # integer:   1 1\nc(TRUE, 1L, 1.5)    # double:    1.0 1.0 1.5\nc(TRUE, 1, \"a\")     # character: \"TRUE\" \"1\" \"a\"\nEs importante saberlo porque a veces lo causamos sin querer y los resultados se vuelven raros."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#vectores-lo-mismo-varias-veces",
+    "href": "clases/clase1-clase.html#vectores-lo-mismo-varias-veces",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Vectores: lo mismo, varias veces",
+    "text": "Vectores: lo mismo, varias veces\nUn vector es una lista ordenada de valores del mismo tipo.\nnotas  &lt;- c(7, 8, 5, 9, 6)\nclass(notas)             # \"numeric\"\nlength(notas)            # 5\nnotas[1]                 # 7\nnotas[c(2, 4)]           # 8 9\nnotas[notas &gt; 6]         # 7 8 9\nSi mezclamos tipos, R coerciona (slide anterior)."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#listas-cosas-distintas-juntas",
+    "href": "clases/clase1-clase.html#listas-cosas-distintas-juntas",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Listas: cosas distintas, juntas",
+    "text": "Listas: cosas distintas, juntas\nUna lista combina elementos de distintos tipos y largos.\nalumno &lt;- list(\n  nombre   = \"Ana\",\n  edad     = 23L,\n  notas    = c(7, 8, 9),\n  aprobado = TRUE\n)\nAcceso por nombre o por posición:\nalumno$nombre        # \"Ana\"\nalumno[[\"notas\"]]    # c(7, 8, 9)\nalumno[[2]]          # 23"
+  },
+  {
+    "objectID": "clases/clase1-clase.html#data.frame-la-tabla-de-r",
+    "href": "clases/clase1-clase.html#data.frame-la-tabla-de-r",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "data.frame: la “tabla” de R",
+    "text": "data.frame: la “tabla” de R\nUn data.frame es una tabla: las filas son observaciones, las columnas son variables.\nPor dentro, es una lista donde cada elemento es una columna y todas las columnas tienen la misma longitud.\nestudiantes &lt;- data.frame(\n  nombre   = c(\"Ana\", \"Beto\", \"Cami\"),\n  nota     = c(7, 4, 9),\n  aprobado = c(TRUE, FALSE, TRUE)\n)\nestudiantes$nota         # 7 4 9\nestudiantes[1, ]         # primera fila\nestudiantes[, \"nombre\"]  # columna por nombre\nVa a ser la estructura central de la materia."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#atómicos-vs-compuestos",
+    "href": "clases/clase1-clase.html#atómicos-vs-compuestos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Atómicos vs compuestos",
+    "text": "Atómicos vs compuestos\n\n\n\n\n\n\n\n\n\nEstructura\n¿Mismo tipo?\n¿Misma longitud?\nForma\n\n\n\n\nvector\nsí\n(no aplica)\nunidimensional\n\n\nlista\nno\nno\n“cajón con etiquetas”\n\n\ndata.frame\npor columna\nsí\ntabla"
+  },
+  {
+    "objectID": "clases/clase1-clase.html#funciones-nuestros-propios-verbos",
+    "href": "clases/clase1-clase.html#funciones-nuestros-propios-verbos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Funciones: nuestros propios verbos",
+    "text": "Funciones: nuestros propios verbos\nUna función es un bloque de código con un nombre, que recibe argumentos y devuelve una salida.\ntrasladar &lt;- function(x, a) {\n  resultado &lt;- x + a\n  return(resultado)\n}\n\ntrasladar(1, 5)      # 6\ntrasladar(1:10, 5)   # 6 7 8 ... 15"
+  },
+  {
+    "objectID": "clases/clase1-clase.html#argumentos-y-valores-por-defecto",
+    "href": "clases/clase1-clase.html#argumentos-y-valores-por-defecto",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Argumentos y valores por defecto",
+    "text": "Argumentos y valores por defecto\nArgumentos pueden pasarse por posición o por nombre:\ntrasladar(x = 1, a = 5)\ntrasladar(a = 5, x = 1)   # equivalente\nTambién se pueden definir valores por defecto:\ntrasladar &lt;- function(x, a = 1) {\n  x + a\n}\n\ntrasladar(10)      # 11, usa a = 1\ntrasladar(10, 3)   # 13\n\nMostrar el panel Environment después de definir trasladar."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#buscar-ayuda",
+    "href": "clases/clase1-clase.html#buscar-ayuda",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buscar ayuda",
+    "text": "Buscar ayuda\nhelp(sum)\n?mean\n\nEn RStudio: panel Help (abajo-derecha) o F1 con el cursor encima de una función.\nGoogle + Stack Overflow: la mayoría de las dudas ya las preguntó alguien.\nCuando preguntan en un foro, incluir un MWE (minimum working example): el código mínimo que reproduce el problema."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#buena-práctica-nombres-descriptivos",
+    "href": "clases/clase1-clase.html#buena-práctica-nombres-descriptivos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buena práctica: nombres descriptivos",
+    "text": "Buena práctica: nombres descriptivos\nEl nombre de una variable es la primera línea de documentación del código. Si los nombres son buenos, casi no hace falta comentar.\n# poco claro\nx  &lt;- 25\ndf &lt;- read.csv(\"datos.csv\")\nn  &lt;- 100\n\n# claro\nedad_paciente   &lt;- 25\npacientes       &lt;- read.csv(\"datos.csv\")\nn_simulaciones  &lt;- 100\nReglas prácticas:\n\nsnake_case (palabras separadas por _).\nSingular para escalares, plural para vectores: edad vs edades.\nEvitar nombres que pisan funciones de R: c, t, T, F, data, df, mean."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#ejercicios-en-clase",
+    "href": "clases/clase1-clase.html#ejercicios-en-clase",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios en clase",
+    "text": "Ejercicios en clase\nCargá mtcars (ya viene con R) y trabajá sobre ese data.frame.\nhead(mtcars)   # mira las primeras filas\n?mtcars        # qué representa cada columna\n\nAsigná tres variables que describan un auto: consumo_mpg, cilindros (entero) y transmision_manual (booleano). Verificá el tipo de cada una con class(). Elegí los nombres pensando que los va a leer otra persona.\nSin correrlo, predecí qué hace este código y por qué. Después corré y comparalo:\nconsumo &lt;- 20\nauto    &lt;- \"Toyota\"\nconsumo + auto\nSobre el vector mtcars$mpg (consumo en miles por galón), quedate con los autos cuyo consumo supera el promedio. Pista: mean(mtcars$mpg) te da el promedio; usá indexado lógico.\nEscribí una función etiquetar_auto(modelo, consumo) que devuelva el string \"&lt;modelo&gt;: &lt;consumo&gt; mpg\". Pista: paste0.\nCreá una lista mi_auto con cuatro campos: modelo (string), cilindros (integer), consumo (double) y manual (logical). Accedé al modelo con $ y con [[ ]].\n\n\n~15 min. Pasar por las mesas. Si terminan rápido: comparar el consumo medio entre autos manuales (am == 1) y automáticos."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#comprensión-quedó-claro",
+    "href": "clases/clase1-clase.html#comprensión-quedó-claro",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Comprensión: ¿quedó claro?",
+    "text": "Comprensión: ¿quedó claro?\nMarcá la opción correcta.\n\n¿Cuál de estos nombres de variable es válido en R?\n\n2x\nmi.variable\nmi variable\nfor\n\n¿Qué devuelve class(3.14)?\n\n\"integer\"\n\"double\"\n\"numeric\"\n\"real\"\n\n¿Cuál es la diferencia clave entre una lista y un data.frame?\n\nLas listas no se pueden imprimir.\nEn un data.frame todas las columnas deben tener la misma longitud.\nUn data.frame solo admite números.\nNo hay diferencia.\n\n¿Qué devuelve class(TRUE & FALSE)?\n\n\"boolean\"\n\"logical\"\n\"TRUE\"\n\"vector\"\n\n\n\nRespuestas: 1-b, 2-c, 3-b, 4-b. Discutir las trampas: for es palabra reservada; class de un double devuelve \"numeric\" (no \"double\"), aunque typeof sí los distingue."
+  },
+  {
+    "objectID": "clases/clase1-clase.html#apéndice-vs--",
+    "href": "clases/clase1-clase.html#apéndice-vs--",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Apéndice: = vs <-",
+    "text": "Apéndice: = vs &lt;-\nPara asignar en R hay dos operadores: &lt;- y =. La mayoría del tiempo son intercambiables.\nx &lt;- 10\ny =  20\nLa diferencia aparece cuando hay una llamada a función de por medio.\nsum(x = 1:10)    # x es el nombre del argumento, no se asigna nada\nsum(x &lt;- 1:10)   # x queda asignada en el environment global\nConvención que vamos a seguir:\n\nUsar &lt;- para asignar variables.\nUsar = solo para pasar argumentos nombrados a una función.\n\nEs una distinción menor, pero ayuda a leer el código sin ambigüedad."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#de-mirar-código-a-mirar-datos",
+    "href": "clases/clase4-clase.html#de-mirar-código-a-mirar-datos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "De mirar código a mirar datos",
+    "text": "De mirar código a mirar datos\nHasta acá aprendimos a guardar valores, decidir, repetir y organizar datos. Hoy damos el paso natural en estadística: mirar los datos.\nUna buena visualización:\n\nmuestra patrones en segundos que tablas con miles de filas esconden,\nsirve como sanity check antes de modelar,\nes la mejor manera de comunicar resultados.\n\nVamos a usar gráficos en base R porque están siempre disponibles, y al final un vistazo a ggplot2.\n\n~5 min. Bridge: clase 1 cosas, clase 2 decisiones+repetición, clase 3 estructuras, hoy “ver” datos."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#tres-gráficos-que-cubren-mucho",
+    "href": "clases/clase4-clase.html#tres-gráficos-que-cubren-mucho",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Tres gráficos que cubren mucho",
+    "text": "Tres gráficos que cubren mucho\n\n\n\nGráfico\nPara qué sirve\nFunción\n\n\n\n\nScatter\nrelación entre dos variables numéricas\nplot\n\n\nHistograma\ndistribución de una variable numérica\nhist\n\n\nBoxplot\ncomparar distribuciones por grupo\nboxplot\n\n\n\nEmpezar por estos tres ya cubre el 80% de un análisis exploratorio."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#scatter-plotx-y",
+    "href": "clases/clase4-clase.html#scatter-plotx-y",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Scatter: plot(x, y)",
+    "text": "Scatter: plot(x, y)\nplot(mtcars$hp, mtcars$mpg)\nCada punto es un auto, eje x = caballos de fuerza, eje y = consumo.\nPersonalizar:\nplot(mtcars$hp, mtcars$mpg,\n     main = \"Consumo vs potencia\",\n     xlab = \"Potencia (hp)\",\n     ylab = \"Consumo (mpg)\",\n     pch  = 19,        # tipo de punto (relleno)\n     col  = \"steelblue\")\n?par lista todos los argumentos gráficos."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#histograma-histx",
+    "href": "clases/clase4-clase.html#histograma-histx",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Histograma: hist(x)",
+    "text": "Histograma: hist(x)\nhist(airquality$Ozone,\n     main   = \"Ozono diario en NY (1973)\",\n     xlab   = \"Ozono (ppb)\",\n     col    = \"lightgray\",\n     breaks = 20)        # cantidad aproximada de bins\nDecisión clave: cuántos bins. Pocos esconden estructura, muchos la enmascaran con ruido. breaks = 20 o breaks = \"FD\" (regla de Freedman-Diaconis) son puntos de partida razonables."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#boxplot-por-grupo",
+    "href": "clases/clase4-clase.html#boxplot-por-grupo",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Boxplot por grupo",
+    "text": "Boxplot por grupo\nSintaxis tipo “fórmula”: y ~ grupo.\nboxplot(Ozone ~ Month, data = airquality,\n        main = \"Ozono por mes\",\n        xlab = \"Mes\",\n        ylab = \"Ozono (ppb)\",\n        col  = \"lightblue\")\nCada caja es la distribución del ozono en un mes. La línea del medio es la mediana, los bordes el primer y tercer cuartil."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#capas-dibujar-encima",
+    "href": "clases/clase4-clase.html#capas-dibujar-encima",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Capas: dibujar encima",
+    "text": "Capas: dibujar encima\nplot abre la ventana; points, lines, abline, legend agregan elementos sobre lo dibujado.\nplot(mtcars$hp, mtcars$mpg, pch = 19, col = \"gray60\",\n     xlab = \"Potencia (hp)\", ylab = \"Consumo (mpg)\")\n\n# linea de regresion lineal (lm es funcion importada)\nabline(lm(mpg ~ hp, data = mtcars), col = \"tomato\", lwd = 2)\n\n# linea horizontal en el promedio\nabline(h = mean(mtcars$mpg), lty = 2)\n\nlegend(\"topright\",\n       legend = c(\"ajuste lineal\", \"promedio\"),\n       col    = c(\"tomato\", \"black\"),\n       lty    = c(1, 2))"
+  },
+  {
+    "objectID": "clases/clase4-clase.html#varios-gráficos-parmfrow",
+    "href": "clases/clase4-clase.html#varios-gráficos-parmfrow",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Varios gráficos: par(mfrow)",
+    "text": "Varios gráficos: par(mfrow)\npar(mfrow = c(2, 2))     # 2 filas, 2 columnas\n\nhist(airquality$Ozone, main = \"Ozono\")\nhist(airquality$Wind,  main = \"Viento\")\nhist(airquality$Temp,  main = \"Temperatura\")\nhist(airquality$Solar.R, main = \"Radiación\")\n\npar(mfrow = c(1, 1))     # volver a 1x1\nPermite comparar varias distribuciones de un vistazo."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#datos-reales-tienen-na",
+    "href": "clases/clase4-clase.html#datos-reales-tienen-na",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Datos reales tienen NA",
+    "text": "Datos reales tienen NA\nairquality$Ozone tiene valores faltantes. La mayoría de las funciones agregadas se quejan:\nmean(airquality$Ozone)             # NA: hay NAs\nmean(airquality$Ozone, na.rm = TRUE)   # 42.13\nOtras útiles:\nsum(is.na(airquality$Ozone))   # cuántos NA hay\ncomplete.cases(airquality)     # filas sin ningún NA\nna.omit(airquality)            # data.frame sin filas con NA\nDecisión de fondo: tirar las filas con NA, imputarlas o usarlas como información. Depende del problema."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#resumir-por-grupo",
+    "href": "clases/clase4-clase.html#resumir-por-grupo",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Resumir por grupo",
+    "text": "Resumir por grupo\nTres herramientas clásicas en base R.\n# media de mpg por cantidad de cilindros\naggregate(mpg ~ cyl, data = mtcars, FUN = mean)\n\n# lo mismo, otra forma\ntapply(mtcars$mpg, mtcars$cyl, mean)\n\n# tabla de frecuencias\ntable(mtcars$cyl)\nprop.table(table(mtcars$cyl))   # proporciones\naggregate devuelve un data.frame, ideal para encadenar con un gráfico."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#un-eda-mínimo-en-cuatro-pasos",
+    "href": "clases/clase4-clase.html#un-eda-mínimo-en-cuatro-pasos",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Un EDA mínimo en cuatro pasos",
+    "text": "Un EDA mínimo en cuatro pasos\nAnte un dataset nuevo:\n# 1. estructura\nstr(airquality)\n\n# 2. resumen estadistico por columna\nsummary(airquality)\n\n# 3. extremos\nhead(airquality)\ntail(airquality)\n\n# 4. graficos basicos\npar(mfrow = c(2, 2))\nhist(airquality$Ozone, main = \"Ozono\")\nhist(airquality$Wind,  main = \"Viento\")\nboxplot(Ozone ~ Month, data = airquality, main = \"Ozono por mes\")\nplot(airquality$Wind, airquality$Ozone, pch = 19, main = \"Ozono vs Viento\")\npar(mfrow = c(1, 1))"
+  },
+  {
+    "objectID": "clases/clase4-clase.html#buena-práctica-probar-antes-de-creer",
+    "href": "clases/clase4-clase.html#buena-práctica-probar-antes-de-creer",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Buena práctica: probar antes de creer",
+    "text": "Buena práctica: probar antes de creer\nUna función puede parecer correcta y estar mal. Lo más simple para no engañarse: escribir un test antes de usarla.\nnormalizar &lt;- function(x) (x - mean(x)) / sd(x)\n\n# tests: ejemplos donde sabemos la respuesta\nstopifnot(abs(mean(normalizar(c(1, 2, 3))))      &lt; 1e-10)   # media debe ser 0\nstopifnot(abs(sd(normalizar(c(1, 2, 3))) - 1)    &lt; 1e-10)   # sd debe ser 1\nstopifnot corta con error si la condición es falsa. Si pasa silenciosamente, la función pasó ese test.\nUn test no garantiza que la función esté bien siempre, pero garantiza que está bien para los casos que probamos."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#ejercicios-en-clase",
+    "href": "clases/clase4-clase.html#ejercicios-en-clase",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Ejercicios en clase",
+    "text": "Ejercicios en clase\nTrabajamos sobre airquality (calidad del aire en NY) y mtcars.\n\nHistograma de airquality$Ozone con título y eje en español. Probá tres valores distintos de breaks (10, 20, 50). ¿Qué cambia?\nBoxplot de Temp ~ Month sobre airquality. Pintá las cajas con col = \"lightgreen\". ¿En qué mes hay más dispersión?\nScatter de mpg ~ hp sobre mtcars, con la recta de regresión por encima usando abline(lm(...)) y una leyenda.\nCalculá la media de mpg por cyl con aggregate, y graficala con barplot(height = ..., names.arg = ...). ¿Cae monótonamente?\nFunción normalizar(x) con dos stopifnot que verifiquen media 0 y sd 1. Aplicala a mtcars$mpg y graficá el histograma del resultado.\n(Bonus, datos argentinos) Cargá la encuesta sysarmy de salarios IT desde el repo de openqube y graficá un histograma del salario neto.\nurl &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\"\nsueldos &lt;- read.csv(url, check.names = TRUE)\nhead(sueldos)\nMirá colnames(sueldos) (los nombres son largos, en español, con acentos), elegí la columna del salario neto y graficá su histograma. ¿Qué breaks elegirías para que no se aplaste con los outliers? Pista: probá un eje x acotado con xlim = c(0, quantile(x, 0.99, na.rm = TRUE)).\n\n\n~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975)))."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#comprensión-quedó-claro",
+    "href": "clases/clase4-clase.html#comprensión-quedó-claro",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Comprensión: ¿quedó claro?",
+    "text": "Comprensión: ¿quedó claro?\n\n¿Qué función usás para comparar la distribución de una variable numérica entre varios grupos?\n\nplot\nhist\nboxplot\nbarplot\n\n¿Qué hace mean(x, na.rm = TRUE) cuando x tiene NA?\n\nDevuelve NA.\nDa error.\nCalcula la media ignorando los NA.\nReemplaza los NA por 0.\n\nPara agregar una recta de regresión sobre un scatter ya dibujado, usás:\n\nplot(lm(...))\nabline(lm(...))\nlines(lm(...))\nregline(...)\n\n¿Para qué sirve stopifnot?\n\nPara parar un bucle infinito.\nPara chequear que una condición es cierta y cortar con error si no.\nPara imprimir un mensaje de advertencia.\nPara suprimir errores.\n\n\n\nRespuestas: 1-c, 2-c, 3-b, 4-b."
+  },
+  {
+    "objectID": "clases/clase4-clase.html#apéndice-gramática-mínima-de-ggplot2",
+    "href": "clases/clase4-clase.html#apéndice-gramática-mínima-de-ggplot2",
+    "title": "Curso Nivelador - Programación en R",
+    "section": "Apéndice: gramática mínima de ggplot2",
+    "text": "Apéndice: gramática mínima de ggplot2\nggplot2 propone una gramática: todo gráfico es data + mapping (aes) + geom.\nlibrary(ggplot2)\n\nggplot(mtcars, aes(x = hp, y = mpg)) +\n  geom_point() +\n  geom_smooth(method = \"lm\") +\n  labs(title = \"Consumo vs potencia\",\n       x = \"Potencia (hp)\", y = \"Consumo (mpg)\")\nMisma idea para boxplot:\nggplot(airquality, aes(x = factor(Month), y = Ozone)) +\n  geom_boxplot(fill = \"lightblue\") +\n  labs(x = \"Mes\", y = \"Ozono (ppb)\")\nUna vez que se entiende la gramática, queda más fácil que el base R para gráficos complejos. Lo vamos a usar más adelante."
+  },
+  {
+    "objectID": "clases/bucles.html#qué-es-un-bucle",
+    "href": "clases/bucles.html#qué-es-un-bucle",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "¿Qué es un bucle?",
+    "text": "¿Qué es un bucle?\nUn bucle permite escribir de forma compacta la repetición de una misma tarea o tareas muy similares.\nPor ejemplo,\n\naplicar una transformación a los elementos de un vector o una lista (feature engineering)\noptimizar una función mediante pasos sucesivos (método de bisección, método de Newton-Raphson)\nrepetir realizaciones de un mismo experimento (ensayos de Bernoulli)"
+  },
+  {
+    "objectID": "clases/bucles.html#for-y-while",
+    "href": "clases/bucles.html#for-y-while",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "for y while",
+    "text": "for y while\nEn R hay varias formas de repetir tareas.\n\nfor: repite una cantidad establecida de veces un bloque de código.\nwhile: repite un bloque de código mientras se verifique una condición.\n\nHay formas propias de R como la familia de comandos replicate, lapply, sapply, mapply, entre otros."
+  },
+  {
+    "objectID": "clases/bucles.html#sintáxis-del-for",
+    "href": "clases/bucles.html#sintáxis-del-for",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Sintáxis del for",
+    "text": "Sintáxis del for\nQueremos repetir una tarea tantas veces como elementos en lista_de_valores\nfor (valor in lista_de_valores) {\n  # la tarea que se repite...\n}\nEl código anterior recorre la lista lista_de_valores, para cada elemento valor de la lista se ejecuta el bloque de código encerrado entre {} ."
+  },
+  {
+    "objectID": "clases/bucles.html#sintáxis-del-for-1",
+    "href": "clases/bucles.html#sintáxis-del-for-1",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Sintáxis del for",
+    "text": "Sintáxis del for\nCada repetición de la tarea podría depender o no de valor.\nejemplo 1\n# Tiro 10 veces un dado equilibrado\n\nfor (valor in 1:10) {\n\n  # no depende de 'valor'\n  dado = sample(1:6, 1)\n  print(paste(\"Tiro el dado:\", dado))\n\n}\nejemplo 2\n# Imprimo los valores de una lista\n\nmetricas &lt;- list(\"mse\", \"mae\", \"mape\")\n\nfor (mtr in metricas) {\n  \n  # depende de 'mtr' \n  mensaje = paste(\"La métrica\", toupper(mtr), \"está disponible.\")\n  print(mensaje)\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#sintáxis-del-for-2",
+    "href": "clases/bucles.html#sintáxis-del-for-2",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Sintáxis del for",
+    "text": "Sintáxis del for\nejemplo 3\n# Quiero elevar cada coordenada al cuadrado\nx = 1:10\n\n# Inicializo un vector numérico vacío\nx_al_cuadrado = vector(\"numeric\", length(x))\n\n# Bucle\nfor (i in 1:length(x)) {\n  x_al_cuadrado[i] = x[i]^2\n}\nejemplo 4\nangulo = seq(0, 360, length=60)\nradianes = angulo * pi / 180\nx = cos(radianes)\ny = sin(radianes)\n\nfor (i in 2:length(angulo)) {\n  Sys.sleep(1)\n  plot(y, x, axes=F, xlab=\"\", ylab=\"\", type=\"l\", lwd=3, main = \"un reloj\")\n  arrows(0, 0, y[i-1], x[i-1], col = \"white\",lwd=2)\n  arrows(0, 0, y[i], x[i], col = \"blue\", lty=2, lwd=2)\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#bucles-anidados",
+    "href": "clases/bucles.html#bucles-anidados",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Bucles anidados",
+    "text": "Bucles anidados\nDentro de un bucle podríamos necesitar otro bucle.\ntrasponer = function(mi_matriz){\n  \n  # inicializamos la traspuesta como una matriz vacia\n  matriz_traspuesta = matrix(0, nrow=ncol(mi_matriz), \n                                ncol=nrow(mi_matriz))\n    \n  for (i in 1:nrow(mi_matriz)) {  # para cada fila de mi_matriz \n    for (j in 1:ncol(mi_matriz)) {  # recorro todas sus columnas \n    \n      # El elemento (i,j) pasa a ser el (j,i) en la traspuesta\n      matriz_traspuesta[j,i] = mi_matriz[i, j]\n      \n      # Un mensajito sobre qué iteración es\n      print(paste(\"Trasponiendo:\", \"fila\", i, \",\", \"columna\", j))\n    }\n  }\n\n  # devolvemos la matriz traspuesta\n  return(matriz_traspuesta)\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#salir-del-for-break",
+    "href": "clases/bucles.html#salir-del-for-break",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Salir del for: break",
+    "text": "Salir del for: break\nPodemos usar break para salir de un bucle.\n# Queremos saber si un vector tiene valores negativos.\n\nnum_vector = c(1, 5, -1, 2, 0, -3)\n\nfor (coord in 1:length(num_vector)) {\n\n  # Verifico si la coordenada 'coord' es negativa\n  if (num_vector[coord] &lt; 0) {\n    print(\"El vector tiene valores negativos.\")\n    break  # salimos del bucle ahora\n    print(\"Esto no se imprime porque está después del 'break'.\")\n  }\n  print(paste(\"El valor de la coordenada\", coor, \"es positivo.\")\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#siguiente-iteración-next",
+    "href": "clases/bucles.html#siguiente-iteración-next",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Siguiente iteración: next",
+    "text": "Siguiente iteración: next\nCon next podemos saltear la iteración actual y continuar con el bucle desde la siguiente.\nfor (val in x) {\n  if (val == 3) {\n    next\n  }\n  print(val)\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#while",
+    "href": "clases/bucles.html#while",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "while",
+    "text": "while\nCada repetición se ejecuta si y solo si\ncondicion_logical == TRUE\nwhile (condicion_logical){\n  # la tarea que queremos repetir...\n}\nEjemplo\nconjetura_catalan = function(k){\n  while (k &gt; 1) {\n    if (k %% 2 == 0) {\n      k = k / 2\n    } else {\n      k = 3 * k + 1\n    }\n    print(k)\n  }\n  print(\"Conjetura: siempre termina en 1.\")\n}"
+  },
+  {
+    "objectID": "clases/bucles.html#contador-auxiliar",
+    "href": "clases/bucles.html#contador-auxiliar",
+    "title": "Bucles: for y while (DEPRECATED)",
+    "section": "Contador auxiliar",
+    "text": "Contador auxiliar\nPor ejemplo, dada una lista_de_numeros, indiquémos en qué posición aparece por primera vez valor.\niter = 1\nwhile (lista_de_numeros[iter] != valor & iter &lt;= length(lista_de_numeros)){\n\n    print(c(iter, lista_de_numeros[iter], valor, lista_de_numeros[iter] != valor))\n    iter = iter + 1\n}\nprint(iter)\nMetemos nuestro código en una función y lo probamos\nprimera_aparicion = function(valor, lista_de_numeros){\n  iter = 1\n  while (lista_de_numeros[iter] != valor & iter &lt;= length(lista_de_numeros)){\n    iter = iter + 1\n  }\n  return(iter)\n}\n\nprimera_aparicion(5, list(10, 2, 5, -3 ,4, 9))"
+  },
+  {
+    "objectID": "clases/dataframe.html",
+    "href": "clases/dataframe.html",
+    "title": "Dataframes",
+    "section": "",
+    "text": "Considere el dataset Bikeshare del paquete ISLR2:\n# install.packages(\"ISLR2\")\nlibrary(ISLR2)\nBikeshare\n\n¿Qué datos recoge el dataframe? (help(Bikeshare) o ?Bikeshare)\nExplore el dataframe con los comandos summary, head y tail .\n¿Qué dimensiones tiene? (dim, nrow, ncol)\n¿Cómo se llaman las columnas? ¿Y las filas? (colnames, rownames)\n¿Qué tipo de dato representa cada variable?\n¿Hay valores faltantes? Es decir, ¿hay valores NA ? (is.na)\nEscriba una función que transforme una columna numérica en una con solo dos categorías, “bajo” y “alto” según los valores sean menores que un umbral predeterminado. Use el siguiente modelo como ejemplo:\ntransformar_columna(dataframe, nombre_columna, umbral){ \n  #…\n  return(dataframe)\n}\n¿Cuál es el promedio de bikers por season?\nGrafique el comando boxplot(bikers ~ weekday, data=Bikeshare) .\nUtilice el comando read.table o read.csv para:\n\nleer el archivo desde el siguiente link (vea el argumento url)\nleer el archivo desde el disco (descargue el archivo del dataset primero)\n\nEscriba una función que reemplace la variable season un one-hot-encoding. Es decir, reemplace la columna season por tantas columnas como categorías admita, donde cada columna indica, con 1 o 0, según su valor. Por ejemplo, si la observación es season = 3, las nuevas columnas valdrían season_1 = 0, season_2 = 0, season_3 = 1, season_4 = 0.\nEscriba una función que reemplace la variable mnth con una variable numérica que tenga el promedio de registered por cada categoría."
+  },
+  {
+    "objectID": "soluciones/unicos.html",
+    "href": "soluciones/unicos.html",
+    "title": "Valores únicos",
+    "section": "",
+    "text": "Dada una lista de palabras, queremos encontrar el subconjunto resultante de eliminar todas las repetidas. Es decir, buscamos el conjunto de valores únicos de la lista. Por ejemplo, en la lista\nlista_de_palabras = c(\"aca\", \"hay\", \"una\", \"una\", \"duplicada\")\nhay una palabra duplicada, \"una\". La salida esperada es c(\"aca\", \"hay\", \"una\", \"duplicada\").\n\nEscriba una función que decida si una palabra pertenece a una lista de palabras. Use el siguiente modelo:\n\n  buscar_una_palabra = function(palabra, lista_de_palabras){\n    # si_esta_la_palabra = ...  # logical\n    return(si_esta_la_palabra)\n  }\n\nSi la función buscar_una_palabra hubiera sido correctamente implementada, las siguientes expresiones serían verdaderas:\n\nbuscar_una_palabra(\"hola\", list(\"hola\", \"chau\")) == TRUE\n# TRUE\nbuscar_una_palabra(\"alo\", list(\"hola\", \"chau\")) == FALSE\n# TRUE\nEscriba una función que verifique ambas condiciones de manera automática.\ntest_buscar_una_palabra = function(){\n  # pasa_los_test = ... # logical\n  return(pasa_los_test)\n}\nCada vez que modifiquemos nuestra función original, tenemos una forma rápida de verificar que aún funciona.\n\nUse la función anterior para determinar el vector de elementos únicos de una lista de palabras. Use el siguiente modelo como base:\n\nborrar_duplicados = function(lista_de_palabras){\n  # unicos = ...  # vector\n  return(unicos)\n}\n\nEn R disponemos del comando unique. Comparemos los desempeños comparando sus tiempos de ejecución. Usaremos el comando benchmark del paquete rbenchmark.\n\n# Instalamos el paquete\ninstall.packages(\"rbenchmark\")\n\n# Cargamos el paquete\nlibrary(\"rbenchmark\")\n\n# Generamos una lista de la palabras para testear\nlista_test = generar_lista(letters[1:10], sample(2:5, 10, replace = TRUE))\n\n# Comparamos los tiempos\nbenchmark(borrar_duplicados(lista_test), unique(lista_test))\n\nModifique la función anterior para contar la cantidad de elementos de cada elemento único. Es decir, calcule la frecuencia absoluta de los elementos únicos encontrados.\n\ncontar_palabras = function(lista_de_palabras){\n    # unicos = ... # vector character\n    # aparece = ... # vector integer\n    return(lista(unicos = ..., aparece = ...)\n}\n\nCompare el desempeño contra la función table de R.\nAgregue a la función anterior un argumento frec_tipo para calcular la frecuencia relativa o la frecuencia porcentual.\n\ncontar_palabras = function(lista_de_palabras, frec_tipo){\n    # unicos = ... # vector character\n    # aparece = ... # vector integer\n    return(lista(unicos = ..., aparece = ...)\n}\n\nHaga un gráfico de barras con las frecuencias obtenidas de la función anterior. En función del tipo de frecuencia elegido el gráfico deberá ajustar su título y etiquetas en los ejes.\n\nplot_frecuencias = function(frecuencias, etiquetas, frec_tipo){\n  # ...\n}\n\nAgregué un argumento para graficar las \\(N\\) palabras con más apariciones. Pruebe la función con la salida del siguiente código que usa herramientas para manipular cadenas de texto de la librería stringr.\n\ninstall.packages(\"stringr)\nlibrary(stringr)\nurl = \"https://www.gutenberg.org/files/14765/14765-8.txt\"\nfile = readLines(url(url))\nfile_clean = unlist(strsplit(str_replace_all(file, \"([,.0-9])\", \"\"),\" \"))\nfile_clean\n\n¿Qué hace el siguiente código?\n\n  all(unique(file_clean) == borrar_duplicados(file_clean))"
+  },
+  {
+    "objectID": "soluciones/cuadratica.html",
+    "href": "soluciones/cuadratica.html",
+    "title": "Fórmula cuadrática",
+    "section": "",
+    "text": "Dado el polinomio de grado \\(2\\), \\(p(x) = a x^2 + b x + c\\), decimos que \\(x_0\\) es un cero o raíz del polinomio si \\(p(x_0) = 0\\). Tenga presente que según el valor de \\(\\Delta = b^2 - 4ac\\) el polinomio podría tener una raíz múltiple o incluse no tener raíces.\n\nEscriba una función que reciba los coeficientes del polinomio y devuelva un vector con las posibles raíces del polinomios. Use el siguiente modelo como base:\n\nceros_cuadratica = function(a, b, c){\n    # raices = ...\n    return(raices)\n}\n\nEn lugar de ingresar los coeficientes por separado, repita el ejercicio pero ingrese un vector de coeficientes. Use el siguiente modelo como base:\n\nceros_cuadratica = function(a, b, c){\n    # raices = ...\n    return(raices)\n}\n\nEscriba una función que reciba una función matemática y un valor y devuelva si dicho valor es raíz de la función. Use el siguiente modelo como base:\n\ndecidir_raiz = function(fun, valor){\n    # es_raiz = ...\n    return(es_raiz)\n}\n\nEscriba una función que grafique una función junto con un valor dado. Que diga en el título del gráfico si es o no raíz de la función.\n\ngraficar_funcion_y_valor = function(fun, valor){\n    # ...\n}"
+  }
+]
