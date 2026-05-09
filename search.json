@@ -452,336 +452,616 @@
     "href": "ejercicios/clase2-ejercicios.html",
     "title": "Clase 2 - Ejercicios",
     "section": "",
-    "text": "Vamos a usar airquality (calidad del aire en NY, mayo a septiembre 1973). Tiene 153 filas y 6 columnas. Es un dataset realista: viene con valores faltantes (NA).\nhead(airquality)\n?airquality\nA las funciones de la clase 1 (etiquetar_auto, dif_promedio, resumen_min) sumamos clasificar_temp, contar_alertas, bootstrap_media y clasificar_presion."
+    "text": "Vamos a usar airquality, mediciones diarias de calidad del aire en Nueva York entre mayo y septiembre de 1973. Tiene 153 filas, 6 columnas y valores faltantes (NA) reales.\nhead(airquality)\n?airquality\nA las funciones de la clase 1 (etiquetar_auto, dif_promedio, dentro_rango, resumen_min) sumamos clasificar_temp, contar_eventos, primer_indice_que_cumple, bootstrap_media y clasificar_presion."
   },
   {
     "objectID": "ejercicios/clase2-ejercicios.html#contexto",
     "href": "ejercicios/clase2-ejercicios.html#contexto",
     "title": "Clase 2 - Ejercicios",
     "section": "",
-    "text": "Vamos a usar airquality (calidad del aire en NY, mayo a septiembre 1973). Tiene 153 filas y 6 columnas. Es un dataset realista: viene con valores faltantes (NA).\nhead(airquality)\n?airquality\nA las funciones de la clase 1 (etiquetar_auto, dif_promedio, resumen_min) sumamos clasificar_temp, contar_alertas, bootstrap_media y clasificar_presion."
+    "text": "Vamos a usar airquality, mediciones diarias de calidad del aire en Nueva York entre mayo y septiembre de 1973. Tiene 153 filas, 6 columnas y valores faltantes (NA) reales.\nhead(airquality)\n?airquality\nA las funciones de la clase 1 (etiquetar_auto, dif_promedio, dentro_rango, resumen_min) sumamos clasificar_temp, contar_eventos, primer_indice_que_cumple, bootstrap_media y clasificar_presion."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-1-reconocer-el-dataset",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-1-reconocer-el-dataset",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-1-explorar-el-dataset",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-1-explorar-el-dataset",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 1: reconocer el dataset",
-    "text": "Ejercicio 1: reconocer el dataset\n\nCargá airquality y mirá head, dim, colnames, ?airquality. Anotá qué representa cada columna.\n¿Cuántos NA tiene la columna Ozone? Pista: sum(is.na(airquality$Ozone)).\n¿Cuántas filas tienen al menos un NA? Pista: sum(!complete.cases(airquality))."
+    "section": "Ejercicio 1: explorar el dataset",
+    "text": "Ejercicio 1: explorar el dataset\n\nVerificá dim(airquality), colnames(airquality), ?airquality. Anotá qué representa cada columna y sus unidades.\n¿Cuántos NA hay en cada columna? Pista: sapply(airquality, function(col) sum(is.na(col))).\n¿Cuántas filas tienen al menos un NA? Pista: sum(!complete.cases(airquality))."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-2-clasificar-temperatura-con-ifelse-ifelse",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-2-clasificar-temperatura-con-ifelse-ifelse",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-2-if-simple",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-2-if-simple",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 2: clasificar temperatura con if/else if/else",
-    "text": "Ejercicio 2: clasificar temperatura con if/else if/else\n\nDefiní clasificar_temp(x) (en °F) que devuelva \"frio\" si x &lt; 60, \"templado\" si 60 &lt;= x &lt; 80, \"caluroso\" si x &gt;= 80.\nAplicala dentro de un for a c(50, 70, 90, 100). Imprimí cada categoría.\nHacé lo mismo con ifelse vectorial anidado. Compará legibilidad."
+    "section": "Ejercicio 2: if simple",
+    "text": "Ejercicio 2: if simple\n\nAsigná temp_observada &lt;- 85 (en °F). Escribí un bloque if que imprima \"alerta de calor\" si temp_observada &gt;= 80.\nReasigná temp_observada &lt;- 70 y volvé a correr. ¿Imprime algo?\n¿Qué pasa si temp_observada es NA? Probá. Identificá el problema."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-3-contar-alertas",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-3-contar-alertas",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-3-if-else",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-3-if-else",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 3: contar alertas",
-    "text": "Ejercicio 3: contar alertas\n\nUsando un for, contá cuántos días airquality$Ozone &gt; 80 (umbral OMS para alerta). Cuidado con los NA: salteálos con next.\nHacé lo mismo en una línea: sum(airquality$Ozone &gt; 80, na.rm = TRUE). Verificá que coincide.\nGeneralizá a contar_alertas(x, umbral). Probá con airquality$Wind y umbral = 15."
+    "section": "Ejercicio 3: if / else",
+    "text": "Ejercicio 3: if / else\n\nDefiní categorizar_dia(temp) que devuelva \"caluroso\" si temp &gt;= 80, \"templado\" en otro caso.\nAplicala a c(60, 75, 90). ¿Funciona vectorizada o no? Justificá.\nAplicala con for a airquality$Temp[1:10]."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-4-primer-índice-que-cumple-una-condición",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-4-primer-índice-que-cumple-una-condición",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-4-if-else-if-else",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-4-if-else-if-else",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 4: primer índice que cumple una condición",
-    "text": "Ejercicio 4: primer índice que cumple una condición\n\nCon un while y seq_along, encontrá el primer día (índice) donde Ozone &gt; 100. Cuidado con NA.\nCompará con which(airquality$Ozone &gt; 100 & !is.na(airquality$Ozone))[1].\nGeneralizá: definí primer_indice(x, condicion_fun) donde condicion_fun es una función que devuelve TRUE/FALSE para cada elemento. Probá con function(z) z &gt; 100 y con function(z) z &lt; 5."
+    "section": "Ejercicio 4: if / else if / else",
+    "text": "Ejercicio 4: if / else if / else\n\nDefiní clasificar_temp(temp) (en °F): \"frio\" si temp &lt; 60, \"templado\" si 60 &lt;= temp &lt; 80, \"caluroso\" si temp &gt;= 80.\nProbala con c(50, 70, 90, 100) dentro de un for.\nHacé lo mismo con ifelse anidado vectorial. Compará legibilidad y velocidad (system.time)."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-5-clasificación-de-los-primeros-30-días",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-5-clasificación-de-los-primeros-30-días",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-5-operadores-lógicos-en-condiciones",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-5-operadores-lógicos-en-condiciones",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 5: clasificación de los primeros 30 días",
-    "text": "Ejercicio 5: clasificación de los primeros 30 días\n\nPara los primeros 30 días, imprimí \"Alta\" si Ozone &gt; 80, \"Baja\" si Ozone &lt; 20, el valor numérico en otro caso. Usá for + if/else if/else. Si hay NA, salteálo.\nReescribilo con ifelse anidado. ¿Es más fácil de leer o más confuso?\n¿Cuándo conviene cada uno? Anotá una línea de criterio."
+    "section": "Ejercicio 5: operadores lógicos en condiciones",
+    "text": "Ejercicio 5: operadores lógicos en condiciones\n\nDefiní dia_alerta(temp, ozono) que devuelva TRUE si ambos superan sus umbrales: temp &gt;= 85 Y ozono &gt;= 80.\nProbala con dia_alerta(90, 85) y dia_alerta(70, 90).\nAplicala con un for a las primeras 30 filas de airquality. Cuidado con NA: tratalos como FALSE."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-6-bootstrap-de-la-media",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-6-bootstrap-de-la-media",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-6-for-básico",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-6-for-básico",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 6: bootstrap de la media",
-    "text": "Ejercicio 6: bootstrap de la media\n\nDefiní bootstrap_media(x, n_rep = 1000) usando replicate + sample. Devolvé el vector de medias bootstrap.\nAplicala a airquality$Wind (no tiene NA). La media de las medias debería estar cerca de mean(airquality$Wind).\nCalculá un IC del 95% por percentiles: quantile(boot, c(0.025, 0.975)). Compará con t.test(airquality$Wind)$conf.int."
+    "section": "Ejercicio 6: for básico",
+    "text": "Ejercicio 6: for básico\n\nImprimí los cuadrados de los enteros del 1 al 10 con un for.\nRecorré airquality$Wind[1:5] con un for e imprimí cada valor con dos decimales. Pista: round(x, 2).\nRecorré las primeras cinco filas de airquality con un for e imprimí paste(\"Día\", i, \": Ozono =\", airquality$Ozone[i])."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-7-acumular-en-un-vector",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-7-acumular-en-un-vector",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-7-for-con-seq_along",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-7-for-con-seq_along",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 7: acumular en un vector",
-    "text": "Ejercicio 7: acumular en un vector\n\nCalculá Ozone^2 - Wind para cada día con un for. Pre-asigná el vector y rellenalo. Si hay NA, dejá NA.\nHacelo vectorizado en una línea: airquality$Ozone^2 - airquality$Wind. Verificá que coincide.\nCronometrá las dos versiones con system.time. ¿Cuánto más rápido es el vectorizado?"
+    "section": "Ejercicio 7: for con seq_along",
+    "text": "Ejercicio 7: for con seq_along\n\nRecorré airquality$Ozone con seq_along. ¿Por qué seq_along es más seguro que 1:length(...)? Pista: pensá qué pasa si length es 0.\nCalculá la suma de los valores no-NA de Ozone con un for. Cuidado con los NA: salteálos con next.\nCompará con sum(airquality$Ozone, na.rm = TRUE)."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-8-break-y-next",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-8-break-y-next",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-8-acumular-en-un-vector-pre-asignado",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-8-acumular-en-un-vector-pre-asignado",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 8: break y next",
-    "text": "Ejercicio 8: break y next\n\nRecorré airquality$Ozone con un for y parate al primer NA con break. Imprimí en qué índice paró.\nRecorré los días impares (saltá los pares con next). Imprimí los primeros 10.\nCombiná: imprimí los primeros 10 días donde Ozone &gt; 80, salteando NA con next."
+    "section": "Ejercicio 8: acumular en un vector pre-asignado",
+    "text": "Ejercicio 8: acumular en un vector pre-asignado\n\nCalculá Ozone^2 - Wind para cada día con un for. Pre-asigná un vector numeric(nrow(airquality)) y rellenalo. Cuidado con NA (dejalos como NA).\nHacé lo mismo en una línea vectorizada: airquality$Ozone^2 - airquality$Wind. Verificá que coincide.\nCronometrá ambas versiones con system.time. Cuantificá la diferencia."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-9-clasificar_presion",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-9-clasificar_presion",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-9-for-anidado",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-9-for-anidado",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 9: clasificar_presion",
-    "text": "Ejercicio 9: clasificar_presion\n\nDefiní clasificar_presion(sistolica) según la AHA: &lt; 90 hipotenso, 90-119 normal, 120-129 elevada, 130-139 hipertensión 1, &gt;= 140 hipertensión 2. Devolvé NA si la entrada es NA.\nProbala con c(85, 110, 125, 135, 150, NA). Verificá.\nAplicala con sapply a un vector de 100 valores aleatorios runif(100, 70, 180). Resumí con table."
+    "section": "Ejercicio 9: for anidado",
+    "text": "Ejercicio 9: for anidado\n\nConstruí una matriz M de 5x5 donde M[i, j] = i * j con dos for anidados.\nVerificá con outer(1:5, 1:5, \"*\") (caja negra). Coinciden.\nCalculá la suma de los elementos pares de M recorriéndola con dos for anidados."
   },
   {
-    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-10-comentar-el-porqué",
-    "href": "ejercicios/clase2-ejercicios.html#ejercicio-10-comentar-el-porqué",
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-10-while-básico",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-10-while-básico",
     "title": "Clase 2 - Ejercicios",
-    "section": "Ejercicio 10: comentar el porqué",
-    "text": "Ejercicio 10: comentar el porqué\n\nTomá tu solución del ejercicio 6 (bootstrap). Agregá UN comentario que explique POR QUÉ usás quantile(..., c(0.025, 0.975)) para el IC.\nMirá el resto de tu código del ejercicio 6: borrá los comentarios que solo parafrasean lo que hace cada línea.\nCompará la versión final con la inicial: ¿se entiende mejor con menos comentarios?"
+    "section": "Ejercicio 10: while básico",
+    "text": "Ejercicio 10: while básico\n\nEscribí un while que duplique x = 1 mientras x &lt; 1000. ¿En qué valor se detiene?\nModificalo para que cuente cuántas iteraciones hizo. Imprimí el contador final.\nCompará con ceiling(log2(1000))."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-11-while-con-tolerancia",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-11-while-con-tolerancia",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 11: while con tolerancia",
+    "text": "Ejercicio 11: while con tolerancia\n\nEscribí un while que estime sqrt(2) con la iteración Babilónica: x &lt;- (x + 2/x) / 2, partiendo de x = 1. Detenete cuando abs(x^2 - 2) &lt; 1e-10.\nImprimí el resultado y la cantidad de iteraciones.\nCompará con sqrt(2) (caja negra)."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-12-break-para-detenerse-al-encontrar",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-12-break-para-detenerse-al-encontrar",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 12: break para detenerse al encontrar",
+    "text": "Ejercicio 12: break para detenerse al encontrar\n\nRecorré airquality$Ozone y detenete con break apenas encontrés un NA. Imprimí en qué índice se detuvo.\nVerificá con which(is.na(airquality$Ozone))[1].\nModificalo para detenerte al primer valor &gt; 100. Compará con which(airquality$Ozone &gt; 100)[1]."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-13-next-para-saltear",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-13-next-para-saltear",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 13: next para saltear",
+    "text": "Ejercicio 13: next para saltear\n\nRecorré los primeros 30 días de airquality$Ozone. Salteá los NA con next e imprimí solo los valores numéricos.\nImprimí solo los valores &gt; 80, salteando NA con next.\nImprimí solo los días impares con valores &gt; 50. Combiná dos next."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-14-contar_eventos",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-14-contar_eventos",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 14: contar_eventos",
+    "text": "Ejercicio 14: contar_eventos\n\nDefiní contar_eventos(x, umbral) que use un for para contar cuántos elementos de x son &gt; umbral. Cuidado con NA.\nProbala con airquality$Ozone y umbral = 80 (alerta de la OMS).\nGeneralizala a contar_eventos(x, umbral, comparacion = \"&gt;\") aceptando \"&gt;\", \"&lt;\", \"&gt;=\", \"&lt;=\". Pista: match.arg. Probala con comparacion = \"&lt;\"."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-15-primer_indice_que_cumple",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-15-primer_indice_que_cumple",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 15: primer_indice_que_cumple",
+    "text": "Ejercicio 15: primer_indice_que_cumple\n\nDefiní primer_indice_que_cumple(x, condicion_fun) con un while y seq_along. condicion_fun es una función que devuelve TRUE/FALSE por elemento. Devolvé NA si no se cumple para ninguno.\nProbala con condicion_fun = function(z) !is.na(z) && z &gt; 100 sobre airquality$Ozone.\nCompará con which(airquality$Ozone &gt; 100 & !is.na(airquality$Ozone))[1]."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-16-clasificar_presion",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-16-clasificar_presion",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 16: clasificar_presion",
+    "text": "Ejercicio 16: clasificar_presion\n\nDefiní clasificar_presion(sistolica) según la clasificación AHA: &lt; 90 \"hipotenso\", 90-119 \"normal\", 120-129 \"elevada\", 130-139 \"hipertension 1\", &gt;= 140 \"hipertension 2\". Devolvé NA si la entrada es NA.\nProbala con c(85, 110, 125, 135, 150, NA).\nAplicala con sapply a un vector de 100 valores aleatorios runif(100, 70, 180). Resumí con table."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-17-bootstrap_media",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-17-bootstrap_media",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 17: bootstrap_media",
+    "text": "Ejercicio 17: bootstrap_media\n\nDefiní bootstrap_media(x, n_rep = 1000) con replicate y sample. Devolvé el vector de medias bootstrap.\nAplicala a airquality$Wind (no tiene NA). La media de las medias debería estar cerca de mean(airquality$Wind).\nCalculá un intervalo del 95% por percentiles: quantile(boot, c(0.025, 0.975)). Compará con t.test(airquality$Wind)$conf.int (caja negra)."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-18-bootstrap-de-una-proporción",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-18-bootstrap-de-una-proporción",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 18: bootstrap de una proporción",
+    "text": "Ejercicio 18: bootstrap de una proporción\n\nDefiní bootstrap_proporcion(x, p, n_rep = 1000) que estime, vía bootstrap, la proporción de elementos de x que cumplen una condición lógica p. p es una función que devuelve TRUE/FALSE.\nProbala con airquality$Ozone y p = function(z) !is.na(z) && z &gt; 80.\nDevolvé un IC del 95% para la proporción y comparalo con la proporción puntual."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-19-clasificar-y-resumir",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-19-clasificar-y-resumir",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 19: clasificar y resumir",
+    "text": "Ejercicio 19: clasificar y resumir\n\nAplicá clasificar_temp (ejercicio 4) a airquality$Temp y guardá el resultado en una columna nueva del data.frame.\nResumí con table(airquality$temp_categoria). ¿Qué proporción de días son calurosos?\nCalculá la media de Ozone por categoría con aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE) (caja negra para esta clase). Interpretá."
+  },
+  {
+    "objectID": "ejercicios/clase2-ejercicios.html#ejercicio-20-comentar-el-porqué",
+    "href": "ejercicios/clase2-ejercicios.html#ejercicio-20-comentar-el-porqué",
+    "title": "Clase 2 - Ejercicios",
+    "section": "Ejercicio 20: comentar el porqué",
+    "text": "Ejercicio 20: comentar el porqué\n\nTomá tu solución del ejercicio 17 (bootstrap). Agregá un solo comentario que explique por qué usás quantile(..., c(0.025, 0.975)) para el IC.\nMirá tu código del ejercicio 17: borrá los comentarios que solo parafrasean lo que hace cada línea.\nCompará la versión final con la inicial. ¿Quedó más legible con menos comentarios?"
   },
   {
     "objectID": "ejercicios/clase5-ejercicios.html",
     "href": "ejercicios/clase5-ejercicios.html",
     "title": "Clase 5 - Ejercicios",
     "section": "",
-    "text": "Última guía. Construís dos generalizaciones (bootstrap_estimador, iterar) y un algoritmo iterativo (biseccion). Cerramos con un mini-proyecto que junta toda la caja de herramientas sobre sysarmy.\nReusás: bootstrap_media (clase 2), eda_minimo y graficar_distribucion (clase 4), cargar_y_describir (clase 3).\nsueldos_url &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\""
+    "text": "Última guía. Generalizamos bootstrap_media a bootstrap_estimador, implementamos un algoritmo iterativo (biseccion) y cerramos con un mini-proyecto que junta toda la caja de herramientas sobre bikeshare.\nsource(\"ejercicios/auxiliares.R\")\nbicis &lt;- cargar_bikeshare()\nReusamos: bootstrap_media (clase 2), eda_minimo, graficar_distribucion, normalizar (clase 4), cargar_y_describir (clase 3)."
   },
   {
     "objectID": "ejercicios/clase5-ejercicios.html#contexto",
     "href": "ejercicios/clase5-ejercicios.html#contexto",
     "title": "Clase 5 - Ejercicios",
     "section": "",
-    "text": "Última guía. Construís dos generalizaciones (bootstrap_estimador, iterar) y un algoritmo iterativo (biseccion). Cerramos con un mini-proyecto que junta toda la caja de herramientas sobre sysarmy.\nReusás: bootstrap_media (clase 2), eda_minimo y graficar_distribucion (clase 4), cargar_y_describir (clase 3).\nsueldos_url &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\""
+    "text": "Última guía. Generalizamos bootstrap_media a bootstrap_estimador, implementamos un algoritmo iterativo (biseccion) y cerramos con un mini-proyecto que junta toda la caja de herramientas sobre bikeshare.\nsource(\"ejercicios/auxiliares.R\")\nbicis &lt;- cargar_bikeshare()\nReusamos: bootstrap_media (clase 2), eda_minimo, graficar_distribucion, normalizar (clase 4), cargar_y_describir (clase 3)."
   },
   {
     "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-1-función-iterar",
     "href": "ejercicios/clase5-ejercicios.html#ejercicio-1-función-iterar",
     "title": "Clase 5 - Ejercicios",
     "section": "Ejercicio 1: función iterar",
-    "text": "Ejercicio 1: función iterar\n\nDefiní iterar(f, x0, n) que aplique f al valor n veces, partiendo de x0. Devolvé el valor final.\nProbala con f &lt;- function(x) (x + 2/x) / 2, x0 = 1, n = 10. ¿A qué número converge? Pista: es la iteración Babilónica para sqrt(2).\nModificá iterar para que devuelva la trayectoria completa (vector de longitud n + 1). Graficala con plot(..., type = \"b\")."
+    "text": "Ejercicio 1: función iterar\n\nDefiní iterar(f, x0, n) que aplique f al valor n veces, partiendo de x0. Devolvé el resultado final.\nProbala con f &lt;- function(x) (x + 2/x) / 2, x0 = 1, n = 10. ¿A qué número converge? Pista: es la iteración Babilónica para sqrt(2).\nModificá iterar para que devuelva la trayectoria completa (vector de longitud n + 1). Graficala con plot(..., type = \"b\")."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-2-monte-carlo-con-monedas",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-2-monte-carlo-con-monedas",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-2-punto-fijo",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-2-punto-fijo",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 2: Monte Carlo con monedas",
-    "text": "Ejercicio 2: Monte Carlo con monedas\n\nEstimá P(al menos 6 caras de 10 monedas equilibradas) con replicate + sample(c(0, 1), 10, replace = TRUE). Usá 10000 réplicas.\nCompará con 1 - pbinom(5, 10, 0.5).\nRepetí para n = 100, 1000, 10000 monedas (proporción &gt;= 0.6). Graficá la estimación contra n. ¿Converge?"
+    "section": "Ejercicio 2: punto fijo",
+    "text": "Ejercicio 2: punto fijo\n\nDefiní punto_fijo(f, x0, tol = 1e-6, max_iter = 100) que itere x &lt;- f(x) hasta que abs(f(x) - x) &lt; tol o se alcance max_iter. Devolvé una lista con valor, iteraciones, convergio.\nAplicala a f &lt;- function(x) cos(x), x0 = 0. ¿Qué valor encuentra?\nAplicala a f &lt;- function(x) (x + 2/x) / 2. ¿Cuántas iteraciones tarda en converger?"
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-3-bootstrap_estimador-generalizado",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-3-bootstrap_estimador-generalizado",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-3-monte-carlo-con-monedas",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-3-monte-carlo-con-monedas",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 3: bootstrap_estimador generalizado",
-    "text": "Ejercicio 3: bootstrap_estimador generalizado\n\nDefiní bootstrap_estimador(x, estimador = mean, n_rep = 1000) que reemplace tu bootstrap_media (clase 2). El argumento estimador es una función.\nProbala con mean, median y sd sobre airquality$Wind. Calculá IC del 95% en cada caso.\n¿Cómo se relaciona con bootstrap_media? Reescribí bootstrap_media como un wrapper de bootstrap_estimador con estimador = mean por defecto."
+    "section": "Ejercicio 3: Monte Carlo con monedas",
+    "text": "Ejercicio 3: Monte Carlo con monedas\n\nEstimá P(al menos 6 caras de 10 monedas equilibradas) con replicate + sample(c(0, 1), 10, replace = TRUE). Usá 10000 réplicas.\nCompará con 1 - pbinom(5, 10, 0.5) (caja negra: distribución binomial).\nRepetí la estimación variando n_rep = c(100, 1000, 10000, 100000). Graficá la estimación contra n_rep y observá la convergencia."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-4-paradoja-del-cumpleaños",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-4-paradoja-del-cumpleaños",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-4-bootstrap_estimador-generalizado",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-4-bootstrap_estimador-generalizado",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 4: paradoja del cumpleaños",
-    "text": "Ejercicio 4: paradoja del cumpleaños\n\nDefiní prob_coincidencia(n, n_sim = 10000) que estime la probabilidad de coincidencia en un grupo de n personas. Pista: any(duplicated(sample(1:365, n, replace = TRUE))).\nAplicala a n = c(5, 10, 15, 20, 23, 30, 50) y graficá los resultados con plot(n, p, type = \"b\").\nEncontrá el n mínimo para P &gt; 0.5 recorriendo de a 1 con un while. ¿Coincide con la respuesta clásica (23)?"
+    "section": "Ejercicio 4: bootstrap_estimador generalizado",
+    "text": "Ejercicio 4: bootstrap_estimador generalizado\n\nDefiní bootstrap_estimador(x, estimador = mean, n_rep = 1000) que reemplace bootstrap_media (clase 2). El argumento estimador es una función.\nProbala con mean, median y sd sobre airquality$Wind. Calculá un IC del 95% en cada caso.\nReescribí bootstrap_media como un wrapper de bootstrap_estimador con estimador = mean por defecto."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-5-bisección",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-5-bisección",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-5-bootstrap-con-na",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-5-bootstrap-con-na",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 5: bisección",
-    "text": "Ejercicio 5: bisección\n\nImplementá biseccion(f, a, b, tol = 1e-6) con while. Usá stopifnot(f(a) * f(b) &lt; 0) como precondición.\nEncontrá la raíz de f(x) = cos(x) - x en [0, 1]. Compará con uniroot(f, c(0, 1))$root.\nModificá biseccion para que devuelva una lista con raiz, iteraciones y tolerancia_final. Comparala con uniroot(...)$iter."
+    "section": "Ejercicio 5: bootstrap con NA",
+    "text": "Ejercicio 5: bootstrap con NA\n\n¿Qué pasa si aplicás bootstrap_estimador a airquality$Ozone (que tiene NA)? Predecí, después corré.\nModificá bootstrap_estimador para que filtre NA al inicio y avise con message().\nCompará el IC del 95% para la mediana de Ozone con quantile(airquality$Ozone, c(0.025, 0.975), na.rm = TRUE). ¿Por qué difieren?"
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-6-bootstrap-sobre-sysarmy",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-6-bootstrap-sobre-sysarmy",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-6-paradoja-del-cumpleaños",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-6-paradoja-del-cumpleaños",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 6: bootstrap sobre sysarmy",
-    "text": "Ejercicio 6: bootstrap sobre sysarmy\n\nCargá sysarmy y quedate con la columna del salario neto (la del 8b/8c de la guía 4). Aplicá as.numeric si hace falta y filtrá NA.\nAplicá bootstrap_estimador(salario_neto, estimador = median, n_rep = 1000). Calculá el IC del 95%.\nCompará la mediana puntual con el IC. Discutí (en una línea) por qué el IC del bootstrap es informativo cuando la distribución es asimétrica."
+    "section": "Ejercicio 6: paradoja del cumpleaños",
+    "text": "Ejercicio 6: paradoja del cumpleaños\n\nDefiní prob_coincidencia(n, n_sim = 10000) que estime la probabilidad de coincidencia de cumpleaños en un grupo de n personas. Pista: any(duplicated(sample(1:365, n, replace = TRUE))).\nAplicala a n = c(5, 10, 15, 20, 23, 30, 50) y graficá los resultados con plot(n, p, type = \"b\").\nEncontrá el n mínimo para P &gt; 0.5 recorriendo de uno en uno con un while. Compará con la respuesta clásica (n = 23)."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-7-regresión-sobre-sysarmy",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-7-regresión-sobre-sysarmy",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-7-bisección",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-7-bisección",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 7: regresión sobre sysarmy",
-    "text": "Ejercicio 7: regresión sobre sysarmy\n\nIdentificá la columna de “años de experiencia” (algo como Años.de.experiencia). Convertí a numérica si hace falta. Filtrá NA y outliers extremos (por ejemplo, salarios sobre el percentil 99).\nAjustá lm(salario_neto ~ años_experiencia). Mostrá summary(modelo)$coefficients y confint(modelo).\nHacé bootstrap del coeficiente de “años de experiencia” con replicate. En cada réplica: sample de filas con reemplazo, ajustar lm, extraer el coeficiente. Calculá IC del 95% y compará con confint."
+    "section": "Ejercicio 7: bisección",
+    "text": "Ejercicio 7: bisección\n\nImplementá biseccion(f, a, b, tol = 1e-6) con while. Validá la precondición con stopifnot(f(a) * f(b) &lt; 0).\nEncontrá la raíz de f(x) = cos(x) - x en [0, 1]. Compará con uniroot(f, c(0, 1))$root (caja negra).\nModificá biseccion para que devuelva una lista con raiz, iteraciones y tolerancia_final."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-8-graficar_bootstrap",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-8-graficar_bootstrap",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-8-bisección-y-la-paradoja",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-8-bisección-y-la-paradoja",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 8: graficar_bootstrap",
-    "text": "Ejercicio 8: graficar_bootstrap\n\nDefiní graficar_bootstrap(boot, etiqueta = \"\") que: dibuje el histograma del vector boot, marque la media con una vertical roja, y los cuantiles 2.5% y 97.5% con dos verticales punteadas.\nAplicala al bootstrap de la mediana de salario (ejercicio 6).\nAplicala al bootstrap del coeficiente de regresión (ejercicio 7)."
+    "section": "Ejercicio 8: bisección y la paradoja",
+    "text": "Ejercicio 8: bisección y la paradoja\n\nReusá prob_coincidencia (ejercicio 6) y biseccion (ejercicio 7) para encontrar el n (real) tal que P(coincidencia) = 0.5. Pista: f(n) = prob_coincidencia(round(n)) - 0.5.\nProbala con n en el intervalo [5, 50].\n¿Por qué la simulación introduce ruido? ¿Cómo afecta a la bisección?"
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-9-mini-pipeline-integrador",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-9-mini-pipeline-integrador",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-9-bootstrap-del-coeficiente-de-regresión",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-9-bootstrap-del-coeficiente-de-regresión",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 9: mini-pipeline integrador",
-    "text": "Ejercicio 9: mini-pipeline integrador\n\nDefiní analizar_columna(df, columna, estimador = mean) que: aplique eda_minimo (clase 4) sobre el df, ejecute bootstrap_estimador sobre la columna indicada, y llame a graficar_bootstrap. Devolvé una lista con los resultados.\nAplicala a la columna de salario neto de sysarmy con estimador = median.\nAplicala a una columna numérica de airquality con estimador = mean. ¿Qué te dice cada salida?"
+    "section": "Ejercicio 9: bootstrap del coeficiente de regresión",
+    "text": "Ejercicio 9: bootstrap del coeficiente de regresión\n\nAjustá mod &lt;- lm(bikers ~ temp, data = bicis) (caja negra). Mostrá coef(mod) y confint(mod).\nHacé bootstrap del coeficiente de temp con replicate. En cada réplica: muestreá filas con reemplazo (sample(seq_len(nrow(bicis)), replace = TRUE)), reajustá lm, extraé coef(...)[\"temp\"]. Usá 500 réplicas.\nCalculá el IC del 95% por percentiles. Compará con confint(mod)."
   },
   {
-    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-10-control-de-versiones",
-    "href": "ejercicios/clase5-ejercicios.html#ejercicio-10-control-de-versiones",
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-10-uso-de-bicicletas-como-variable-de-interés",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-10-uso-de-bicicletas-como-variable-de-interés",
     "title": "Clase 5 - Ejercicios",
-    "section": "Ejercicio 10: control de versiones",
-    "text": "Ejercicio 10: control de versiones\n\nEn la carpeta donde tenés guardadas todas las funciones del curso, hacé git init. Mirá git status.\nHacé tres commits con mensajes que expliquen el porqué:\n\nuno con etiquetar_auto, dif_promedio, resumen_min (clase 1),\notro con clasificar_temp, bootstrap_media, clasificar_presion (clase 2),\nun último con medias_por_grupo, cargar_y_describir, graficar_distribucion, eda_minimo, bootstrap_estimador, biseccion, analizar_columna.\n\nMirá git log --oneline. ¿El historial cuenta una historia clara de lo que aprendiste? Si no, ¿qué cambiarías?"
+    "section": "Ejercicio 10: uso de bicicletas como variable de interés",
+    "text": "Ejercicio 10: uso de bicicletas como variable de interés\n\nCalculá la mediana de bicis$bikers y aplicá bootstrap_estimador con estimador = median. 1000 réplicas.\nCalculá un IC del 95% para la mediana.\nCompará la mediana puntual con el IC. ¿Por qué el IC del bootstrap es informativo cuando la distribución es asimétrica?"
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-11-graficar_bootstrap",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-11-graficar_bootstrap",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 11: graficar_bootstrap",
+    "text": "Ejercicio 11: graficar_bootstrap\n\nMirá la función graficar_bootstrap que viene en auxiliares.R. Probala con el resultado del ejercicio 10.\nAplicala al bootstrap del coeficiente del ejercicio 9.\nModificala (haciendo una copia local) para que también muestre el cuantil 50% (mediana) con una línea verde."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-12-simulación-de-un-experimento",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-12-simulación-de-un-experimento",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 12: simulación de un experimento",
+    "text": "Ejercicio 12: simulación de un experimento\n\nDefiní simular_lanzamientos(n, p, n_sim = 1000) que devuelva un vector con la cantidad de éxitos en n_sim simulaciones, cada una de n lanzamientos con probabilidad p.\nAplicala a n = 100, p = 0.3. Calculá la media de éxitos.\nCompará con n * p (esperanza teórica) y n * p * (1 - p) (varianza teórica)."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-13-ley-de-los-grandes-números",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-13-ley-de-los-grandes-números",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 13: ley de los grandes números",
+    "text": "Ejercicio 13: ley de los grandes números\n\nPara n_lanzamientos = c(10, 100, 1000, 10000), simulá una secuencia de lanzamientos con p = 0.5 y calculá la proporción acumulada de éxitos.\nGraficá las cuatro trayectorias con par(mfrow = c(2, 2)).\n¿Qué observás cuando n crece? Conectalo con la ley de los grandes números."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-14-monte-carlo-para-integración",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-14-monte-carlo-para-integración",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 14: Monte Carlo para integración",
+    "text": "Ejercicio 14: Monte Carlo para integración\n\nEstimá integral_0^1 x^2 dx = 1/3 por Monte Carlo: mean(runif(10000)^2). Verificá.\nEstimá integral_0^1 sin(pi*x) dx = 2/pi por Monte Carlo. Compará.\nEstimá pi mediante el método del círculo en el cuadrado: muestreá puntos runif en [-1, 1]^2, contá los que caen en el círculo unitario, y multiplicá por 4."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-15-newton-raphson-caja-negra-parcial",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-15-newton-raphson-caja-negra-parcial",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 15: Newton-Raphson (caja negra parcial)",
+    "text": "Ejercicio 15: Newton-Raphson (caja negra parcial)\n\nImplementá newton(f, df, x0, tol = 1e-6, max_iter = 100) donde df es la derivada de f. Iteración: x &lt;- x - f(x) / df(x).\nEncontrá la raíz de f(x) = x^2 - 2 con df(x) = 2*x, partiendo de x0 = 1.\nCompará la cantidad de iteraciones con bisección sobre el mismo problema en [1, 2]."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-16-t-test-como-caja-negra",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-16-t-test-como-caja-negra",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 16: t-test como caja negra",
+    "text": "Ejercicio 16: t-test como caja negra\n\nHacé t.test(airquality$Wind) y leé la salida. ¿Qué representa mean of x, confidence interval, p-value?\nCompará el IC del t.test con tu IC bootstrap del ejercicio 4 sobre la misma columna.\nHacé t.test(airquality$Wind ~ airquality$Month %in% c(5, 6)) (compara dos grupos). Leé la salida."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-17-pipeline-de-análisis",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-17-pipeline-de-análisis",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 17: pipeline de análisis",
+    "text": "Ejercicio 17: pipeline de análisis\n\nDefiní analizar_columna(df, columna, estimador = mean) que: aplique eda_minimo(df) (clase 4), ejecute bootstrap_estimador sobre la columna, y llame a graficar_bootstrap. Devolvé una lista con los resultados.\nAplicala a bicis$bikers con estimador = median.\nAplicala a una columna numérica de airquality con estimador = mean. ¿Qué te informa cada salida?"
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-18-comparar-dos-pipelines",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-18-comparar-dos-pipelines",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 18: comparar dos pipelines",
+    "text": "Ejercicio 18: comparar dos pipelines\n\nAplicá analizar_columna a bicis$bikers separando por bicis$workingday (días hábiles vs fin de semana). Pista: subseteá el data.frame antes de pasarlo.\nMostrá los dos IC bootstrap. ¿Hay solapamiento?\n¿Qué conclusión preliminar podés sacar sobre el efecto del día hábil?"
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-19-tu-propio-mini-experimento",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-19-tu-propio-mini-experimento",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 19: tu propio mini-experimento",
+    "text": "Ejercicio 19: tu propio mini-experimento\n\nElegí una columna numérica de bicis y formulá una pregunta concreta: “¿es mayor el uso en X que en Y?”.\nDiseñá el experimento: definí X y Y, calculá la mediana en cada uno, hacé bootstrap del estimador en cada subset.\nConcluí: ¿los IC se solapan? Anotá la conclusión con sus limitaciones."
+  },
+  {
+    "objectID": "ejercicios/clase5-ejercicios.html#ejercicio-20-control-de-versiones",
+    "href": "ejercicios/clase5-ejercicios.html#ejercicio-20-control-de-versiones",
+    "title": "Clase 5 - Ejercicios",
+    "section": "Ejercicio 20: control de versiones",
+    "text": "Ejercicio 20: control de versiones\n\nEn la carpeta donde tenés guardadas las funciones del curso, hacé git init. Mirá git status.\nHacé tres commits con mensajes que expliquen el porqué:\n\nuno con las funciones de las clases 1 y 2 (etiquetar_auto, dif_promedio, dentro_rango, resumen_min, clasificar_temp, bootstrap_media, clasificar_presion),\notro con las de clase 3 y 4 (medias_por_grupo, top_grupo, cargar_y_describir, graficar_distribucion, eda_minimo, normalizar),\nun último con las de clase 5 (iterar, bootstrap_estimador, biseccion, analizar_columna).\n\nMirá git log --oneline. ¿El historial cuenta una historia clara? ¿Qué cambiarías?"
   },
   {
     "objectID": "ejercicios/clase4-ejercicios.html",
     "href": "ejercicios/clase4-ejercicios.html",
     "title": "Clase 4 - Ejercicios",
     "section": "",
-    "text": "Esta guía empuja toda la caja de herramientas hacia un EDA real. Datasets:\n\nairquality (lo conocés de la clase 2),\nmtcars,\nla encuesta sysarmy de salarios IT (CSV crudo en GitHub).\n\nFunciones nuevas: graficar_distribucion, eda_minimo, normalizar. Reusás medias_por_grupo (clase 3), bootstrap_media (clase 2), cargar_y_describir (clase 3).\nsueldos_url &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\"\nsueldos &lt;- read.csv(sueldos_url, check.names = TRUE)"
+    "text": "Esta guía aplica las herramientas a un análisis exploratorio realista. Datasets:\n\nairquality,\nmtcars,\nbikeshare (cargado con cargar_bikeshare() de auxiliares.R).\n\nFunciones nuevas: graficar_distribucion, eda_minimo, normalizar. Reusamos medias_por_grupo (clase 3), bootstrap_media (clase 2) y cargar_y_describir (clase 3).\nsource(\"ejercicios/auxiliares.R\")\nbicis &lt;- cargar_bikeshare()"
   },
   {
     "objectID": "ejercicios/clase4-ejercicios.html#contexto",
     "href": "ejercicios/clase4-ejercicios.html#contexto",
     "title": "Clase 4 - Ejercicios",
     "section": "",
-    "text": "Esta guía empuja toda la caja de herramientas hacia un EDA real. Datasets:\n\nairquality (lo conocés de la clase 2),\nmtcars,\nla encuesta sysarmy de salarios IT (CSV crudo en GitHub).\n\nFunciones nuevas: graficar_distribucion, eda_minimo, normalizar. Reusás medias_por_grupo (clase 3), bootstrap_media (clase 2), cargar_y_describir (clase 3).\nsueldos_url &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\"\nsueldos &lt;- read.csv(sueldos_url, check.names = TRUE)"
+    "text": "Esta guía aplica las herramientas a un análisis exploratorio realista. Datasets:\n\nairquality,\nmtcars,\nbikeshare (cargado con cargar_bikeshare() de auxiliares.R).\n\nFunciones nuevas: graficar_distribucion, eda_minimo, normalizar. Reusamos medias_por_grupo (clase 3), bootstrap_media (clase 2) y cargar_y_describir (clase 3).\nsource(\"ejercicios/auxiliares.R\")\nbicis &lt;- cargar_bikeshare()"
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-1-histograma-de-ozono",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-1-histograma-de-ozono",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-1-histograma-con-varios-breaks",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-1-histograma-con-varios-breaks",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 1: histograma de ozono",
-    "text": "Ejercicio 1: histograma de ozono\n\nHacé tres histogramas de airquality$Ozone con breaks = 10, breaks = 20, breaks = 50. Compará lo que se ve.\nEn el histograma con breaks = 20, agregá título y eje en español.\nMarcá la media con abline(v = mean(airquality$Ozone, na.rm = TRUE), col = \"red\", lwd = 2)."
+    "section": "Ejercicio 1: histograma con varios breaks",
+    "text": "Ejercicio 1: histograma con varios breaks\n\nHacé tres histogramas de airquality$Ozone con breaks = 10, breaks = 20, breaks = 50. Compará lo que se ve.\nEn el histograma con breaks = 20, agregá título y eje en español.\nMarcá la media con abline(v = mean(airquality$Ozone, na.rm = TRUE), col = \"red\", lwd = 2)."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-2-boxplot-estacional",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-2-boxplot-estacional",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-2-boxplot-por-grupo",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-2-boxplot-por-grupo",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 2: boxplot estacional",
-    "text": "Ejercicio 2: boxplot estacional\n\nBoxplot de Temp ~ Month sobre airquality. Pintá las cajas con col = \"lightblue\".\nConvertí Month en factor con etiquetas c(\"May\", \"Jun\", \"Jul\", \"Ago\", \"Sep\") y re-graficá. Pista: factor(airquality$Month, labels = c(\"May\", ...)).\n¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rango intercuartílico)?"
+    "section": "Ejercicio 2: boxplot por grupo",
+    "text": "Ejercicio 2: boxplot por grupo\n\nBoxplot de Temp ~ Month sobre airquality. Pintá las cajas con col = \"lightblue\".\nConvertí Month en factor con etiquetas c(\"May\", \"Jun\", \"Jul\", \"Ago\", \"Sep\") y volvé a graficar. Pista: factor(airquality$Month, labels = c(\"May\", ...)).\n¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rango intercuartílico)?"
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-3-scatter-con-regresión",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-3-scatter-con-regresión",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-3-scatter-con-regresión-lineal",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-3-scatter-con-regresión-lineal",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 3: scatter con regresión",
-    "text": "Ejercicio 3: scatter con regresión\n\nScatter de mpg ~ hp sobre mtcars con pch = 19, col = \"gray60\".\nAgregá la recta de regresión: abline(lm(mpg ~ hp, data = mtcars), col = \"tomato\", lwd = 2).\nAgregá una línea horizontal en la media de mpg con abline(h = mean(mtcars$mpg), lty = 2) y una leyenda con legend(\"topright\", ...)."
+    "section": "Ejercicio 3: scatter con regresión lineal",
+    "text": "Ejercicio 3: scatter con regresión lineal\n\nScatter de mpg ~ hp sobre mtcars con pch = 19, col = \"gray60\".\nAgregá la recta de regresión: abline(lm(mpg ~ hp, data = mtcars), col = \"tomato\", lwd = 2). lm es una caja negra por ahora.\nAgregá una línea horizontal en la media de mpg con abline(h = mean(mtcars$mpg), lty = 2) y una leyenda con legend(\"topright\", legend = c(...), col = c(...), lty = c(1, 2))."
   },
   {
     "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-4-graficar_distribucion",
     "href": "ejercicios/clase4-ejercicios.html#ejercicio-4-graficar_distribucion",
     "title": "Clase 4 - Ejercicios",
     "section": "Ejercicio 4: graficar_distribucion",
-    "text": "Ejercicio 4: graficar_distribucion\n\nDefiní graficar_distribucion(x, etiqueta = \"\") que dibuje histograma + boxplot lado a lado en par(mfrow = c(1, 2)). Usá etiqueta en los títulos. Acordate de restablecer con par(mfrow = c(1, 1)) al final.\nAplicala a airquality$Ozone y airquality$Wind.\nAplicala a mtcars$mpg."
+    "text": "Ejercicio 4: graficar_distribucion\n\nDefiní graficar_distribucion(x, etiqueta = \"\") que dibuje histograma + boxplot lado a lado en par(mfrow = c(1, 2)). Restablecé el layout con par(mfrow = c(1, 1)) al final.\nAplicala a airquality$Ozone y airquality$Wind.\nAplicala a mtcars$mpg."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-5-resumen-por-mes",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-5-resumen-por-mes",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-5-comparar-con-la-versión-auxiliar",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-5-comparar-con-la-versión-auxiliar",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 5: resumen por mes",
-    "text": "Ejercicio 5: resumen por mes\n\nReusá medias_por_grupo (clase 3): media de Ozone por Month en airquality.\nGraficá con barplot(height = ..., names.arg = ...).\nAgregá barras de error con el desvío estándar dividido por raíz de n. Pista: hacé un aggregate con function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x))))."
+    "section": "Ejercicio 5: comparar con la versión auxiliar",
+    "text": "Ejercicio 5: comparar con la versión auxiliar\n\nCargá auxiliares.R y mirá la función graficar_hist_box provista.\nComparala con tu graficar_distribucion. ¿Qué hace on.exit(par(par_anterior))? Pista: ?on.exit.\nReescribí graficar_distribucion agregando on.exit para que el layout siempre se restaure, incluso si la función falla."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-6-eda_minimo",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-6-eda_minimo",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-6-resumen-por-mes-con-barras",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-6-resumen-por-mes-con-barras",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 6: eda_minimo",
-    "text": "Ejercicio 6: eda_minimo\n\nDefiní eda_minimo(df) que: imprima str(df), summary(df), head(df, 3), y para cada columna numérica llame a graficar_distribucion.\nAplicala a airquality.\nAplicala a mtcars."
+    "section": "Ejercicio 6: resumen por mes con barras",
+    "text": "Ejercicio 6: resumen por mes con barras\n\nReusá medias_por_grupo (clase 3): media de Ozone por Month en airquality.\nGraficá con barplot(height = ..., names.arg = ..., main = \"Ozono medio por mes\").\nAgregá barras de error con arrows(x0, y0, x1, y1, code = 3, angle = 90). Calculá los extremos como media ± sd / sqrt(n). Pista: armá el resumen con aggregate(... , FUN = function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))))."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-7-normalizar-con-tests",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-7-normalizar-con-tests",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-7-varios-gráficos-con-parmfrow",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-7-varios-gráficos-con-parmfrow",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 7: normalizar con tests",
-    "text": "Ejercicio 7: normalizar con tests\n\nDefiní normalizar(x) que devuelva (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE).\nValidá la implementación con dos stopifnot: media cercana a 0 y desvío cercano a 1 sobre c(1, 2, 3, 4, 5). Tolerancia: 1e-10.\nAplicala a airquality$Wind y graficá el histograma del resultado."
+    "section": "Ejercicio 7: varios gráficos con par(mfrow)",
+    "text": "Ejercicio 7: varios gráficos con par(mfrow)\n\nDibujá los cuatro histogramas de Ozone, Solar.R, Wind, Temp en una grilla 2x2.\nRestablecé el layout al final.\nHacé lo mismo pero con boxplots, también en grilla 2x2."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-8-cargar-sysarmy",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-8-cargar-sysarmy",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-8-eda_minimo",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-8-eda_minimo",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 8: cargar sysarmy",
-    "text": "Ejercicio 8: cargar sysarmy\n\nCargá el CSV de sysarmy con la URL del setup. Aplicá cargar_y_describir (clase 3). ¿Cuántas filas? ¿Cuántas columnas? ¿Cuántas tienen NA?\nMirá colnames(sueldos). Identificá la columna del salario neto (algo parecido a Salario.mensual.o.retiro.NETO..en.tu.moneda.local.). Asignala a salario_neto.\n¿Qué tipo es la columna? Si vino como character, convertí a número con as.numeric y mirá cuántos NA te quedaron."
+    "section": "Ejercicio 8: eda_minimo",
+    "text": "Ejercicio 8: eda_minimo\n\nDefiní eda_minimo(df) que: imprima str(df), summary(df), head(df, 3), y para cada columna numérica llame a graficar_distribucion.\nAplicala a airquality.\nAplicala a mtcars."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-9-eda-sobre-sysarmy",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-9-eda-sobre-sysarmy",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-9-nas-en-datos-reales",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-9-nas-en-datos-reales",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 9: EDA sobre sysarmy",
-    "text": "Ejercicio 9: EDA sobre sysarmy\n\nAplicá eda_minimo a un sub-data.frame con tres columnas numéricas relevantes.\nHistograma del salario neto acotado al percentil 99: hist(salario_neto, xlim = c(0, quantile(salario_neto, 0.99, na.rm = TRUE)), breaks = 50). ¿Por qué acotamos?\nBoxplot del salario neto por seniority/rol (la columna Trabajo.de o equivalente). Cuidado con etiquetas largas: par(mar = c(8, 4, 2, 2)); boxplot(..., las = 2)."
+    "section": "Ejercicio 9: NAs en datos reales",
+    "text": "Ejercicio 9: NAs en datos reales\n\nIdentificá las columnas de airquality con NA. ¿Cuántos hay en cada una?\nComparar el resultado de mean(airquality$Ozone) con mean(airquality$Ozone, na.rm = TRUE).\nDefiní media_robusta(x) que devuelva mean(x, na.rm = TRUE) con un mensaje (message()) si encuentra NA. Probala."
   },
   {
-    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-10-probar-antes-de-creer",
-    "href": "ejercicios/clase4-ejercicios.html#ejercicio-10-probar-antes-de-creer",
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-10-normalizar-con-tests",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-10-normalizar-con-tests",
     "title": "Clase 4 - Ejercicios",
-    "section": "Ejercicio 10: probar antes de creer",
-    "text": "Ejercicio 10: probar antes de creer\n\nMirá tu normalizar: ¿qué pasa si x tiene un solo valor? ¿Y si todos los valores son iguales (sd 0)? Predecí, después corré.\nAgregá validaciones con stopifnot: length(x) &gt;= 2 y sd(x, na.rm = TRUE) &gt; 0.\nEscribí un test que confirme que normalizar(c(1, 1, 1)) lanza error con un mensaje claro. Pista: tryCatch(normalizar(c(1, 1, 1)), error = function(e) message(\"Falla esperada: \", conditionMessage(e)))."
+    "section": "Ejercicio 10: normalizar con tests",
+    "text": "Ejercicio 10: normalizar con tests\n\nDefiní normalizar(x) que devuelva (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE).\nValidala con dos stopifnot sobre c(1, 2, 3, 4, 5): media cercana a 0 y desvío cercano a 1, ambas con tolerancia 1e-10.\nAplicala a airquality$Wind. Graficá el histograma del resultado."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-11-explorar-bikeshare",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-11-explorar-bikeshare",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 11: explorar bikeshare",
+    "text": "Ejercicio 11: explorar bikeshare\n\nCargá bicis &lt;- cargar_bikeshare(). Aplicá eda_minimo(bicis).\n¿Cuántas filas tiene? ¿Cuántas columnas numéricas y cuántas factores?\n¿Qué representa bikers? ¿Y casual versus registered? Pista: mirá la documentación al inicio de auxiliares.R."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-12-distribución-de-viajes-por-hora",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-12-distribución-de-viajes-por-hora",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 12: distribución de viajes por hora",
+    "text": "Ejercicio 12: distribución de viajes por hora\n\nHistograma de bicis$bikers. ¿Por qué tiene una cola tan larga?\nAcotá el eje x al percentil 99: xlim = c(0, quantile(bicis$bikers, 0.99)). Volvé a graficar.\nHacé el histograma de log10(bicis$bikers + 1). Compará con la versión sin transformar. ¿Por qué + 1?"
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-13-viajes-por-estación",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-13-viajes-por-estación",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 13: viajes por estación",
+    "text": "Ejercicio 13: viajes por estación\n\nBoxplot de bikers ~ season sobre bicis. ¿Qué estación tiene mayor mediana?\nBoxplot de bikers ~ weekday. ¿Hay diferencia entre días hábiles y fines de semana?\nCalculá la media de bikers por estación y graficá con barplot. Compará con el boxplot."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-14-el-ciclo-diario",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-14-el-ciclo-diario",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 14: el ciclo diario",
+    "text": "Ejercicio 14: el ciclo diario\n\nCalculá la media de bikers por hora con aggregate(bikers ~ hr, data = bicis, mean).\nGraficá la curva resultante con plot(... , type = \"l\", lwd = 2). Identificá los picos.\nHacé lo mismo separando por workingday (días hábiles vs fines de semana). Pista: dos aggregate y dos lines sobre el mismo plot."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-15-temperatura-y-uso",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-15-temperatura-y-uso",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 15: temperatura y uso",
+    "text": "Ejercicio 15: temperatura y uso\n\nScatter de bikers ~ temp sobre bicis con pch = 16, col = rgb(0, 0, 0, 0.05). ¿Por qué alpha = 0.05?\nAgregá la recta de regresión abline(lm(bikers ~ temp, data = bicis), col = \"red\", lwd = 2).\nCalculá cor(bicis$bikers, bicis$temp) (caja negra). Interpretá el signo y la magnitud."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-16-dos-variables-a-la-vez",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-16-dos-variables-a-la-vez",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 16: dos variables a la vez",
+    "text": "Ejercicio 16: dos variables a la vez\n\nCalculá la media de bikers agrupando por weekday y hr con aggregate(bikers ~ weekday + hr, data = bicis, mean).\nConvertí el resultado a una matriz con xtabs(media ~ weekday + hr, data = ...).\nGraficala con image(t(matriz_xtabs)) (heatmap básico). Identificá los picos visualmente."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-17-bootstrap-con-bikeshare",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-17-bootstrap-con-bikeshare",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 17: bootstrap con bikeshare",
+    "text": "Ejercicio 17: bootstrap con bikeshare\n\nAplicá bootstrap_media (clase 2) a bicis$bikers con 1000 réplicas.\nCalculá un IC del 95% por percentiles.\nGraficá el histograma de las medias bootstrap usando la función auxiliar graficar_bootstrap (de auxiliares.R). Mirá su código antes de usarla."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-18-regresión-simple-caja-negra",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-18-regresión-simple-caja-negra",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 18: regresión simple (caja negra)",
+    "text": "Ejercicio 18: regresión simple (caja negra)\n\nAjustá mod &lt;- lm(bikers ~ temp + hum + windspeed, data = bicis). Mostrá summary(mod). lm es una caja negra: lo importante es leer la salida.\nIdentificá los coeficientes estimados y su signo. ¿Cuál variable parece tener más peso?\nCalculá confint(mod) y coef(mod). Compará intervalos con coeficientes."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-19-eda_minimo-extendido",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-19-eda_minimo-extendido",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 19: eda_minimo extendido",
+    "text": "Ejercicio 19: eda_minimo extendido\n\nMirá tu eda_minimo: ¿imprime también la cantidad de NA por columna? Si no, agregalo.\nAgregale: si una columna es factor, imprimí su table.\nAplicá eda_minimo a bicis y verificá que ahora muestra factores y NA."
+  },
+  {
+    "objectID": "ejercicios/clase4-ejercicios.html#ejercicio-20-probar-antes-de-creer",
+    "href": "ejercicios/clase4-ejercicios.html#ejercicio-20-probar-antes-de-creer",
+    "title": "Clase 4 - Ejercicios",
+    "section": "Ejercicio 20: probar antes de creer",
+    "text": "Ejercicio 20: probar antes de creer\n\nMirá tu normalizar (ejercicio 10): ¿qué pasa si x tiene un solo elemento? ¿Y si todos los valores son iguales (sd 0)? Predecí, después corré.\nAgregá validaciones con stopifnot: length(x) &gt;= 2 y sd(x, na.rm = TRUE) &gt; 0.\nEscribí un test que confirme que normalizar(c(1, 1, 1)) lanza error con un mensaje claro. Pista: tryCatch(normalizar(c(1, 1, 1)), error = function(e) message(\"Falla esperada: \", conditionMessage(e)))."
   },
   {
     "objectID": "ejercicios/clase3-ejercicios.html",
     "href": "ejercicios/clase3-ejercicios.html",
     "title": "Clase 3 - Ejercicios",
     "section": "",
-    "text": "En esta guía organizamos datos en estructuras compuestas y reusamos las funciones que armaste antes (clasificar_temp, clasificar_presion, resumen_min).\nDataset principal: airquality. Para algunos ejercicios usamos iris y mtcars. Para el bonus al final, bikeshare.csv que vive en datos/.\nhead(airquality)\nhead(iris)\nFunciones nuevas que vas a construir: medias_por_grupo, top_grupo, cargar_y_describir."
+    "text": "En esta guía organizamos los datos en estructuras compuestas y reusamos las funciones de las clases anteriores (clasificar_temp, clasificar_presion, resumen_min).\nDatasets:\n\nairquality (lo conocés de la clase 2),\niris: 150 filas, mide cuatro atributos de tres especies de flores,\nbikeshare: 8645 registros horarios de uso de un sistema de bicicletas (similar a Ecobici en CABA). Lo cargamos con la función auxiliar cargar_bikeshare().\n\nsource(\"ejercicios/auxiliares.R\")    # provee cargar_bikeshare()\nbicis &lt;- cargar_bikeshare()\nhead(bicis)\nFunciones nuevas que vamos a construir: medias_por_grupo, top_grupo, cargar_y_describir."
   },
   {
     "objectID": "ejercicios/clase3-ejercicios.html#contexto",
     "href": "ejercicios/clase3-ejercicios.html#contexto",
     "title": "Clase 3 - Ejercicios",
     "section": "",
-    "text": "En esta guía organizamos datos en estructuras compuestas y reusamos las funciones que armaste antes (clasificar_temp, clasificar_presion, resumen_min).\nDataset principal: airquality. Para algunos ejercicios usamos iris y mtcars. Para el bonus al final, bikeshare.csv que vive en datos/.\nhead(airquality)\nhead(iris)\nFunciones nuevas que vas a construir: medias_por_grupo, top_grupo, cargar_y_describir."
+    "text": "En esta guía organizamos los datos en estructuras compuestas y reusamos las funciones de las clases anteriores (clasificar_temp, clasificar_presion, resumen_min).\nDatasets:\n\nairquality (lo conocés de la clase 2),\niris: 150 filas, mide cuatro atributos de tres especies de flores,\nbikeshare: 8645 registros horarios de uso de un sistema de bicicletas (similar a Ecobici en CABA). Lo cargamos con la función auxiliar cargar_bikeshare().\n\nsource(\"ejercicios/auxiliares.R\")    # provee cargar_bikeshare()\nbicis &lt;- cargar_bikeshare()\nhead(bicis)\nFunciones nuevas que vamos a construir: medias_por_grupo, top_grupo, cargar_y_describir."
   },
   {
     "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-1-lista-paciente",
     "href": "ejercicios/clase3-ejercicios.html#ejercicio-1-lista-paciente",
     "title": "Clase 3 - Ejercicios",
     "section": "Ejercicio 1: lista paciente",
-    "text": "Ejercicio 1: lista paciente\n\nCreá una lista paciente con: id (integer), edad (double), sintomas (vector de strings), tiene_diagnostico (logical), presion_sistolica (double).\nAccedé al primer síntoma con $, con [[ ]] y con [ ]. Mostrá la class de cada resultado y explicá la diferencia.\nReusá clasificar_presion (clase 2) para agregarle a la lista un campo presion_categoria con la categoría correspondiente. Verificá."
+    "text": "Ejercicio 1: lista paciente\n\nCreá una lista paciente con: id (integer), edad (double), sintomas (vector de strings), tiene_diagnostico (logical) y presion_sistolica (double).\nAccedé al primer síntoma con $, con [[ ]] y con [ ]. Mostrá class() de cada acceso y explicá la diferencia.\nReusá clasificar_presion (clase 2) para agregar un campo presion_categoria a la lista. Verificá."
   },
   {
     "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-2-lista-de-pacientes",
     "href": "ejercicios/clase3-ejercicios.html#ejercicio-2-lista-de-pacientes",
     "title": "Clase 3 - Ejercicios",
     "section": "Ejercicio 2: lista de pacientes",
-    "text": "Ejercicio 2: lista de pacientes\n\nCreá una lista pacientes que contenga 3 pacientes (cada uno como en el ejercicio 1).\nExtraé las edades con sapply(pacientes, function(p) p$edad). Calculá la edad media.\nAplicá clasificar_presion (clase 2) a las presiones de todos los pacientes con sapply. Devolvé un vector de categorías."
+    "text": "Ejercicio 2: lista de pacientes\n\nCreá una lista pacientes con tres pacientes (cada uno como en el ejercicio 1).\nExtraé las edades con sapply(pacientes, function(p) p$edad). Calculá la edad media.\nAplicá clasificar_presion a las presiones de todos los pacientes con sapply. Devolvé un vector de categorías."
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-3-matriz-desde-airquality",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-3-matriz-desde-airquality",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-3-listas-anidadas",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-3-listas-anidadas",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 3: matriz desde airquality",
-    "text": "Ejercicio 3: matriz desde airquality\n\nConvertí las columnas numéricas de airquality (Ozone, Solar.R, Wind, Temp) en una matriz. Pista: as.matrix(airquality[, 1:4]).\nCalculá la media por columna con colMeans (ojo con NA, usá na.rm = TRUE).\nSacá las filas con NA (na.omit) y calculá t(M) %*% M / nrow(M). ¿Qué representa cada celda? Pista: producto interno por columna."
+    "section": "Ejercicio 3: listas anidadas",
+    "text": "Ejercicio 3: listas anidadas\n\nCreá una lista consultorio con dos campos: nombre (string) y pacientes (la lista del ejercicio 2).\nAccedé al nombre del primer paciente con consultorio$pacientes[[1]]$nombre. Si no agregaste el campo nombre, agregalo y volvé a probar.\nCalculá la edad media de los pacientes del consultorio en una sola línea."
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-4-filtrar-y-modificar-airquality",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-4-filtrar-y-modificar-airquality",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-4-matriz-desde-airquality",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-4-matriz-desde-airquality",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 4: filtrar y modificar airquality",
-    "text": "Ejercicio 4: filtrar y modificar airquality\n\nQuedate con los días de junio (Month == 6). ¿Cuántas filas quedan? ¿Cuántos NA en Ozone?\nAgregale al subset una columna temp_categoria aplicando clasificar_temp (clase 2) a Temp. Convertila en factor con factor(...).\nMostrá table(temp_categoria). ¿Qué proporción de días son calurosos?"
+    "section": "Ejercicio 4: matriz desde airquality",
+    "text": "Ejercicio 4: matriz desde airquality\n\nConvertí las cuatro columnas numéricas de airquality (Ozone, Solar.R, Wind, Temp) en una matriz: M &lt;- as.matrix(airquality[, 1:4]).\nCalculá la media por columna con colMeans(M, na.rm = TRUE).\nCalculá M_clean &lt;- na.omit(M) y luego t(M_clean) %*% M_clean / nrow(M_clean). ¿Qué representa cada celda? Pista: el producto interno entre dos columnas, normalizado."
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-5-medias_por_grupo",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-5-medias_por_grupo",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-5-operaciones-con-matrices",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-5-operaciones-con-matrices",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 5: medias_por_grupo",
-    "text": "Ejercicio 5: medias_por_grupo\n\nDefiní medias_por_grupo(df, columna_numerica, columna_grupo) que devuelva un data.frame con dos columnas: grupo y media. Usá aggregate. Manejá NA con na.rm = TRUE.\nAplicala a airquality: media de Ozone por Month.\nAplicala a iris: media de Sepal.Length por Species."
+    "section": "Ejercicio 5: operaciones con matrices",
+    "text": "Ejercicio 5: operaciones con matrices\n\nConstruí la matriz identidad de 5x5 con diag(5). Multiplicala por sí misma con %*%. Verificá que el resultado sigue siendo la identidad.\nConstruí una matriz A de 3x3 con valores aleatorios (matrix(rnorm(9), 3, 3)). Calculá su traspuesta y verificá que t(t(A)) da A.\nCalculá A %*% t(A). ¿Por qué es simétrica?"
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-6-top_grupo",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-6-top_grupo",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-6-filtrar-y-modificar-airquality",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-6-filtrar-y-modificar-airquality",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 6: top_grupo",
-    "text": "Ejercicio 6: top_grupo\n\nDefiní top_grupo(resumen) que reciba la salida de medias_por_grupo y devuelva el nombre del grupo con la media más alta.\nAplicala al resultado del 5b. ¿Qué mes tiene mayor ozono medio?\nAplicala al resultado del 5c. ¿Qué especie tiene los sépalos más largos?"
+    "section": "Ejercicio 6: filtrar y modificar airquality",
+    "text": "Ejercicio 6: filtrar y modificar airquality\n\nFiltrá airquality para quedarte con los días de junio (Month == 6). ¿Cuántas filas quedan?\nAgregale al subset una columna temp_categoria aplicando clasificar_temp (clase 2) a Temp. Convertila en factor.\nMostrá table(temp_categoria). ¿Qué proporción de días son calurosos?"
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-7-factor-con-orden",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-7-factor-con-orden",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-7-medias_por_grupo",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-7-medias_por_grupo",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 7: factor con orden",
-    "text": "Ejercicio 7: factor con orden\n\nConvertí mtcars$cyl en factor. Mostrá levels.\nConvertilo en factor ordenado c(\"4\", \"6\", \"8\") con ordered = TRUE. Verificá que mtcars$cyl[1] &lt; \"8\" da TRUE cuando es ordenado.\nAplicá medias_por_grupo(mtcars, \"mpg\", \"cyl\"). ¿Confirma la intuición de que más cilindros implica menos mpg?"
+    "section": "Ejercicio 7: medias_por_grupo",
+    "text": "Ejercicio 7: medias_por_grupo\n\nDefiní medias_por_grupo(df, columna_numerica, columna_grupo) que devuelva un data.frame con dos columnas, grupo y media. Pista: aggregate. Manejá NA con na.rm = TRUE.\nAplicala a airquality: media de Ozone por Month.\nAplicala a iris: media de Sepal.Length por Species."
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-8-cargar_y_describir",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-8-cargar_y_describir",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-8-top_grupo",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-8-top_grupo",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 8: cargar_y_describir",
-    "text": "Ejercicio 8: cargar_y_describir\n\nDefiní cargar_y_describir(archivo) que devuelva una lista con: df (el data.frame), dimensiones (vector de 2), tipos (vector con class por columna), n_na (vector con sum(is.na) por columna).\nAplicala a bikeshare.csv (en datos/). Pista: read.csv(\"datos/bikeshare.csv\").\nMostrá los tipos de cada columna y las que tienen más de 0 NA."
+    "section": "Ejercicio 8: top_grupo",
+    "text": "Ejercicio 8: top_grupo\n\nDefiní top_grupo(resumen) que reciba la salida de medias_por_grupo y devuelva el grupo con la media más alta.\nAplicala al resultado de 7b. ¿Qué mes tiene mayor ozono medio?\nAplicala al resultado de 7c. ¿Qué especie tiene los sépalos más largos en promedio?"
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-9-mini-eda-encadenado",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-9-mini-eda-encadenado",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-9-factor-con-orden",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-9-factor-con-orden",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 9: mini-EDA encadenado",
-    "text": "Ejercicio 9: mini-EDA encadenado\n\nSobre el df cargado en 8b, identificá las columnas numéricas. Pista: sapply(df, is.numeric).\nAplicá resumen_min (clase 1) a cada columna numérica. Guardá el resultado en una lista nombrada por nombre de columna.\n¿Cuál columna numérica tiene la mayor amplitud (max - min)? Mostrala."
+    "section": "Ejercicio 9: factor con orden",
+    "text": "Ejercicio 9: factor con orden\n\nConvertí mtcars$cyl en factor. Mostrá los niveles.\nConvertilo en factor ordenado c(\"4\", \"6\", \"8\") con ordered = TRUE. Verificá que la comparación entre niveles funciona.\nAplicá medias_por_grupo(mtcars, \"mpg\", \"cyl\"). ¿Confirma la intuición de que más cilindros implica menos mpg?"
   },
   {
-    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-10-una-función-una-responsabilidad",
-    "href": "ejercicios/clase3-ejercicios.html#ejercicio-10-una-función-una-responsabilidad",
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-10-tablas-de-frecuencias",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-10-tablas-de-frecuencias",
     "title": "Clase 3 - Ejercicios",
-    "section": "Ejercicio 10: una función, una responsabilidad",
-    "text": "Ejercicio 10: una función, una responsabilidad\n\nMirá tu cargar_y_describir: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.\nPartila en cuatro funciones más chicas: cargar_csv, dimensiones_df, tipos_columnas, na_por_columna. Reescribí cargar_y_describir para que llame a las cuatro.\nJustificá: ¿qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?"
+    "section": "Ejercicio 10: tablas de frecuencias",
+    "text": "Ejercicio 10: tablas de frecuencias\n\nCalculá table(iris$Species). ¿Cuántas observaciones hay por especie?\nCalculá prop.table(table(iris$Species)). ¿Qué representa cada valor?\nCalculá una tabla cruzada (contingencia) entre airquality$Month y clasificar_temp(airquality$Temp) con table. ¿Cuántos días calurosos hubo en agosto?"
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-11-explorar-iris",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-11-explorar-iris",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 11: explorar iris",
+    "text": "Ejercicio 11: explorar iris\n\nMostrá dim(iris), colnames(iris), class(iris$Species). ¿Cuántas especies hay?\nSubseteá iris para quedarte con flores de especie \"virginica\" que tengan Petal.Length &gt; 6. ¿Cuántas son?\nCalculá medias_por_grupo(iris, \"Petal.Length\", \"Species\")."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-12-cargar-bikeshare-con-la-función-auxiliar",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-12-cargar-bikeshare-con-la-función-auxiliar",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 12: cargar bikeshare con la función auxiliar",
+    "text": "Ejercicio 12: cargar bikeshare con la función auxiliar\n\nCargá bicis &lt;- cargar_bikeshare(). Mirá str(bicis) y head(bicis). Identificá tipos.\n¿Cuál es la columna bikers? ¿Y casual y registered? Pista: ?bikeshare no existe; mirá head y deducí.\n¿Cuántos NA tiene cada columna? Pista: sapply(bicis, function(col) sum(is.na(col)))."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-13-explorar-bikeshare-con-aggregate",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-13-explorar-bikeshare-con-aggregate",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 13: explorar bikeshare con aggregate",
+    "text": "Ejercicio 13: explorar bikeshare con aggregate\n\nCalculá la media de bikers por estación con aggregate(bikers ~ season, data = bicis, mean). ¿Cuál es la estación con más uso?\nCalculá la media por día de la semana (weekday).\nCalculá la media por hora (hr). ¿En qué horas aparece el pico?"
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-14-cargar_y_describir",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-14-cargar_y_describir",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 14: cargar_y_describir",
+    "text": "Ejercicio 14: cargar_y_describir\n\nDefiní cargar_y_describir(archivo, sep = \" \") que devuelva una lista con: df (el data.frame), dimensiones (vector de 2), tipos (vector con class por columna), n_na (vector con sum(is.na) por columna).\nAplicala al CSV datos/bikeshare.csv. Pista: el archivo está separado por espacios, no por comas, así que pasá sep = \" \".\nMostrá los tipos y las columnas con más de cero NA."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-15-is.numeric-para-identificar-columnas",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-15-is.numeric-para-identificar-columnas",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 15: is.numeric para identificar columnas",
+    "text": "Ejercicio 15: is.numeric para identificar columnas\n\nSobre el df de 14, identificá las columnas numéricas con sapply(df, is.numeric). Devolvé un vector de booleanos.\nQuedate solo con las columnas numéricas. Pista: df[, sapply(df, is.numeric)].\nAplicá resumen_min (clase 1) a cada columna numérica con lapply. Guardá el resultado."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-16-la-columna-con-mayor-amplitud",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-16-la-columna-con-mayor-amplitud",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 16: la columna con mayor amplitud",
+    "text": "Ejercicio 16: la columna con mayor amplitud\n\nPara cada columna numérica, calculá max - min (la amplitud).\nIdentificá la columna con mayor amplitud y la de menor amplitud.\nJustificá por qué bikers y temp tienen amplitudes muy distintas."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-17-combinar-listas-y-data.frame",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-17-combinar-listas-y-data.frame",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 17: combinar listas y data.frame",
+    "text": "Ejercicio 17: combinar listas y data.frame\n\nConstruí una lista con dos data.frame: mtcars y iris[, 1:4].\nAplicá nrow a cada uno con sapply.\nAplicá colMeans a cada uno con lapply. ¿Por qué lapply y no sapply aquí?"
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-18-do.callrbind-...-caja-negra",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-18-do.callrbind-...-caja-negra",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 18: do.call(rbind, ...) (caja negra)",
+    "text": "Ejercicio 18: do.call(rbind, ...) (caja negra)\n\nConstruí tres data.frame chiquitos con la misma estructura (mismas columnas).\nCombinálos verticalmente con do.call(rbind, lista_de_dfs). Verificá dim.\nHacé lo mismo con tres subsetes de airquality (uno por mes 5, 6, 7)."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-19-medias_por_grupo-sobre-bikeshare",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-19-medias_por_grupo-sobre-bikeshare",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 19: medias_por_grupo sobre bikeshare",
+    "text": "Ejercicio 19: medias_por_grupo sobre bikeshare\n\nAplicá medias_por_grupo (ejercicio 7) sobre bicis: media de bikers por season.\nAplicá medias_por_grupo con bikers por weekday. Convertí weekday a factor ordenado de lunes a domingo si todavía no lo está.\nIdentificá el día y la estación con mayor uso usando top_grupo."
+  },
+  {
+    "objectID": "ejercicios/clase3-ejercicios.html#ejercicio-20-una-función-una-responsabilidad",
+    "href": "ejercicios/clase3-ejercicios.html#ejercicio-20-una-función-una-responsabilidad",
+    "title": "Clase 3 - Ejercicios",
+    "section": "Ejercicio 20: una función, una responsabilidad",
+    "text": "Ejercicio 20: una función, una responsabilidad\n\nMirá tu cargar_y_describir del ejercicio 14: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.\nPartila en cuatro funciones: cargar_csv(archivo, sep), dimensiones_df(df), tipos_columnas(df), na_por_columna(df). Reescribí cargar_y_describir para que llame a las cuatro.\n¿Qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?"
   },
   {
     "objectID": "ejercicios/entrega.html",
@@ -795,84 +1075,154 @@
     "href": "ejercicios/clase1-ejercicios.html",
     "title": "Clase 1 - Ejercicios",
     "section": "",
-    "text": "Vamos a usar mtcars, un dataset de 32 autos con 11 columnas (consumo, cilindros, potencia, etc). Viene con R, no hace falta instalar nada.\nhead(mtcars)\n?mtcars\nA lo largo de la guía vas a construir una pequeña caja de herramientas: etiquetar_auto, dif_promedio, resumen_min. Las vas a reusar en las clases siguientes."
+    "text": "Vamos a usar mtcars, un dataset de 32 autos con 11 variables (consumo, cilindros, potencia, peso, etc.). Viene con R, no requiere instalación.\nhead(mtcars)\n?mtcars\nA lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: etiquetar_auto, dif_promedio, dentro_rango, resumen_min. Los ejercicios marcados como caja negra usan funciones del lenguaje sin pedir que las implementen."
   },
   {
     "objectID": "ejercicios/clase1-ejercicios.html#contexto",
     "href": "ejercicios/clase1-ejercicios.html#contexto",
     "title": "Clase 1 - Ejercicios",
     "section": "",
-    "text": "Vamos a usar mtcars, un dataset de 32 autos con 11 columnas (consumo, cilindros, potencia, etc). Viene con R, no hace falta instalar nada.\nhead(mtcars)\n?mtcars\nA lo largo de la guía vas a construir una pequeña caja de herramientas: etiquetar_auto, dif_promedio, resumen_min. Las vas a reusar en las clases siguientes."
+    "text": "Vamos a usar mtcars, un dataset de 32 autos con 11 variables (consumo, cilindros, potencia, peso, etc.). Viene con R, no requiere instalación.\nhead(mtcars)\n?mtcars\nA lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: etiquetar_auto, dif_promedio, dentro_rango, resumen_min. Los ejercicios marcados como caja negra usan funciones del lenguaje sin pedir que las implementen."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-1-variables-y-tipos",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-1-variables-y-tipos",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-1-variables-y-tipos-atómicos",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-1-variables-y-tipos-atómicos",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 1: variables y tipos",
-    "text": "Ejercicio 1: variables y tipos\n\nAsigná cuatro variables que describan el primer auto de mtcars: nombre_auto (string con rownames(mtcars)[1]), consumo_mpg (double, mtcars$mpg[1]), cilindros (integer, as.integer(mtcars$cyl[1])) y transmision_manual (logical, mtcars$am[1] == 1). Verificá class() y typeof() de cada una.\n¿Qué devuelve is.numeric(cilindros)? ¿Y is.numeric(transmision_manual)? Justificá.\nPredecí qué hace consumo_mpg + transmision_manual y consumo_mpg + nombre_auto. Después corrélo y comparalo con tu predicción."
+    "section": "Ejercicio 1: variables y tipos atómicos",
+    "text": "Ejercicio 1: variables y tipos atómicos\n\nAsigná cuatro variables que describan el primer auto de mtcars: nombre_auto (string con rownames(mtcars)[1]), consumo_mpg (double, mtcars$mpg[1]), cilindros (integer, as.integer(mtcars$cyl[1])) y transmision_manual (logical, mtcars$am[1] == 1). Verificá class() de cada una.\nVerificá también typeof(). ¿En qué se diferencian class y typeof para consumo_mpg?\n¿Qué devuelve is.numeric(cilindros)? ¿Y is.numeric(transmision_manual)? Justificá."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-2-vector-de-consumos",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-2-vector-de-consumos",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-2-coerción-de-tipos",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-2-coerción-de-tipos",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 2: vector de consumos",
-    "text": "Ejercicio 2: vector de consumos\n\nAsigná consumos &lt;- mtcars$mpg. ¿Cuántos elementos tiene? ¿Qué tipo?\nCalculá mean(consumos), median(consumos), min(consumos), max(consumos). Usá summary(consumos) y compará con los valores anteriores.\nQuedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son? Pista: sum(consumos &gt; mean(consumos))."
+    "section": "Ejercicio 2: coerción de tipos",
+    "text": "Ejercicio 2: coerción de tipos\n\nPredecí (sin correr) qué devuelve c(TRUE, 1L, 1.5). Después corrélo y compará con tu predicción.\nPredecí qué devuelve c(TRUE, 1, \"a\"). Justificá usando la regla de coerción.\n¿Qué pasa al evaluar consumo_mpg + transmision_manual? Identificá qué tipo predomina."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-3-indexar-mtcars",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-3-indexar-mtcars",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-3-vector-de-consumos",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-3-vector-de-consumos",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 3: indexar mtcars",
-    "text": "Ejercicio 3: indexar mtcars\n\nMostrá la primera fila de mtcars completa. Mostrá la columna hp. Mostrá la celda fila 5, columna mpg.\nEncontrá el auto con mayor mpg usando which.max. Mostrá su nombre con rownames(mtcars)[which.max(mtcars$mpg)].\nMostrá las primeras 3 columnas (mpg, cyl, disp) de los primeros 5 autos."
+    "section": "Ejercicio 3: vector de consumos",
+    "text": "Ejercicio 3: vector de consumos\n\nAsigná consumos &lt;- mtcars$mpg. Verificá length(consumos) y class(consumos).\nCalculá mean, median, min y max de consumos. Compará con la salida de summary(consumos).\nQuedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son?"
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-4-función-etiquetar_auto",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-4-función-etiquetar_auto",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-4-indexar-mtcars",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-4-indexar-mtcars",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 4: función etiquetar_auto",
-    "text": "Ejercicio 4: función etiquetar_auto\n\nDefiní etiquetar_auto(modelo, mpg) que devuelva el string \"&lt;modelo&gt;: &lt;mpg&gt; mpg\". Pista: paste0. Probala con \"Mazda RX4\" y 21.\nProbala con valores extraídos de mtcars: etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1]).\nAgregale un valor por defecto mpg = NA. ¿Qué devuelve etiquetar_auto(\"Auto fantasma\")?"
+    "section": "Ejercicio 4: indexar mtcars",
+    "text": "Ejercicio 4: indexar mtcars\n\nMostrá la primera fila completa de mtcars, la columna hp entera y la celda fila 5 columna mpg.\nEncontrá el auto con mayor mpg con which.max. Mostrá su nombre con rownames(mtcars)[which.max(mtcars$mpg)].\nMostrá las primeras tres columnas (mpg, cyl, disp) de los primeros cinco autos. Verificá la estructura del resultado."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-5-función-dif_promedio",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-5-función-dif_promedio",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-5-filtros-con-condiciones-múltiples",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-5-filtros-con-condiciones-múltiples",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 5: función dif_promedio",
-    "text": "Ejercicio 5: función dif_promedio\n\nDefiní dif_promedio(x) que devuelva x - mean(x). Aplicala a mtcars$mpg. ¿Cuál es la suma de las diferencias?\n¿Cuántos autos están por encima del promedio? Pista: sum(dif_promedio(mtcars$mpg) &gt; 0).\n¿Cuál es el auto que más se aleja del promedio (en valor absoluto)? Pista: which.max(abs(...))."
+    "section": "Ejercicio 5: filtros con condiciones múltiples",
+    "text": "Ejercicio 5: filtros con condiciones múltiples\n\nFiltrá los autos con mpg &gt; 25. ¿Cuántos son?\nFiltrá los autos con mpg &gt; 25 Y cyl == 4. Pista: operador &.\nFiltrá los autos con cyl == 4 o cyl == 8. Pista: | o %in%."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-6-lista-que-describe-un-auto",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-6-lista-que-describe-un-auto",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-6-función-etiquetar_auto",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-6-función-etiquetar_auto",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 6: lista que describe un auto",
-    "text": "Ejercicio 6: lista que describe un auto\n\nCreá una lista auto_1 con: modelo (string), mpg (double), cilindros (integer), caja (“manual” o “automatica”). Usá los datos del primer auto de mtcars.\nAccedé a cada campo con $ y con [[ ]]. ¿Qué devuelve auto_1[\"modelo\"] y por qué difiere?\nCambiale el mpg a auto_1 reasignándolo con auto_1$mpg &lt;- .... Verificá."
+    "section": "Ejercicio 6: función etiquetar_auto",
+    "text": "Ejercicio 6: función etiquetar_auto\n\nDefiní etiquetar_auto(modelo, mpg) que devuelva el string \"&lt;modelo&gt;: &lt;mpg&gt; mpg\". Pista: paste0. Probala con \"Mazda RX4\" y 21.\nProbala con valores extraídos de mtcars: etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1]).\nAgregale un valor por defecto mpg = NA y observá la salida cuando se omite el segundo argumento."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-7-función-resumen_min",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-7-función-resumen_min",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-7-función-dif_promedio",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-7-función-dif_promedio",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 7: función resumen_min",
-    "text": "Ejercicio 7: función resumen_min\n\nDefiní resumen_min(x) que reciba un vector numérico y devuelva una lista con media, mediana, min, max. Probala con mtcars$mpg.\nAplicala a mtcars$hp. Compará el rango con el de mpg.\n¿Qué pasa si la pasás c(1, 2, NA, 4)? Probá. ¿Cómo lo arreglarías sin tocar la función? Pista: na.omit."
+    "section": "Ejercicio 7: función dif_promedio",
+    "text": "Ejercicio 7: función dif_promedio\n\nDefiní dif_promedio(x) que devuelva x - mean(x). Aplicala a mtcars$mpg. Calculá la suma de las diferencias. Justificá el resultado teóricamente.\n¿Cuántos autos están por encima del promedio? Pista: sum(dif_promedio(x) &gt; 0).\n¿Cuál es el auto que más se aleja del promedio en valor absoluto? Pista: which.max(abs(...))."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-8-etiquetas-en-lote",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-8-etiquetas-en-lote",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-8-función-dentro_rango",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-8-función-dentro_rango",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 8: etiquetas en lote",
-    "text": "Ejercicio 8: etiquetas en lote\n\nArmá un vector con \"&lt;modelo&gt;: &lt;mpg&gt; mpg\" para los primeros 5 autos. Pista: paste0(rownames(mtcars)[1:5], \": \", mtcars$mpg[1:5], \" mpg\").\nHacé lo mismo para todos los autos.\nRecreá el mismo vector usando sapply y la función etiquetar_auto del ejercicio 4. Pista: sapply(seq_len(nrow(mtcars)), function(i) etiquetar_auto(rownames(mtcars)[i], mtcars$mpg[i]))."
+    "section": "Ejercicio 8: función dentro_rango",
+    "text": "Ejercicio 8: función dentro_rango\n\nDefiní dentro_rango(x, a, b) que devuelva TRUE si a &lt;= x &lt;= b, FALSE en otro caso. La función debe ser vectorizada: si x es un vector, devuelve un vector de booleanos. Pista: &.\nProbala con dentro_rango(c(1, 5, 10, 15, 20), 5, 15).\nAplicala a mtcars$mpg con rango c(20, 25). ¿Cuántos autos caen dentro del rango?"
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-9-tu-propio-data.frame",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-9-tu-propio-data.frame",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-9-conversión-de-unidades",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-9-conversión-de-unidades",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 9: tu propio data.frame",
-    "text": "Ejercicio 9: tu propio data.frame\n\nCreá mis_autos con 3 filas y columnas modelo, mpg, cilindros, manual. Mezclá un auto real con dos imaginarios.\nAccedé a la columna mpg con $, con [[\"mpg\"]] y con [, \"mpg\"]. Confirmá que dan el mismo resultado.\nAplicá resumen_min a la columna mpg de mis_autos. ¿Qué tipo de objeto devuelve?"
+    "section": "Ejercicio 9: conversión de unidades",
+    "text": "Ejercicio 9: conversión de unidades\n\nDefiní mpg_a_km_l(x) que convierta de mpg (millas por galón) a km/L. Factor: 1 mpg ≈ 0.4251 km/L.\nAplicala a mtcars$mpg para obtener un vector de consumos en km/L.\nDefiní km_l_a_mpg(x) (función inversa). Verificá que km_l_a_mpg(mpg_a_km_l(20)) devuelve aproximadamente 20."
   },
   {
-    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-10-buenos-nombres",
-    "href": "ejercicios/clase1-ejercicios.html#ejercicio-10-buenos-nombres",
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-10-función-resumen_min",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-10-función-resumen_min",
     "title": "Clase 1 - Ejercicios",
-    "section": "Ejercicio 10: buenos nombres",
-    "text": "Ejercicio 10: buenos nombres\n\nMirá este snippet:\nf &lt;- function(x, y) x + y * 0.6213\na &lt;- 100\nprint(f(0, a))\nPista: el factor 0.6213 convierte kilómetros a millas.\nReescribilo cambiando f, a, x, y por nombres descriptivos. La intención debería leerse sin comentarios.\n¿Qué nombres elegiste y por qué? Anotalo en una línea."
+    "section": "Ejercicio 10: función resumen_min",
+    "text": "Ejercicio 10: función resumen_min\n\nDefiní resumen_min(x) que reciba un vector numérico y devuelva una lista con media, mediana, min, max.\nAplicala a mtcars$mpg. Verificá class() del resultado.\nAplicala a mtcars$hp. Compará el rango con el de mpg."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-11-lista-que-describe-un-auto",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-11-lista-que-describe-un-auto",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 11: lista que describe un auto",
+    "text": "Ejercicio 11: lista que describe un auto\n\nCreá una lista auto_1 con: modelo (string), mpg (double), cilindros (integer), caja (\"manual\" o \"automatica\"). Usá los datos del primer auto de mtcars.\nAccedé a cada campo con $, con [[ ]] y con [ ]. Mostrá class() de cada acceso.\nCambiá el valor de mpg reasignándolo (auto_1$mpg &lt;- ...). Verificá."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-12-comparar-dos-autos",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-12-comparar-dos-autos",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 12: comparar dos autos",
+    "text": "Ejercicio 12: comparar dos autos\n\nDefiní comparar_autos(auto_a, auto_b) que reciba dos listas con campos mpg y cilindros y devuelva una lista con dif_mpg y dif_cilindros.\nProbala con dos autos cualesquiera de mtcars.\nSi llamás comparar_autos(list(mpg = 20), list(consumo = 25)), ¿qué pasa? Identificá el problema."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-13-ordenar-por-consumo",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-13-ordenar-por-consumo",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 13: ordenar por consumo",
+    "text": "Ejercicio 13: ordenar por consumo\n\nOrdená mtcars por mpg descendente. Pista: order(-mtcars$mpg) o order(..., decreasing = TRUE).\nMostrá los nombres de los tres autos con mayor mpg.\nMostrá los tres con menor mpg."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-14-aplicar-resumen_min-a-varias-columnas",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-14-aplicar-resumen_min-a-varias-columnas",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 14: aplicar resumen_min a varias columnas",
+    "text": "Ejercicio 14: aplicar resumen_min a varias columnas\n\nAplicá resumen_min por separado a las columnas mpg, hp y wt de mtcars. Guardá los resultados en una lista nombrada.\nHacé lo mismo en una sola línea con lapply. Pista: lapply(mtcars[, c(\"mpg\", \"hp\", \"wt\")], resumen_min).\n¿Qué tipo devuelve lapply y qué devuelve sapply? Compará los resultados."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-15-tu-propio-data.frame",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-15-tu-propio-data.frame",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 15: tu propio data.frame",
+    "text": "Ejercicio 15: tu propio data.frame\n\nCreá un data.frame con tres pacientes y cuatro columnas: id (integer), edad (double), peso_kg (double), fuma (logical).\nAplicá resumen_min a la columna edad.\nAplicá summary() al data.frame completo. Compará la salida con la de resumen_min."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-16-quantile-caja-negra",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-16-quantile-caja-negra",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 16: quantile (caja negra)",
+    "text": "Ejercicio 16: quantile (caja negra)\n\nAplicá quantile(mtcars$mpg) (sin argumentos extra). Identificá el percentil 25, la mediana y el percentil 75.\nAplicá quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9)). ¿Qué representa cada valor?\nDefiní rango_intercuartilico(x) usando quantile. Aplicalo a mtcars$mpg y compará con IQR(mtcars$mpg)."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-17-correlación-con-cor-caja-negra",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-17-correlación-con-cor-caja-negra",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 17: correlación con cor (caja negra)",
+    "text": "Ejercicio 17: correlación con cor (caja negra)\n\nCalculá cor(mtcars$mpg, mtcars$hp). Interpretá el signo y la magnitud (cor toma valores entre -1 y 1).\nCalculá la matriz de correlaciones entre mpg, hp, wt y cyl con cor(mtcars[, c(\"mpg\", \"hp\", \"wt\", \"cyl\")]).\nIdentificá el par de variables más correlacionado y el menos correlacionado."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-18-leer-la-documentación",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-18-leer-la-documentación",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 18: leer la documentación",
+    "text": "Ejercicio 18: leer la documentación\n\nAbrí ?sapply. Identificá los argumentos X, FUN y simplify.\nProbá sapply(1:5, function(i) i^2). ¿Devuelve un vector o una lista?\nProbá lapply(1:5, function(i) i^2). Compará con la salida de sapply y explicá cuándo conviene cada uno."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-19-la-caja-de-herramientas-sobre-datos-sintéticos",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 19: la caja de herramientas sobre datos sintéticos",
+    "text": "Ejercicio 19: la caja de herramientas sobre datos sintéticos\n\nGenerá un vector x con rnorm(100, mean = 50, sd = 10) (100 valores normales). rnorm es una caja negra: ver ?rnorm.\nAplicale resumen_min, dif_promedio y dentro_rango con a = 40, b = 60.\n¿Aproximadamente cuántos valores caen en [40, 60]? Compará con la regla 68-95-99.7 de la distribución normal (esperado: ~68%)."
+  },
+  {
+    "objectID": "ejercicios/clase1-ejercicios.html#ejercicio-20-buenos-nombres",
+    "href": "ejercicios/clase1-ejercicios.html#ejercicio-20-buenos-nombres",
+    "title": "Clase 1 - Ejercicios",
+    "section": "Ejercicio 20: buenos nombres",
+    "text": "Ejercicio 20: buenos nombres\n\nTomá este snippet:\nf &lt;- function(x, y) x + y * 0.6213\na &lt;- 100\nprint(f(0, a))\nPista: el factor 0.6213 convierte kilómetros a millas.\nReescribilo cambiando los nombres para que la intención sea clara sin necesidad de comentarios. Pensá nombres descriptivos para f, a, x, y.\nJustificá tu elección en una línea."
   },
   {
     "objectID": "clases/clase1-clase.html#programar-es-como-hablar-un-idioma",
@@ -1103,7 +1453,7 @@
     "href": "clases/clase4-clase.html#ejercicios-en-clase",
     "title": "Curso Nivelador - Programación en R",
     "section": "Ejercicios en clase",
-    "text": "Ejercicios en clase\nTrabajamos sobre airquality (calidad del aire en NY) y mtcars.\n\nHistograma de airquality$Ozone con título y eje en español. Probá tres valores distintos de breaks (10, 20, 50). ¿Qué cambia?\nBoxplot de Temp ~ Month sobre airquality. Pintá las cajas con col = \"lightgreen\". ¿En qué mes hay más dispersión?\nScatter de mpg ~ hp sobre mtcars, con la recta de regresión por encima usando abline(lm(...)) y una leyenda.\nCalculá la media de mpg por cyl con aggregate, y graficala con barplot(height = ..., names.arg = ...). ¿Cae monótonamente?\nFunción normalizar(x) con dos stopifnot que verifiquen media 0 y sd 1. Aplicala a mtcars$mpg y graficá el histograma del resultado.\n(Bonus, datos argentinos) Cargá la encuesta sysarmy de salarios IT desde el repo de openqube y graficá un histograma del salario neto.\nurl &lt;- \"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv\"\nsueldos &lt;- read.csv(url, check.names = TRUE)\nhead(sueldos)\nMirá colnames(sueldos) (los nombres son largos, en español, con acentos), elegí la columna del salario neto y graficá su histograma. ¿Qué breaks elegirías para que no se aplaste con los outliers? Pista: probá un eje x acotado con xlim = c(0, quantile(x, 0.99, na.rm = TRUE)).\n\n\n~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975)))."
+    "text": "Ejercicios en clase\nTrabajamos sobre airquality (calidad del aire en NY) y mtcars.\n\nHistograma de airquality$Ozone con título y eje en español. Probá tres valores distintos de breaks (10, 20, 50). ¿Qué cambia?\nBoxplot de Temp ~ Month sobre airquality. Pintá las cajas con col = \"lightgreen\". ¿En qué mes hay más dispersión?\nScatter de mpg ~ hp sobre mtcars, con la recta de regresión por encima usando abline(lm(...)) y una leyenda.\nCalculá la media de mpg por cyl con aggregate, y graficala con barplot(height = ..., names.arg = ...). ¿Cae monótonamente?\nFunción normalizar(x) con dos stopifnot que verifiquen media 0 y sd 1. Aplicala a mtcars$mpg y graficá el histograma del resultado.\n(Bonus) Cargá bikeshare.csv (en datos/) usando la función auxiliar cargar_bikeshare() provista. Graficá un histograma de bikers (cantidad de viajes por hora). ¿Qué breaks elegirías para evitar que la cola larga aplaste el resto?\n\n\n~15 min. Si terminan rápido: en el ejercicio 6, calcular un boxplot de bikers ~ season para ver el efecto estacional."
   },
   {
     "objectID": "clases/clase4-clase.html#comprensión-quedó-claro",

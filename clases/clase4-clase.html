@@ -383,14 +383,10 @@
 <li><p>Scatter de <code>mpg ~ hp</code> sobre <code>mtcars</code>, con la recta de regresión por encima usando <code>abline(lm(...))</code> y una leyenda.</p></li>
 <li><p>Calculá la media de <code>mpg</code> por <code>cyl</code> con <code>aggregate</code>, y graficala con <code>barplot(height = ..., names.arg = ...)</code>. ¿Cae monótonamente?</p></li>
 <li><p>Función <code>normalizar(x)</code> con dos <code>stopifnot</code> que verifiquen media 0 y sd 1. Aplicala a <code>mtcars$mpg</code> y graficá el histograma del resultado.</p></li>
-<li><p>(Bonus, datos argentinos) Cargá la encuesta sysarmy de salarios IT desde el <a href="https://github.com/openqube/openqube-sueldos">repo de openqube</a> y graficá un histograma del salario neto.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a>url <span class="ot">&lt;-</span> <span class="st">"https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv"</span></span>
-<span id="cb12-2"><a></a>sueldos <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url, <span class="at">check.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-3"><a></a><span class="fu">head</span>(sueldos)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Mirá <code>colnames(sueldos)</code> (los nombres son largos, en español, con acentos), elegí la columna del salario neto y graficá su histograma. ¿Qué <code>breaks</code> elegirías para que no se aplaste con los outliers? Pista: probá un eje x acotado con <code>xlim = c(0, quantile(x, 0.99, na.rm = TRUE))</code>.</p></li>
+<li><p>(Bonus) Cargá <code>bikeshare.csv</code> (en <code>datos/</code>) usando la función auxiliar <code>cargar_bikeshare()</code> provista. Graficá un histograma de <code>bikers</code> (cantidad de viajes por hora). ¿Qué <code>breaks</code> elegirías para evitar que la cola larga aplaste el resto?</p></li>
 </ol>
 <aside class="notes">
-<p>~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975))).</p>
+<p>~15 min. Si terminan rápido: en el ejercicio 6, calcular un boxplot de <code>bikers ~ season</code> para ver el efecto estacional.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -448,17 +444,17 @@
 <section id="apéndice-gramática-mínima-de-ggplot2" class="slide level2">
 <h2>Apéndice: gramática mínima de <code>ggplot2</code></h2>
 <p><code>ggplot2</code> propone una <strong>gramática</strong>: todo gráfico es <code>data + mapping (aes) + geom</code>.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb13-2"><a></a></span>
-<span id="cb13-3"><a></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> hp, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
-<span id="cb13-4"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb13-5"><a></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
-<span id="cb13-6"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Consumo vs potencia"</span>,</span>
-<span id="cb13-7"><a></a>       <span class="at">x =</span> <span class="st">"Potencia (hp)"</span>, <span class="at">y =</span> <span class="st">"Consumo (mpg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb12-2"><a></a></span>
+<span id="cb12-3"><a></a><span class="fu">ggplot</span>(mtcars, <span class="fu">aes</span>(<span class="at">x =</span> hp, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb12-4"><a></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb12-5"><a></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Consumo vs potencia"</span>,</span>
+<span id="cb12-7"><a></a>       <span class="at">x =</span> <span class="st">"Potencia (hp)"</span>, <span class="at">y =</span> <span class="st">"Consumo (mpg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Misma idea para boxplot:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a></a><span class="fu">ggplot</span>(airquality, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Month), <span class="at">y =</span> Ozone)) <span class="sc">+</span></span>
-<span id="cb14-2"><a></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
-<span id="cb14-3"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mes"</span>, <span class="at">y =</span> <span class="st">"Ozono (ppb)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a></a><span class="fu">ggplot</span>(airquality, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">factor</span>(Month), <span class="at">y =</span> Ozone)) <span class="sc">+</span></span>
+<span id="cb13-2"><a></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">"lightblue"</span>) <span class="sc">+</span></span>
+<span id="cb13-3"><a></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Mes"</span>, <span class="at">y =</span> <span class="st">"Ozono (ppb)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Una vez que se entiende la gramática, queda más fácil que el base R para gráficos complejos. Lo vamos a usar más adelante.</p>
 
 
