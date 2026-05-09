@@ -1,82 +1,107 @@
 ---
 title: "Clase 1 - Ejercicios"
-format: html
+subtitle: "Tipos de datos, vectores y primeras funciones"
+format:
+  html:
+    toc: true
+    toc-depth: 2
 ---
 
-1. Escriba 
-a. una funciòn que convierta una temperatura en grados Celsius a grados [Fahrenheit](https://es.wikipedia.org/wiki/Grado_Fahrenheit)
-b. otro programa que se haga la operación inversa (de Fahrenheit a Celsius)
-c. verifique que aplicar una función seguida de la otra devuelven el valor original.
+## Contexto
 
-2. Cree una funciòn que dado un cuadrado, a partir de la variable `base`, calcule su perímetro y su área.
-
-3. Construya una función `es_cuadrado_perfecto` que devuelva un **booleano** según el input `x` es o no un cuadrado perfecto (existe $k$ tal que $k^2$) 
-
-4. Arme una función que dado un vector numérico `x` devuelve un vector con la media muestral y, la mediana. Use el siguiente modelo como base:
+Vamos a usar `mtcars`, un dataset de 32 autos con 11 columnas (consumo, cilindros, potencia, etc). Viene con R, no hace falta instalar nada.
 
 ```r
-medias = function(x) {
-  return(c(mean(x), median(x)))
-}
-```
-Una vez definida la función `medias` ejecute la siguente línea:
-
-```r
-replicaciones = replicate(10000, medias(rnorm(100)))
-```
-^
-Extraiga de la matriz `replicaciones` la medias y medianas y asígnelas a los vectores `las_medias` y `las_medianas` respectivamente. Luego ejecute el siguiente código para graficar.
-
-```r
-colores = c("skyblue3", "orange")
-densidades = c(50, 30)
-# las_medias = ...
-hist(las_medias, density=densidades[1], col = colores[1])
-# las_mediana = ...
-hist(las_medianas, density=densidades[2], col = colores[2], add=TRUE)
-legend("topright", legend=c("media", "mediana"), col = colores, density=densidades, fill = colores)
+head(mtcars)
+?mtcars
 ```
 
-5. Una empresa regala una heladera al azar entre $N$ personas. Repite el proceso $n$ veces. ¿Cuál es la probabilidad de que una persona reciba dos heladeras?
+A lo largo de la guía vas a construir una pequeña caja de herramientas: `etiquetar_auto`, `dif_promedio`, `resumen_min`. Las vas a reusar en las clases siguientes.
 
-a. Primero escriba una función que simule una sola realización del sorteo. Usá el siguiente modelo:
+## Ejercicio 1: variables y tipos
 
-```r
-una_heladera = function(N, n){
-# ...
-return(dos_heladeras_bool)
-}
-```
+a)  Asigná cuatro variables que describan el primer auto de `mtcars`: `nombre_auto` (string con `rownames(mtcars)[1]`), `consumo_mpg` (double, `mtcars$mpg[1]`), `cilindros` (integer, `as.integer(mtcars$cyl[1])`) y `transmision_manual` (logical, `mtcars$am[1] == 1`). Verificá `class()` y `typeof()` de cada una.
 
-b. Use el siguiente código para obtener un vector con los resultados de correr la función anterior `k` veces.
+b)  ¿Qué devuelve `is.numeric(cilindros)`? ¿Y `is.numeric(transmision_manual)`? Justificá.
 
-```r
-k = 1000
-N = 40000000
-n = 15000
-reps = replicate(k, una_heladera(N, n))
-```
+c)  Predecí qué hace `consumo_mpg + transmision_manual` y `consumo_mpg + nombre_auto`. Después corrélo y comparalo con tu predicción.
 
-c. Calcule la media muestral de `reps`, ¿qué representa?.
+## Ejercicio 2: vector de consumos
 
-6. Considere la siguientes tres sucesiones:
+a)  Asigná `consumos <- mtcars$mpg`. ¿Cuántos elementos tiene? ¿Qué tipo?
 
-* $a_n = \frac{1}{\sqrt{n}} + (\frac{1}{2})^n$
-*  $b_n = (-1)^n + 5$
-* $c_n = \frac{3n-8}{\sqrt{16n^2+n}}$
+b)  Calculá `mean(consumos)`, `median(consumos)`, `min(consumos)`, `max(consumos)`. Usá `summary(consumos)` y compará con los valores anteriores.
 
-a. Grafique los primeros $n=100$ términos de cada sucesón.
-b. Decida si las sucesiones son convergentes y en tal caso agregue una línea horizontal al gráfico.
+c)  Quedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son? Pista: `sum(consumos > mean(consumos))`.
 
-7. Considere las siguientes funciones: 
+## Ejercicio 3: indexar `mtcars`
 
-* $l_2(x) = x^2$,
-* $l_1(x) = |x|$,
-* $\rho_k(x) = x^2 * I_{(|x|\leq k)} + 2k|x|-k^2 * I_{(|x| > k)}$.
+a)  Mostrá la primera fila de `mtcars` completa. Mostrá la columna `hp`. Mostrá la celda fila 5, columna `mpg`.
 
-para $x \in [-10, 10]$. Grafique $p_k$ con $k=5$ junto a las otras funciones con distintos colores y una leyenda.
+b)  Encontrá el auto con mayor `mpg` usando `which.max`. Mostrá su nombre con `rownames(mtcars)[which.max(mtcars$mpg)]`.
 
-8. Grafique el polinomio interpolador de Lagranges en $n+1$ puntos equiespaciados en el intervalo $[-1,1]$, con $n= 5, 10, 15$, para los valores generados por las siguientes funciones:
+c)  Mostrá las primeras 3 columnas (`mpg`, `cyl`, `disp`) de los primeros 5 autos.
 
-* $f_1(x) = \frac{1}{25x^2}$
-* $f_2(x) = \sin(\pi x)$
+## Ejercicio 4: función `etiquetar_auto`
+
+a)  Definí `etiquetar_auto(modelo, mpg)` que devuelva el string `"<modelo>: <mpg> mpg"`. Pista: `paste0`. Probala con `"Mazda RX4"` y `21`.
+
+b)  Probala con valores extraídos de `mtcars`: `etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1])`.
+
+c)  Agregale un valor por defecto `mpg = NA`. ¿Qué devuelve `etiquetar_auto("Auto fantasma")`?
+
+## Ejercicio 5: función `dif_promedio`
+
+a)  Definí `dif_promedio(x)` que devuelva `x - mean(x)`. Aplicala a `mtcars$mpg`. ¿Cuál es la suma de las diferencias?
+
+b)  ¿Cuántos autos están por encima del promedio? Pista: `sum(dif_promedio(mtcars$mpg) > 0)`.
+
+c)  ¿Cuál es el auto que más se aleja del promedio (en valor absoluto)? Pista: `which.max(abs(...))`.
+
+## Ejercicio 6: lista que describe un auto
+
+a)  Creá una lista `auto_1` con: `modelo` (string), `mpg` (double), `cilindros` (integer), `caja` ("manual" o "automatica"). Usá los datos del primer auto de `mtcars`.
+
+b)  Accedé a cada campo con `$` y con `[[ ]]`. ¿Qué devuelve `auto_1["modelo"]` y por qué difiere?
+
+c)  Cambiale el `mpg` a `auto_1` reasignándolo con `auto_1$mpg <- ...`. Verificá.
+
+## Ejercicio 7: función `resumen_min`
+
+a)  Definí `resumen_min(x)` que reciba un vector numérico y devuelva una lista con `media`, `mediana`, `min`, `max`. Probala con `mtcars$mpg`.
+
+b)  Aplicala a `mtcars$hp`. Compará el rango con el de `mpg`.
+
+c)  ¿Qué pasa si la pasás `c(1, 2, NA, 4)`? Probá. ¿Cómo lo arreglarías sin tocar la función? Pista: `na.omit`.
+
+## Ejercicio 8: etiquetas en lote
+
+a)  Armá un vector con `"<modelo>: <mpg> mpg"` para los primeros 5 autos. Pista: `paste0(rownames(mtcars)[1:5], ": ", mtcars$mpg[1:5], " mpg")`.
+
+b)  Hacé lo mismo para todos los autos.
+
+c)  Recreá el mismo vector usando `sapply` y la función `etiquetar_auto` del ejercicio 4. Pista: `sapply(seq_len(nrow(mtcars)), function(i) etiquetar_auto(rownames(mtcars)[i], mtcars$mpg[i]))`.
+
+## Ejercicio 9: tu propio `data.frame`
+
+a)  Creá `mis_autos` con 3 filas y columnas `modelo`, `mpg`, `cilindros`, `manual`. Mezclá un auto real con dos imaginarios.
+
+b)  Accedé a la columna `mpg` con `$`, con `[["mpg"]]` y con `[, "mpg"]`. Confirmá que dan el mismo resultado.
+
+c)  Aplicá `resumen_min` a la columna `mpg` de `mis_autos`. ¿Qué tipo de objeto devuelve?
+
+## Ejercicio 10: buenos nombres
+
+a)  Mirá este snippet:
+
+    ```r
+    f <- function(x, y) x + y * 0.6213
+    a <- 100
+    print(f(0, a))
+    ```
+
+    Pista: el factor `0.6213` convierte kilómetros a millas.
+
+b)  Reescribilo cambiando `f`, `a`, `x`, `y` por nombres descriptivos. La intención debería leerse sin comentarios.
+
+c)  ¿Qué nombres elegiste y por qué? Anotalo en una línea.

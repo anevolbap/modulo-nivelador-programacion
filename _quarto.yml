@@ -28,6 +28,12 @@ website:
             href: ejercicios/clase1-ejercicios.qmd
           - text: "Clase 2"
             href: ejercicios/clase2-ejercicios.qmd
+          - text: "Clase 3"
+            href: ejercicios/clase3-ejercicios.qmd
+          - text: "Clase 4"
+            href: ejercicios/clase4-ejercicios.qmd
+          - text: "Clase 5"
+            href: ejercicios/clase5-ejercicios.qmd
           - text: "Entrega final"
             href: ejercicios/entrega.qmd
     right:

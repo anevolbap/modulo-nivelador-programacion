@@ -1,54 +1,99 @@
 ---
 title: "Clase 2 - Ejercicios"
-format: html
+subtitle: "Condicionales y bucles aplicados a `airquality`"
+format:
+  html:
+    toc: true
+    toc-depth: 2
 ---
 
-1.  Escriba una función que sume los primeros $n$ números naturales. Compare su desempeño contra la `sum(1:n)`. Utilice el siguiente modelo como base:
+## Contexto
 
-    ``` r
-    sumar_naturales = function(n) {
-      # suma = ...
-      return(suma)
-    }
-    ```
-2.  Un juego consiste en revelar una por una las cartas de un mazo mientras que se repiten los números 1, 2 y 3. Si al revelar la carta coincide con el número cantado, el juego se pierde. Solo se gana si no hay ninguna coincidencia.
+Vamos a usar `airquality` (calidad del aire en NY, mayo a septiembre 1973). Tiene 153 filas y 6 columnas. Es un dataset realista: viene con valores faltantes (`NA`).
 
-    1.  Escriba una función que realice una sola repetición del juego. Utilice el siguiente modelo como base:
+```r
+head(airquality)
+?airquality
+```
 
-        ``` r
-        juego_123 = function() {
-          # ganamos = ... # logical
-          return(ganamos)
-        }
-        ```
+A las funciones de la clase 1 (`etiquetar_auto`, `dif_promedio`, `resumen_min`) sumamos `clasificar_temp`, `contar_alertas`, `bootstrap_media` y `clasificar_presion`.
 
-    2.  Luego, juegue $1000$ veces y calcule la proporción de veces que ganó el juego. Utilice bucles y compare el desempeño contra el siguiente código:
+## Ejercicio 1: reconocer el dataset
 
-        ``` r
-        mean(replicate(n=1000, expr=juego_123))
-        ```
+a)  Cargá `airquality` y mirá `head`, `dim`, `colnames`, `?airquality`. Anotá qué representa cada columna.
 
-3.  Escriba una función tal que dada una matriz devuelva su parte triangular superior. Utilice el siguiente modelo como base:
+b)  ¿Cuántos `NA` tiene la columna `Ozone`? Pista: `sum(is.na(airquality$Ozone))`.
 
-    ``` r
-    extraer_trisup = function(matriz) {
-      # trisup = ...
-      return(trisup)
-    }
-    ```
+c)  ¿Cuántas filas tienen al menos un `NA`? Pista: `sum(!complete.cases(airquality))`.
 
+## Ejercicio 2: clasificar temperatura con `if/else if/else`
 
-4.  Diseñe una función que dado un vector numérico devuelva un vector que indique, como texto, a qué decil pertenece cada valor. Por ejemplo, para el vector `num_vec=1:10`, la función debería devolver el vector `c("primer decil", "segundo decil", …, "décimo decil")` . Utilice el siguiente modelo como base:
+a)  Definí `clasificar_temp(x)` (en °F) que devuelva `"frio"` si `x < 60`, `"templado"` si `60 <= x < 80`, `"caluroso"` si `x >= 80`.
 
-    ``` r
-    indicar_deciles = function(num_vec) {
-      # deciles_vec = ...
-      return(deciles_vec)
-    }
-    ```
+b)  Aplicala dentro de un `for` a `c(50, 70, 90, 100)`. Imprimí cada categoría.
 
-5.  Arme una función que, dado un vector de valores `logical`, indique si son todos `TRUE`. Compare su desempeño contra la función `all` .
+c)  Hacé lo mismo con `ifelse` vectorial anidado. Compará legibilidad.
 
-6.  En la primera página de [este](https://arxiv.org/pdf/2110.01111.pdf) trabajo, sus autores proponen un método para ordenar una lista de números de forma creciente. Escriba una función en R que implemente el pseudocódigo de la imagen. ¿Funciona el método propuesto? Compare su desempeño contra la función `sort` .
+## Ejercicio 3: contar alertas
 
-    ![](images/paste-BE927DFA.png)
+a)  Usando un `for`, contá cuántos días `airquality$Ozone > 80` (umbral OMS para alerta). Cuidado con los `NA`: salteálos con `next`.
+
+b)  Hacé lo mismo en una línea: `sum(airquality$Ozone > 80, na.rm = TRUE)`. Verificá que coincide.
+
+c)  Generalizá a `contar_alertas(x, umbral)`. Probá con `airquality$Wind` y `umbral = 15`.
+
+## Ejercicio 4: primer índice que cumple una condición
+
+a)  Con un `while` y `seq_along`, encontrá el primer día (índice) donde `Ozone > 100`. Cuidado con `NA`.
+
+b)  Compará con `which(airquality$Ozone > 100 & !is.na(airquality$Ozone))[1]`.
+
+c)  Generalizá: definí `primer_indice(x, condicion_fun)` donde `condicion_fun` es una función que devuelve `TRUE`/`FALSE` para cada elemento. Probá con `function(z) z > 100` y con `function(z) z < 5`.
+
+## Ejercicio 5: clasificación de los primeros 30 días
+
+a)  Para los primeros 30 días, imprimí `"Alta"` si `Ozone > 80`, `"Baja"` si `Ozone < 20`, el valor numérico en otro caso. Usá `for` + `if/else if/else`. Si hay `NA`, salteálo.
+
+b)  Reescribilo con `ifelse` anidado. ¿Es más fácil de leer o más confuso?
+
+c)  ¿Cuándo conviene cada uno? Anotá una línea de criterio.
+
+## Ejercicio 6: bootstrap de la media
+
+a)  Definí `bootstrap_media(x, n_rep = 1000)` usando `replicate` + `sample`. Devolvé el vector de medias bootstrap.
+
+b)  Aplicala a `airquality$Wind` (no tiene `NA`). La media de las medias debería estar cerca de `mean(airquality$Wind)`.
+
+c)  Calculá un IC del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int`.
+
+## Ejercicio 7: acumular en un vector
+
+a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná el vector y rellenalo. Si hay `NA`, dejá `NA`.
+
+b)  Hacelo vectorizado en una línea: `airquality$Ozone^2 - airquality$Wind`. Verificá que coincide.
+
+c)  Cronometrá las dos versiones con `system.time`. ¿Cuánto más rápido es el vectorizado?
+
+## Ejercicio 8: `break` y `next`
+
+a)  Recorré `airquality$Ozone` con un `for` y parate al primer `NA` con `break`. Imprimí en qué índice paró.
+
+b)  Recorré los días impares (saltá los pares con `next`). Imprimí los primeros 10.
+
+c)  Combiná: imprimí los primeros 10 días donde `Ozone > 80`, salteando `NA` con `next`.
+
+## Ejercicio 9: `clasificar_presion`
+
+a)  Definí `clasificar_presion(sistolica)` según la AHA: `< 90` hipotenso, `90-119` normal, `120-129` elevada, `130-139` hipertensión 1, `>= 140` hipertensión 2. Devolvé `NA` si la entrada es `NA`.
+
+b)  Probala con `c(85, 110, 125, 135, 150, NA)`. Verificá.
+
+c)  Aplicala con `sapply` a un vector de 100 valores aleatorios `runif(100, 70, 180)`. Resumí con `table`.
+
+## Ejercicio 10: comentar el porqué
+
+a)  Tomá tu solución del ejercicio 6 (bootstrap). Agregá UN comentario que explique POR QUÉ usás `quantile(..., c(0.025, 0.975))` para el IC.
+
+b)  Mirá el resto de tu código del ejercicio 6: borrá los comentarios que solo parafrasean lo que hace cada línea.
+
+c)  Compará la versión final con la inicial: ¿se entiende mejor con menos comentarios?

@@ -1,0 +1,101 @@
+---
+title: "Clase 3 - Ejercicios"
+subtitle: "Listas, matrices, `data.frame` y `factor`"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+
+## Contexto
+
+En esta guía organizamos datos en estructuras compuestas y reusamos las funciones que armaste antes (`clasificar_temp`, `clasificar_presion`, `resumen_min`).
+
+Dataset principal: `airquality`. Para algunos ejercicios usamos `iris` y `mtcars`. Para el bonus al final, `bikeshare.csv` que vive en `datos/`.
+
+```r
+head(airquality)
+head(iris)
+```
+
+Funciones nuevas que vas a construir: `medias_por_grupo`, `top_grupo`, `cargar_y_describir`.
+
+## Ejercicio 1: lista paciente
+
+a)  Creá una lista `paciente` con: `id` (integer), `edad` (double), `sintomas` (vector de strings), `tiene_diagnostico` (logical), `presion_sistolica` (double).
+
+b)  Accedé al primer síntoma con `$`, con `[[ ]]` y con `[ ]`. Mostrá la `class` de cada resultado y explicá la diferencia.
+
+c)  Reusá `clasificar_presion` (clase 2) para agregarle a la lista un campo `presion_categoria` con la categoría correspondiente. Verificá.
+
+## Ejercicio 2: lista de pacientes
+
+a)  Creá una lista `pacientes` que contenga 3 pacientes (cada uno como en el ejercicio 1).
+
+b)  Extraé las edades con `sapply(pacientes, function(p) p$edad)`. Calculá la edad media.
+
+c)  Aplicá `clasificar_presion` (clase 2) a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías.
+
+## Ejercicio 3: matriz desde `airquality`
+
+a)  Convertí las columnas numéricas de `airquality` (`Ozone`, `Solar.R`, `Wind`, `Temp`) en una matriz. Pista: `as.matrix(airquality[, 1:4])`.
+
+b)  Calculá la media por columna con `colMeans` (ojo con `NA`, usá `na.rm = TRUE`).
+
+c)  Sacá las filas con `NA` (`na.omit`) y calculá `t(M) %*% M / nrow(M)`. ¿Qué representa cada celda? Pista: producto interno por columna.
+
+## Ejercicio 4: filtrar y modificar `airquality`
+
+a)  Quedate con los días de junio (`Month == 6`). ¿Cuántas filas quedan? ¿Cuántos `NA` en `Ozone`?
+
+b)  Agregale al subset una columna `temp_categoria` aplicando `clasificar_temp` (clase 2) a `Temp`. Convertila en `factor` con `factor(...)`.
+
+c)  Mostrá `table(temp_categoria)`. ¿Qué proporción de días son calurosos?
+
+## Ejercicio 5: `medias_por_grupo`
+
+a)  Definí `medias_por_grupo(df, columna_numerica, columna_grupo)` que devuelva un `data.frame` con dos columnas: `grupo` y `media`. Usá `aggregate`. Manejá `NA` con `na.rm = TRUE`.
+
+b)  Aplicala a `airquality`: media de `Ozone` por `Month`.
+
+c)  Aplicala a `iris`: media de `Sepal.Length` por `Species`.
+
+## Ejercicio 6: `top_grupo`
+
+a)  Definí `top_grupo(resumen)` que reciba la salida de `medias_por_grupo` y devuelva el nombre del grupo con la media más alta.
+
+b)  Aplicala al resultado del 5b. ¿Qué mes tiene mayor ozono medio?
+
+c)  Aplicala al resultado del 5c. ¿Qué especie tiene los sépalos más largos?
+
+## Ejercicio 7: `factor` con orden
+
+a)  Convertí `mtcars$cyl` en `factor`. Mostrá `levels`.
+
+b)  Convertilo en `factor` ordenado `c("4", "6", "8")` con `ordered = TRUE`. Verificá que `mtcars$cyl[1] < "8"` da `TRUE` cuando es ordenado.
+
+c)  Aplicá `medias_por_grupo(mtcars, "mpg", "cyl")`. ¿Confirma la intuición de que más cilindros implica menos `mpg`?
+
+## Ejercicio 8: `cargar_y_describir`
+
+a)  Definí `cargar_y_describir(archivo)` que devuelva una **lista** con: `df` (el `data.frame`), `dimensiones` (vector de 2), `tipos` (vector con `class` por columna), `n_na` (vector con `sum(is.na)` por columna).
+
+b)  Aplicala a `bikeshare.csv` (en `datos/`). Pista: `read.csv("datos/bikeshare.csv")`.
+
+c)  Mostrá los tipos de cada columna y las que tienen más de 0 `NA`.
+
+## Ejercicio 9: mini-EDA encadenado
+
+a)  Sobre el `df` cargado en 8b, identificá las columnas numéricas. Pista: `sapply(df, is.numeric)`.
+
+b)  Aplicá `resumen_min` (clase 1) a cada columna numérica. Guardá el resultado en una lista nombrada por nombre de columna.
+
+c)  ¿Cuál columna numérica tiene la mayor amplitud (`max - min`)? Mostrala.
+
+## Ejercicio 10: una función, una responsabilidad
+
+a)  Mirá tu `cargar_y_describir`: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.
+
+b)  Partila en cuatro funciones más chicas: `cargar_csv`, `dimensiones_df`, `tipos_columnas`, `na_por_columna`. Reescribí `cargar_y_describir` para que llame a las cuatro.
+
+c)  Justificá: ¿qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?

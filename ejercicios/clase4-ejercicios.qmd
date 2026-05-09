@@ -1,0 +1,103 @@
+---
+title: "Clase 4 - Ejercicios"
+subtitle: "Visualización y EDA con `airquality` y sysarmy"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+---
+
+## Contexto
+
+Esta guía empuja toda la caja de herramientas hacia un EDA real. Datasets:
+
+-   `airquality` (lo conocés de la clase 2),
+-   `mtcars`,
+-   la encuesta sysarmy de salarios IT (CSV crudo en GitHub).
+
+Funciones nuevas: `graficar_distribucion`, `eda_minimo`, `normalizar`. Reusás `medias_por_grupo` (clase 3), `bootstrap_media` (clase 2), `cargar_y_describir` (clase 3).
+
+```r
+sueldos_url <- "https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv"
+sueldos <- read.csv(sueldos_url, check.names = TRUE)
+```
+
+## Ejercicio 1: histograma de ozono
+
+a)  Hacé tres histogramas de `airquality$Ozone` con `breaks = 10`, `breaks = 20`, `breaks = 50`. Compará lo que se ve.
+
+b)  En el histograma con `breaks = 20`, agregá título y eje en español.
+
+c)  Marcá la media con `abline(v = mean(airquality$Ozone, na.rm = TRUE), col = "red", lwd = 2)`.
+
+## Ejercicio 2: boxplot estacional
+
+a)  Boxplot de `Temp ~ Month` sobre `airquality`. Pintá las cajas con `col = "lightblue"`.
+
+b)  Convertí `Month` en factor con etiquetas `c("May", "Jun", "Jul", "Ago", "Sep")` y re-graficá. Pista: `factor(airquality$Month, labels = c("May", ...))`.
+
+c)  ¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rango intercuartílico)?
+
+## Ejercicio 3: scatter con regresión
+
+a)  Scatter de `mpg ~ hp` sobre `mtcars` con `pch = 19, col = "gray60"`.
+
+b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)`.
+
+c)  Agregá una línea horizontal en la media de `mpg` con `abline(h = mean(mtcars$mpg), lty = 2)` y una leyenda con `legend("topright", ...)`.
+
+## Ejercicio 4: `graficar_distribucion`
+
+a)  Definí `graficar_distribucion(x, etiqueta = "")` que dibuje histograma + boxplot lado a lado en `par(mfrow = c(1, 2))`. Usá `etiqueta` en los títulos. Acordate de restablecer con `par(mfrow = c(1, 1))` al final.
+
+b)  Aplicala a `airquality$Ozone` y `airquality$Wind`.
+
+c)  Aplicala a `mtcars$mpg`.
+
+## Ejercicio 5: resumen por mes
+
+a)  Reusá `medias_por_grupo` (clase 3): media de `Ozone` por `Month` en `airquality`.
+
+b)  Graficá con `barplot(height = ..., names.arg = ...)`.
+
+c)  Agregá barras de error con el desvío estándar dividido por raíz de `n`. Pista: hacé un `aggregate` con `function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x))))`.
+
+## Ejercicio 6: `eda_minimo`
+
+a)  Definí `eda_minimo(df)` que: imprima `str(df)`, `summary(df)`, `head(df, 3)`, y para cada columna numérica llame a `graficar_distribucion`.
+
+b)  Aplicala a `airquality`.
+
+c)  Aplicala a `mtcars`.
+
+## Ejercicio 7: `normalizar` con tests
+
+a)  Definí `normalizar(x)` que devuelva `(x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)`.
+
+b)  Validá la implementación con dos `stopifnot`: media cercana a 0 y desvío cercano a 1 sobre `c(1, 2, 3, 4, 5)`. Tolerancia: `1e-10`.
+
+c)  Aplicala a `airquality$Wind` y graficá el histograma del resultado.
+
+## Ejercicio 8: cargar sysarmy
+
+a)  Cargá el CSV de sysarmy con la URL del setup. Aplicá `cargar_y_describir` (clase 3). ¿Cuántas filas? ¿Cuántas columnas? ¿Cuántas tienen `NA`?
+
+b)  Mirá `colnames(sueldos)`. Identificá la columna del salario neto (algo parecido a `Salario.mensual.o.retiro.NETO..en.tu.moneda.local.`). Asignala a `salario_neto`.
+
+c)  ¿Qué tipo es la columna? Si vino como `character`, convertí a número con `as.numeric` y mirá cuántos `NA` te quedaron.
+
+## Ejercicio 9: EDA sobre sysarmy
+
+a)  Aplicá `eda_minimo` a un sub-`data.frame` con tres columnas numéricas relevantes.
+
+b)  Histograma del salario neto acotado al percentil 99: `hist(salario_neto, xlim = c(0, quantile(salario_neto, 0.99, na.rm = TRUE)), breaks = 50)`. ¿Por qué acotamos?
+
+c)  Boxplot del salario neto por seniority/rol (la columna `Trabajo.de` o equivalente). Cuidado con etiquetas largas: `par(mar = c(8, 4, 2, 2)); boxplot(..., las = 2)`.
+
+## Ejercicio 10: probar antes de creer
+
+a)  Mirá tu `normalizar`: ¿qué pasa si `x` tiene un solo valor? ¿Y si todos los valores son iguales (sd 0)? Predecí, después corré.
+
+b)  Agregá validaciones con `stopifnot`: `length(x) >= 2` y `sd(x, na.rm = TRUE) > 0`.
+
+c)  Escribí un test que confirme que `normalizar(c(1, 1, 1))` lanza error con un mensaje claro. Pista: `tryCatch(normalizar(c(1, 1, 1)), error = function(e) message("Falla esperada: ", conditionMessage(e)))`.

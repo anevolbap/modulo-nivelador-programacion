@@ -16,8 +16,13 @@ El curso son cinco clases de 90 minutos pensadas para alumnos sin experiencia pr
 
 ## Ejercicios
 
+Cada guía tiene 10 ejercicios encadenados. Las funciones que se construyen en una guía se reusan en la siguiente.
+
 - [Clase 1](ejercicios/clase1-ejercicios.qmd)
 - [Clase 2](ejercicios/clase2-ejercicios.qmd)
+- [Clase 3](ejercicios/clase3-ejercicios.qmd)
+- [Clase 4](ejercicios/clase4-ejercicios.qmd)
+- [Clase 5](ejercicios/clase5-ejercicios.qmd)
 - [Entrega final](ejercicios/entrega.qmd)
 
 ## Repositorio
