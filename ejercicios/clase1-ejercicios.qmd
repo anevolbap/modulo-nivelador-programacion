@@ -9,92 +9,172 @@ format:
 
 ## Contexto
 
-Vamos a usar `mtcars`, un dataset de 32 autos con 11 columnas (consumo, cilindros, potencia, etc). Viene con R, no hace falta instalar nada.
+Vamos a usar `mtcars`, un dataset de 32 autos con 11 variables (consumo, cilindros, potencia, peso, etc.). Viene con R, no requiere instalación.
 
 ```r
 head(mtcars)
 ?mtcars
 ```
 
-A lo largo de la guía vas a construir una pequeña caja de herramientas: `etiquetar_auto`, `dif_promedio`, `resumen_min`. Las vas a reusar en las clases siguientes.
+A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: `etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`. Los ejercicios marcados como **caja negra** usan funciones del lenguaje sin pedir que las implementen.
 
-## Ejercicio 1: variables y tipos
+## Ejercicio 1: variables y tipos atómicos
 
-a)  Asigná cuatro variables que describan el primer auto de `mtcars`: `nombre_auto` (string con `rownames(mtcars)[1]`), `consumo_mpg` (double, `mtcars$mpg[1]`), `cilindros` (integer, `as.integer(mtcars$cyl[1])`) y `transmision_manual` (logical, `mtcars$am[1] == 1`). Verificá `class()` y `typeof()` de cada una.
+a)  Asigná cuatro variables que describan el primer auto de `mtcars`: `nombre_auto` (string con `rownames(mtcars)[1]`), `consumo_mpg` (double, `mtcars$mpg[1]`), `cilindros` (integer, `as.integer(mtcars$cyl[1])`) y `transmision_manual` (logical, `mtcars$am[1] == 1`). Verificá `class()` de cada una.
 
-b)  ¿Qué devuelve `is.numeric(cilindros)`? ¿Y `is.numeric(transmision_manual)`? Justificá.
+b)  Verificá también `typeof()`. ¿En qué se diferencian `class` y `typeof` para `consumo_mpg`?
 
-c)  Predecí qué hace `consumo_mpg + transmision_manual` y `consumo_mpg + nombre_auto`. Después corrélo y comparalo con tu predicción.
+c)  ¿Qué devuelve `is.numeric(cilindros)`? ¿Y `is.numeric(transmision_manual)`? Justificá.
 
-## Ejercicio 2: vector de consumos
+## Ejercicio 2: coerción de tipos
 
-a)  Asigná `consumos <- mtcars$mpg`. ¿Cuántos elementos tiene? ¿Qué tipo?
+a)  Predecí (sin correr) qué devuelve `c(TRUE, 1L, 1.5)`. Después corrélo y compará con tu predicción.
 
-b)  Calculá `mean(consumos)`, `median(consumos)`, `min(consumos)`, `max(consumos)`. Usá `summary(consumos)` y compará con los valores anteriores.
+b)  Predecí qué devuelve `c(TRUE, 1, "a")`. Justificá usando la regla de coerción.
 
-c)  Quedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son? Pista: `sum(consumos > mean(consumos))`.
+c)  ¿Qué pasa al evaluar `consumo_mpg + transmision_manual`? Identificá qué tipo predomina.
 
-## Ejercicio 3: indexar `mtcars`
+## Ejercicio 3: vector de consumos
 
-a)  Mostrá la primera fila de `mtcars` completa. Mostrá la columna `hp`. Mostrá la celda fila 5, columna `mpg`.
+a)  Asigná `consumos <- mtcars$mpg`. Verificá `length(consumos)` y `class(consumos)`.
 
-b)  Encontrá el auto con mayor `mpg` usando `which.max`. Mostrá su nombre con `rownames(mtcars)[which.max(mtcars$mpg)]`.
+b)  Calculá `mean`, `median`, `min` y `max` de `consumos`. Compará con la salida de `summary(consumos)`.
 
-c)  Mostrá las primeras 3 columnas (`mpg`, `cyl`, `disp`) de los primeros 5 autos.
+c)  Quedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son?
 
-## Ejercicio 4: función `etiquetar_auto`
+## Ejercicio 4: indexar `mtcars`
+
+a)  Mostrá la primera fila completa de `mtcars`, la columna `hp` entera y la celda fila 5 columna `mpg`.
+
+b)  Encontrá el auto con mayor `mpg` con `which.max`. Mostrá su nombre con `rownames(mtcars)[which.max(mtcars$mpg)]`.
+
+c)  Mostrá las primeras tres columnas (`mpg`, `cyl`, `disp`) de los primeros cinco autos. Verificá la estructura del resultado.
+
+## Ejercicio 5: filtros con condiciones múltiples
+
+a)  Filtrá los autos con `mpg > 25`. ¿Cuántos son?
+
+b)  Filtrá los autos con `mpg > 25` Y `cyl == 4`. Pista: operador `&`.
+
+c)  Filtrá los autos con `cyl == 4` o `cyl == 8`. Pista: `|` o `%in%`.
+
+## Ejercicio 6: función `etiquetar_auto`
 
 a)  Definí `etiquetar_auto(modelo, mpg)` que devuelva el string `"<modelo>: <mpg> mpg"`. Pista: `paste0`. Probala con `"Mazda RX4"` y `21`.
 
 b)  Probala con valores extraídos de `mtcars`: `etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1])`.
 
-c)  Agregale un valor por defecto `mpg = NA`. ¿Qué devuelve `etiquetar_auto("Auto fantasma")`?
+c)  Agregale un valor por defecto `mpg = NA` y observá la salida cuando se omite el segundo argumento.
 
-## Ejercicio 5: función `dif_promedio`
+## Ejercicio 7: función `dif_promedio`
 
-a)  Definí `dif_promedio(x)` que devuelva `x - mean(x)`. Aplicala a `mtcars$mpg`. ¿Cuál es la suma de las diferencias?
+a)  Definí `dif_promedio(x)` que devuelva `x - mean(x)`. Aplicala a `mtcars$mpg`. Calculá la suma de las diferencias. Justificá el resultado teóricamente.
 
-b)  ¿Cuántos autos están por encima del promedio? Pista: `sum(dif_promedio(mtcars$mpg) > 0)`.
+b)  ¿Cuántos autos están por encima del promedio? Pista: `sum(dif_promedio(x) > 0)`.
 
-c)  ¿Cuál es el auto que más se aleja del promedio (en valor absoluto)? Pista: `which.max(abs(...))`.
+c)  ¿Cuál es el auto que más se aleja del promedio en valor absoluto? Pista: `which.max(abs(...))`.
 
-## Ejercicio 6: lista que describe un auto
+## Ejercicio 8: función `dentro_rango`
 
-a)  Creá una lista `auto_1` con: `modelo` (string), `mpg` (double), `cilindros` (integer), `caja` ("manual" o "automatica"). Usá los datos del primer auto de `mtcars`.
+a)  Definí `dentro_rango(x, a, b)` que devuelva `TRUE` si `a <= x <= b`, `FALSE` en otro caso. La función debe ser **vectorizada**: si `x` es un vector, devuelve un vector de booleanos. Pista: `&`.
 
-b)  Accedé a cada campo con `$` y con `[[ ]]`. ¿Qué devuelve `auto_1["modelo"]` y por qué difiere?
+b)  Probala con `dentro_rango(c(1, 5, 10, 15, 20), 5, 15)`.
 
-c)  Cambiale el `mpg` a `auto_1` reasignándolo con `auto_1$mpg <- ...`. Verificá.
+c)  Aplicala a `mtcars$mpg` con rango `c(20, 25)`. ¿Cuántos autos caen dentro del rango?
 
-## Ejercicio 7: función `resumen_min`
+## Ejercicio 9: conversión de unidades
 
-a)  Definí `resumen_min(x)` que reciba un vector numérico y devuelva una lista con `media`, `mediana`, `min`, `max`. Probala con `mtcars$mpg`.
+a)  Definí `mpg_a_km_l(x)` que convierta de `mpg` (millas por galón) a `km/L`. Factor: `1 mpg ≈ 0.4251 km/L`.
 
-b)  Aplicala a `mtcars$hp`. Compará el rango con el de `mpg`.
+b)  Aplicala a `mtcars$mpg` para obtener un vector de consumos en `km/L`.
 
-c)  ¿Qué pasa si la pasás `c(1, 2, NA, 4)`? Probá. ¿Cómo lo arreglarías sin tocar la función? Pista: `na.omit`.
+c)  Definí `km_l_a_mpg(x)` (función inversa). Verificá que `km_l_a_mpg(mpg_a_km_l(20))` devuelve aproximadamente `20`.
 
-## Ejercicio 8: etiquetas en lote
+## Ejercicio 10: función `resumen_min`
 
-a)  Armá un vector con `"<modelo>: <mpg> mpg"` para los primeros 5 autos. Pista: `paste0(rownames(mtcars)[1:5], ": ", mtcars$mpg[1:5], " mpg")`.
+a)  Definí `resumen_min(x)` que reciba un vector numérico y devuelva una **lista** con `media`, `mediana`, `min`, `max`.
 
-b)  Hacé lo mismo para todos los autos.
+b)  Aplicala a `mtcars$mpg`. Verificá `class()` del resultado.
 
-c)  Recreá el mismo vector usando `sapply` y la función `etiquetar_auto` del ejercicio 4. Pista: `sapply(seq_len(nrow(mtcars)), function(i) etiquetar_auto(rownames(mtcars)[i], mtcars$mpg[i]))`.
+c)  Aplicala a `mtcars$hp`. Compará el rango con el de `mpg`.
 
-## Ejercicio 9: tu propio `data.frame`
+## Ejercicio 11: lista que describe un auto
 
-a)  Creá `mis_autos` con 3 filas y columnas `modelo`, `mpg`, `cilindros`, `manual`. Mezclá un auto real con dos imaginarios.
+a)  Creá una lista `auto_1` con: `modelo` (string), `mpg` (double), `cilindros` (integer), `caja` (`"manual"` o `"automatica"`). Usá los datos del primer auto de `mtcars`.
 
-b)  Accedé a la columna `mpg` con `$`, con `[["mpg"]]` y con `[, "mpg"]`. Confirmá que dan el mismo resultado.
+b)  Accedé a cada campo con `$`, con `[[ ]]` y con `[ ]`. Mostrá `class()` de cada acceso.
 
-c)  Aplicá `resumen_min` a la columna `mpg` de `mis_autos`. ¿Qué tipo de objeto devuelve?
+c)  Cambiá el valor de `mpg` reasignándolo (`auto_1$mpg <- ...`). Verificá.
 
-## Ejercicio 10: buenos nombres
+## Ejercicio 12: comparar dos autos
 
-a)  Mirá este snippet:
+a)  Definí `comparar_autos(auto_a, auto_b)` que reciba dos listas con campos `mpg` y `cilindros` y devuelva una lista con `dif_mpg` y `dif_cilindros`.
 
-    ```r
+b)  Probala con dos autos cualesquiera de `mtcars`.
+
+c)  Si llamás `comparar_autos(list(mpg = 20), list(consumo = 25))`, ¿qué pasa? Identificá el problema.
+
+## Ejercicio 13: ordenar por consumo
+
+a)  Ordená `mtcars` por `mpg` descendente. Pista: `order(-mtcars$mpg)` o `order(..., decreasing = TRUE)`.
+
+b)  Mostrá los nombres de los tres autos con mayor `mpg`.
+
+c)  Mostrá los tres con menor `mpg`.
+
+## Ejercicio 14: aplicar `resumen_min` a varias columnas
+
+a)  Aplicá `resumen_min` por separado a las columnas `mpg`, `hp` y `wt` de `mtcars`. Guardá los resultados en una lista nombrada.
+
+b)  Hacé lo mismo en una sola línea con `lapply`. Pista: `lapply(mtcars[, c("mpg", "hp", "wt")], resumen_min)`.
+
+c)  ¿Qué tipo devuelve `lapply` y qué devuelve `sapply`? Compará los resultados.
+
+## Ejercicio 15: tu propio `data.frame`
+
+a)  Creá un `data.frame` con tres pacientes y cuatro columnas: `id` (integer), `edad` (double), `peso_kg` (double), `fuma` (logical).
+
+b)  Aplicá `resumen_min` a la columna `edad`.
+
+c)  Aplicá `summary()` al `data.frame` completo. Compará la salida con la de `resumen_min`.
+
+## Ejercicio 16: `quantile` (caja negra)
+
+a)  Aplicá `quantile(mtcars$mpg)` (sin argumentos extra). Identificá el percentil 25, la mediana y el percentil 75.
+
+b)  Aplicá `quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9))`. ¿Qué representa cada valor?
+
+c)  Definí `rango_intercuartilico(x)` usando `quantile`. Aplicalo a `mtcars$mpg` y compará con `IQR(mtcars$mpg)`.
+
+## Ejercicio 17: correlación con `cor` (caja negra)
+
+a)  Calculá `cor(mtcars$mpg, mtcars$hp)`. Interpretá el signo y la magnitud (`cor` toma valores entre `-1` y `1`).
+
+b)  Calculá la matriz de correlaciones entre `mpg`, `hp`, `wt` y `cyl` con `cor(mtcars[, c("mpg", "hp", "wt", "cyl")])`.
+
+c)  Identificá el par de variables más correlacionado y el menos correlacionado.
+
+## Ejercicio 18: leer la documentación
+
+a)  Abrí `?sapply`. Identificá los argumentos `X`, `FUN` y `simplify`.
+
+b)  Probá `sapply(1:5, function(i) i^2)`. ¿Devuelve un vector o una lista?
+
+c)  Probá `lapply(1:5, function(i) i^2)`. Compará con la salida de `sapply` y explicá cuándo conviene cada uno.
+
+## Ejercicio 19: la caja de herramientas sobre datos sintéticos
+
+a)  Generá un vector `x` con `rnorm(100, mean = 50, sd = 10)` (100 valores normales). `rnorm` es una caja negra: ver `?rnorm`.
+
+b)  Aplicale `resumen_min`, `dif_promedio` y `dentro_rango` con `a = 40, b = 60`.
+
+c)  ¿Aproximadamente cuántos valores caen en `[40, 60]`? Compará con la regla 68-95-99.7 de la distribución normal (esperado: ~68%).
+
+## Ejercicio 20: buenos nombres
+
+a)  Tomá este snippet:
+
+    ``` r
     f <- function(x, y) x + y * 0.6213
     a <- 100
     print(f(0, a))
@@ -102,6 +182,6 @@ a)  Mirá este snippet:
 
     Pista: el factor `0.6213` convierte kilómetros a millas.
 
-b)  Reescribilo cambiando `f`, `a`, `x`, `y` por nombres descriptivos. La intención debería leerse sin comentarios.
+b)  Reescribilo cambiando los nombres para que la intención sea clara sin necesidad de comentarios. Pensá nombres descriptivos para `f`, `a`, `x`, `y`.
 
-c)  ¿Qué nombres elegiste y por qué? Anotalo en una línea.
+c)  Justificá tu elección en una línea.

@@ -207,18 +207,10 @@ Trabajamos sobre `airquality` (calidad del aire en NY) y `mtcars`.
 
 5.  Función `normalizar(x)` con dos `stopifnot` que verifiquen media 0 y sd 1. Aplicala a `mtcars$mpg` y graficá el histograma del resultado.
 
-6.  (Bonus, datos argentinos) Cargá la encuesta sysarmy de salarios IT desde el [repo de openqube](https://github.com/openqube/openqube-sueldos) y graficá un histograma del salario neto.
-
-    ``` r
-    url <- "https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv"
-    sueldos <- read.csv(url, check.names = TRUE)
-    head(sueldos)
-    ```
-
-    Mirá `colnames(sueldos)` (los nombres son largos, en español, con acentos), elegí la columna del salario neto y graficá su histograma. ¿Qué `breaks` elegirías para que no se aplaste con los outliers? Pista: probá un eje x acotado con `xlim = c(0, quantile(x, 0.99, na.rm = TRUE))`.
+6.  (Bonus) Cargá `bikeshare.csv` (en `datos/`) usando la función auxiliar `cargar_bikeshare()` provista. Graficá un histograma de `bikers` (cantidad de viajes por hora). ¿Qué `breaks` elegirías para evitar que la cola larga aplaste el resto?
 
 ::: notes
-~15 min. Si terminan rápido: en el ejercicio 6, calcular la mediana y un IC del 95% por percentiles (quantile(x, c(0.025, 0.975))).
+~15 min. Si terminan rápido: en el ejercicio 6, calcular un boxplot de `bikers ~ season` para ver el efecto estacional.
 :::
 
 ## Comprensión: ¿quedó claro? {.scrollable}

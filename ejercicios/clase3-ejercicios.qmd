@@ -9,93 +9,178 @@ format:
 
 ## Contexto
 
-En esta guía organizamos datos en estructuras compuestas y reusamos las funciones que armaste antes (`clasificar_temp`, `clasificar_presion`, `resumen_min`).
+En esta guía organizamos los datos en estructuras compuestas y reusamos las funciones de las clases anteriores (`clasificar_temp`, `clasificar_presion`, `resumen_min`).
 
-Dataset principal: `airquality`. Para algunos ejercicios usamos `iris` y `mtcars`. Para el bonus al final, `bikeshare.csv` que vive en `datos/`.
+Datasets:
+
+-   `airquality` (lo conocés de la clase 2),
+-   `iris`: 150 filas, mide cuatro atributos de tres especies de flores,
+-   `bikeshare`: 8645 registros horarios de uso de un sistema de bicicletas (similar a Ecobici en CABA). Lo cargamos con la función auxiliar `cargar_bikeshare()`.
 
 ```r
-head(airquality)
-head(iris)
+source("ejercicios/auxiliares.R")    # provee cargar_bikeshare()
+bicis <- cargar_bikeshare()
+head(bicis)
 ```
 
-Funciones nuevas que vas a construir: `medias_por_grupo`, `top_grupo`, `cargar_y_describir`.
+Funciones nuevas que vamos a construir: `medias_por_grupo`, `top_grupo`, `cargar_y_describir`.
 
 ## Ejercicio 1: lista paciente
 
-a)  Creá una lista `paciente` con: `id` (integer), `edad` (double), `sintomas` (vector de strings), `tiene_diagnostico` (logical), `presion_sistolica` (double).
+a)  Creá una lista `paciente` con: `id` (integer), `edad` (double), `sintomas` (vector de strings), `tiene_diagnostico` (logical) y `presion_sistolica` (double).
 
-b)  Accedé al primer síntoma con `$`, con `[[ ]]` y con `[ ]`. Mostrá la `class` de cada resultado y explicá la diferencia.
+b)  Accedé al primer síntoma con `$`, con `[[ ]]` y con `[ ]`. Mostrá `class()` de cada acceso y explicá la diferencia.
 
-c)  Reusá `clasificar_presion` (clase 2) para agregarle a la lista un campo `presion_categoria` con la categoría correspondiente. Verificá.
+c)  Reusá `clasificar_presion` (clase 2) para agregar un campo `presion_categoria` a la lista. Verificá.
 
 ## Ejercicio 2: lista de pacientes
 
-a)  Creá una lista `pacientes` que contenga 3 pacientes (cada uno como en el ejercicio 1).
+a)  Creá una lista `pacientes` con tres pacientes (cada uno como en el ejercicio 1).
 
 b)  Extraé las edades con `sapply(pacientes, function(p) p$edad)`. Calculá la edad media.
 
-c)  Aplicá `clasificar_presion` (clase 2) a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías.
+c)  Aplicá `clasificar_presion` a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías.
 
-## Ejercicio 3: matriz desde `airquality`
+## Ejercicio 3: listas anidadas
 
-a)  Convertí las columnas numéricas de `airquality` (`Ozone`, `Solar.R`, `Wind`, `Temp`) en una matriz. Pista: `as.matrix(airquality[, 1:4])`.
+a)  Creá una lista `consultorio` con dos campos: `nombre` (string) y `pacientes` (la lista del ejercicio 2).
 
-b)  Calculá la media por columna con `colMeans` (ojo con `NA`, usá `na.rm = TRUE`).
+b)  Accedé al nombre del primer paciente con `consultorio$pacientes[[1]]$nombre`. Si no agregaste el campo `nombre`, agregalo y volvé a probar.
 
-c)  Sacá las filas con `NA` (`na.omit`) y calculá `t(M) %*% M / nrow(M)`. ¿Qué representa cada celda? Pista: producto interno por columna.
+c)  Calculá la edad media de los pacientes del consultorio en una sola línea.
 
-## Ejercicio 4: filtrar y modificar `airquality`
+## Ejercicio 4: matriz desde `airquality`
 
-a)  Quedate con los días de junio (`Month == 6`). ¿Cuántas filas quedan? ¿Cuántos `NA` en `Ozone`?
+a)  Convertí las cuatro columnas numéricas de `airquality` (`Ozone`, `Solar.R`, `Wind`, `Temp`) en una matriz: `M <- as.matrix(airquality[, 1:4])`.
 
-b)  Agregale al subset una columna `temp_categoria` aplicando `clasificar_temp` (clase 2) a `Temp`. Convertila en `factor` con `factor(...)`.
+b)  Calculá la media por columna con `colMeans(M, na.rm = TRUE)`.
+
+c)  Calculá `M_clean <- na.omit(M)` y luego `t(M_clean) %*% M_clean / nrow(M_clean)`. ¿Qué representa cada celda? Pista: el producto interno entre dos columnas, normalizado.
+
+## Ejercicio 5: operaciones con matrices
+
+a)  Construí la matriz identidad de 5x5 con `diag(5)`. Multiplicala por sí misma con `%*%`. Verificá que el resultado sigue siendo la identidad.
+
+b)  Construí una matriz `A` de 3x3 con valores aleatorios (`matrix(rnorm(9), 3, 3)`). Calculá su traspuesta y verificá que `t(t(A))` da `A`.
+
+c)  Calculá `A %*% t(A)`. ¿Por qué es simétrica?
+
+## Ejercicio 6: filtrar y modificar `airquality`
+
+a)  Filtrá `airquality` para quedarte con los días de junio (`Month == 6`). ¿Cuántas filas quedan?
+
+b)  Agregale al subset una columna `temp_categoria` aplicando `clasificar_temp` (clase 2) a `Temp`. Convertila en `factor`.
 
 c)  Mostrá `table(temp_categoria)`. ¿Qué proporción de días son calurosos?
 
-## Ejercicio 5: `medias_por_grupo`
+## Ejercicio 7: `medias_por_grupo`
 
-a)  Definí `medias_por_grupo(df, columna_numerica, columna_grupo)` que devuelva un `data.frame` con dos columnas: `grupo` y `media`. Usá `aggregate`. Manejá `NA` con `na.rm = TRUE`.
+a)  Definí `medias_por_grupo(df, columna_numerica, columna_grupo)` que devuelva un `data.frame` con dos columnas, `grupo` y `media`. Pista: `aggregate`. Manejá `NA` con `na.rm = TRUE`.
 
 b)  Aplicala a `airquality`: media de `Ozone` por `Month`.
 
 c)  Aplicala a `iris`: media de `Sepal.Length` por `Species`.
 
-## Ejercicio 6: `top_grupo`
+## Ejercicio 8: `top_grupo`
 
-a)  Definí `top_grupo(resumen)` que reciba la salida de `medias_por_grupo` y devuelva el nombre del grupo con la media más alta.
+a)  Definí `top_grupo(resumen)` que reciba la salida de `medias_por_grupo` y devuelva el grupo con la media más alta.
 
-b)  Aplicala al resultado del 5b. ¿Qué mes tiene mayor ozono medio?
+b)  Aplicala al resultado de 7b. ¿Qué mes tiene mayor ozono medio?
 
-c)  Aplicala al resultado del 5c. ¿Qué especie tiene los sépalos más largos?
+c)  Aplicala al resultado de 7c. ¿Qué especie tiene los sépalos más largos en promedio?
 
-## Ejercicio 7: `factor` con orden
+## Ejercicio 9: `factor` con orden
 
-a)  Convertí `mtcars$cyl` en `factor`. Mostrá `levels`.
+a)  Convertí `mtcars$cyl` en `factor`. Mostrá los niveles.
 
-b)  Convertilo en `factor` ordenado `c("4", "6", "8")` con `ordered = TRUE`. Verificá que `mtcars$cyl[1] < "8"` da `TRUE` cuando es ordenado.
+b)  Convertilo en `factor` ordenado `c("4", "6", "8")` con `ordered = TRUE`. Verificá que la comparación entre niveles funciona.
 
 c)  Aplicá `medias_por_grupo(mtcars, "mpg", "cyl")`. ¿Confirma la intuición de que más cilindros implica menos `mpg`?
 
-## Ejercicio 8: `cargar_y_describir`
+## Ejercicio 10: tablas de frecuencias
 
-a)  Definí `cargar_y_describir(archivo)` que devuelva una **lista** con: `df` (el `data.frame`), `dimensiones` (vector de 2), `tipos` (vector con `class` por columna), `n_na` (vector con `sum(is.na)` por columna).
+a)  Calculá `table(iris$Species)`. ¿Cuántas observaciones hay por especie?
 
-b)  Aplicala a `bikeshare.csv` (en `datos/`). Pista: `read.csv("datos/bikeshare.csv")`.
+b)  Calculá `prop.table(table(iris$Species))`. ¿Qué representa cada valor?
 
-c)  Mostrá los tipos de cada columna y las que tienen más de 0 `NA`.
+c)  Calculá una tabla cruzada (contingencia) entre `airquality$Month` y `clasificar_temp(airquality$Temp)` con `table`. ¿Cuántos días calurosos hubo en agosto?
 
-## Ejercicio 9: mini-EDA encadenado
+## Ejercicio 11: explorar `iris`
 
-a)  Sobre el `df` cargado en 8b, identificá las columnas numéricas. Pista: `sapply(df, is.numeric)`.
+a)  Mostrá `dim(iris)`, `colnames(iris)`, `class(iris$Species)`. ¿Cuántas especies hay?
 
-b)  Aplicá `resumen_min` (clase 1) a cada columna numérica. Guardá el resultado en una lista nombrada por nombre de columna.
+b)  Subseteá `iris` para quedarte con flores de especie `"virginica"` que tengan `Petal.Length > 6`. ¿Cuántas son?
 
-c)  ¿Cuál columna numérica tiene la mayor amplitud (`max - min`)? Mostrala.
+c)  Calculá `medias_por_grupo(iris, "Petal.Length", "Species")`.
 
-## Ejercicio 10: una función, una responsabilidad
+## Ejercicio 12: cargar `bikeshare` con la función auxiliar
 
-a)  Mirá tu `cargar_y_describir`: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.
+a)  Cargá `bicis <- cargar_bikeshare()`. Mirá `str(bicis)` y `head(bicis)`. Identificá tipos.
 
-b)  Partila en cuatro funciones más chicas: `cargar_csv`, `dimensiones_df`, `tipos_columnas`, `na_por_columna`. Reescribí `cargar_y_describir` para que llame a las cuatro.
+b)  ¿Cuál es la columna `bikers`? ¿Y `casual` y `registered`? Pista: `?bikeshare` no existe; mirá `head` y deducí.
 
-c)  Justificá: ¿qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?
+c)  ¿Cuántos `NA` tiene cada columna? Pista: `sapply(bicis, function(col) sum(is.na(col)))`.
+
+## Ejercicio 13: explorar `bikeshare` con `aggregate`
+
+a)  Calculá la media de `bikers` por estación con `aggregate(bikers ~ season, data = bicis, mean)`. ¿Cuál es la estación con más uso?
+
+b)  Calculá la media por día de la semana (`weekday`).
+
+c)  Calculá la media por hora (`hr`). ¿En qué horas aparece el pico?
+
+## Ejercicio 14: `cargar_y_describir`
+
+a)  Definí `cargar_y_describir(archivo, sep = " ")` que devuelva una **lista** con: `df` (el `data.frame`), `dimensiones` (vector de 2), `tipos` (vector con `class` por columna), `n_na` (vector con `sum(is.na)` por columna).
+
+b)  Aplicala al CSV `datos/bikeshare.csv`. Pista: el archivo está separado por espacios, no por comas, así que pasá `sep = " "`.
+
+c)  Mostrá los tipos y las columnas con más de cero `NA`.
+
+## Ejercicio 15: `is.numeric` para identificar columnas
+
+a)  Sobre el `df` de 14, identificá las columnas numéricas con `sapply(df, is.numeric)`. Devolvé un vector de booleanos.
+
+b)  Quedate solo con las columnas numéricas. Pista: `df[, sapply(df, is.numeric)]`.
+
+c)  Aplicá `resumen_min` (clase 1) a cada columna numérica con `lapply`. Guardá el resultado.
+
+## Ejercicio 16: la columna con mayor amplitud
+
+a)  Para cada columna numérica, calculá `max - min` (la amplitud).
+
+b)  Identificá la columna con mayor amplitud y la de menor amplitud.
+
+c)  Justificá por qué `bikers` y `temp` tienen amplitudes muy distintas.
+
+## Ejercicio 17: combinar listas y `data.frame`
+
+a)  Construí una lista con dos `data.frame`: `mtcars` y `iris[, 1:4]`.
+
+b)  Aplicá `nrow` a cada uno con `sapply`.
+
+c)  Aplicá `colMeans` a cada uno con `lapply`. ¿Por qué `lapply` y no `sapply` aquí?
+
+## Ejercicio 18: `do.call(rbind, ...)` (caja negra)
+
+a)  Construí tres `data.frame` chiquitos con la misma estructura (mismas columnas).
+
+b)  Combinálos verticalmente con `do.call(rbind, lista_de_dfs)`. Verificá `dim`.
+
+c)  Hacé lo mismo con tres subsetes de `airquality` (uno por mes 5, 6, 7).
+
+## Ejercicio 19: `medias_por_grupo` sobre bikeshare
+
+a)  Aplicá `medias_por_grupo` (ejercicio 7) sobre `bicis`: media de `bikers` por `season`.
+
+b)  Aplicá `medias_por_grupo` con `bikers` por `weekday`. Convertí `weekday` a factor ordenado de lunes a domingo si todavía no lo está.
+
+c)  Identificá el día y la estación con mayor uso usando `top_grupo`.
+
+## Ejercicio 20: una función, una responsabilidad
+
+a)  Mirá tu `cargar_y_describir` del ejercicio 14: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.
+
+b)  Partila en cuatro funciones: `cargar_csv(archivo, sep)`, `dimensiones_df(df)`, `tipos_columnas(df)`, `na_por_columna(df)`. Reescribí `cargar_y_describir` para que llame a las cuatro.
+
+c)  ¿Qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?

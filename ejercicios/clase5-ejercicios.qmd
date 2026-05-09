@@ -9,93 +9,175 @@ format:
 
 ## Contexto
 
-Última guía. Construís dos generalizaciones (`bootstrap_estimador`, `iterar`) y un algoritmo iterativo (`biseccion`). Cerramos con un mini-proyecto que junta toda la caja de herramientas sobre sysarmy.
-
-Reusás: `bootstrap_media` (clase 2), `eda_minimo` y `graficar_distribucion` (clase 4), `cargar_y_describir` (clase 3).
+Última guía. Generalizamos `bootstrap_media` a `bootstrap_estimador`, implementamos un algoritmo iterativo (`biseccion`) y cerramos con un mini-proyecto que junta toda la caja de herramientas sobre `bikeshare`.
 
 ```r
-sueldos_url <- "https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv"
+source("ejercicios/auxiliares.R")
+bicis <- cargar_bikeshare()
 ```
+
+Reusamos: `bootstrap_media` (clase 2), `eda_minimo`, `graficar_distribucion`, `normalizar` (clase 4), `cargar_y_describir` (clase 3).
 
 ## Ejercicio 1: función `iterar`
 
-a)  Definí `iterar(f, x0, n)` que aplique `f` al valor `n` veces, partiendo de `x0`. Devolvé el valor final.
+a)  Definí `iterar(f, x0, n)` que aplique `f` al valor `n` veces, partiendo de `x0`. Devolvé el resultado final.
 
 b)  Probala con `f <- function(x) (x + 2/x) / 2`, `x0 = 1`, `n = 10`. ¿A qué número converge? Pista: es la iteración Babilónica para `sqrt(2)`.
 
 c)  Modificá `iterar` para que devuelva la **trayectoria** completa (vector de longitud `n + 1`). Graficala con `plot(..., type = "b")`.
 
-## Ejercicio 2: Monte Carlo con monedas
+## Ejercicio 2: punto fijo
+
+a)  Definí `punto_fijo(f, x0, tol = 1e-6, max_iter = 100)` que itere `x <- f(x)` hasta que `abs(f(x) - x) < tol` o se alcance `max_iter`. Devolvé una lista con `valor`, `iteraciones`, `convergio`.
+
+b)  Aplicala a `f <- function(x) cos(x)`, `x0 = 0`. ¿Qué valor encuentra?
+
+c)  Aplicala a `f <- function(x) (x + 2/x) / 2`. ¿Cuántas iteraciones tarda en converger?
+
+## Ejercicio 3: Monte Carlo con monedas
 
 a)  Estimá `P(al menos 6 caras de 10 monedas equilibradas)` con `replicate` + `sample(c(0, 1), 10, replace = TRUE)`. Usá 10000 réplicas.
 
-b)  Compará con `1 - pbinom(5, 10, 0.5)`.
+b)  Compará con `1 - pbinom(5, 10, 0.5)` (caja negra: distribución binomial).
 
-c)  Repetí para `n = 100, 1000, 10000` monedas (proporción `>= 0.6`). Graficá la estimación contra `n`. ¿Converge?
+c)  Repetí la estimación variando `n_rep = c(100, 1000, 10000, 100000)`. Graficá la estimación contra `n_rep` y observá la convergencia.
 
-## Ejercicio 3: `bootstrap_estimador` generalizado
+## Ejercicio 4: `bootstrap_estimador` generalizado
 
-a)  Definí `bootstrap_estimador(x, estimador = mean, n_rep = 1000)` que reemplace tu `bootstrap_media` (clase 2). El argumento `estimador` es **una función**.
+a)  Definí `bootstrap_estimador(x, estimador = mean, n_rep = 1000)` que reemplace `bootstrap_media` (clase 2). El argumento `estimador` es una **función**.
 
-b)  Probala con `mean`, `median` y `sd` sobre `airquality$Wind`. Calculá IC del 95% en cada caso.
+b)  Probala con `mean`, `median` y `sd` sobre `airquality$Wind`. Calculá un IC del 95% en cada caso.
 
-c)  ¿Cómo se relaciona con `bootstrap_media`? Reescribí `bootstrap_media` como un wrapper de `bootstrap_estimador` con `estimador = mean` por defecto.
+c)  Reescribí `bootstrap_media` como un wrapper de `bootstrap_estimador` con `estimador = mean` por defecto.
 
-## Ejercicio 4: paradoja del cumpleaños
+## Ejercicio 5: bootstrap con NA
 
-a)  Definí `prob_coincidencia(n, n_sim = 10000)` que estime la probabilidad de coincidencia en un grupo de `n` personas. Pista: `any(duplicated(sample(1:365, n, replace = TRUE)))`.
+a)  ¿Qué pasa si aplicás `bootstrap_estimador` a `airquality$Ozone` (que tiene `NA`)? Predecí, después corré.
+
+b)  Modificá `bootstrap_estimador` para que filtre `NA` al inicio y avise con `message()`.
+
+c)  Compará el IC del 95% para la mediana de `Ozone` con `quantile(airquality$Ozone, c(0.025, 0.975), na.rm = TRUE)`. ¿Por qué difieren?
+
+## Ejercicio 6: paradoja del cumpleaños
+
+a)  Definí `prob_coincidencia(n, n_sim = 10000)` que estime la probabilidad de coincidencia de cumpleaños en un grupo de `n` personas. Pista: `any(duplicated(sample(1:365, n, replace = TRUE)))`.
 
 b)  Aplicala a `n = c(5, 10, 15, 20, 23, 30, 50)` y graficá los resultados con `plot(n, p, type = "b")`.
 
-c)  Encontrá el `n` mínimo para `P > 0.5` recorriendo de a 1 con un `while`. ¿Coincide con la respuesta clásica (23)?
+c)  Encontrá el `n` mínimo para `P > 0.5` recorriendo de uno en uno con un `while`. Compará con la respuesta clásica (`n = 23`).
 
-## Ejercicio 5: bisección
+## Ejercicio 7: bisección
 
-a)  Implementá `biseccion(f, a, b, tol = 1e-6)` con `while`. Usá `stopifnot(f(a) * f(b) < 0)` como precondición.
+a)  Implementá `biseccion(f, a, b, tol = 1e-6)` con `while`. Validá la precondición con `stopifnot(f(a) * f(b) < 0)`.
 
-b)  Encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot(f, c(0, 1))$root`.
+b)  Encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot(f, c(0, 1))$root` (caja negra).
 
-c)  Modificá `biseccion` para que devuelva una lista con `raiz`, `iteraciones` y `tolerancia_final`. Comparala con `uniroot(...)$iter`.
+c)  Modificá `biseccion` para que devuelva una lista con `raiz`, `iteraciones` y `tolerancia_final`.
 
-## Ejercicio 6: bootstrap sobre sysarmy
+## Ejercicio 8: bisección y la paradoja
 
-a)  Cargá sysarmy y quedate con la columna del salario neto (la del 8b/8c de la guía 4). Aplicá `as.numeric` si hace falta y filtrá `NA`.
+a)  Reusá `prob_coincidencia` (ejercicio 6) y `biseccion` (ejercicio 7) para encontrar el `n` (real) tal que `P(coincidencia) = 0.5`. Pista: `f(n) = prob_coincidencia(round(n)) - 0.5`.
 
-b)  Aplicá `bootstrap_estimador(salario_neto, estimador = median, n_rep = 1000)`. Calculá el IC del 95%.
+b)  Probala con `n` en el intervalo `[5, 50]`.
 
-c)  Compará la mediana puntual con el IC. Discutí (en una línea) por qué el IC del bootstrap es informativo cuando la distribución es asimétrica.
+c)  ¿Por qué la simulación introduce ruido? ¿Cómo afecta a la bisección?
 
-## Ejercicio 7: regresión sobre sysarmy
+## Ejercicio 9: bootstrap del coeficiente de regresión
 
-a)  Identificá la columna de "años de experiencia" (algo como `Años.de.experiencia`). Convertí a numérica si hace falta. Filtrá `NA` y outliers extremos (por ejemplo, salarios sobre el percentil 99).
+a)  Ajustá `mod <- lm(bikers ~ temp, data = bicis)` (caja negra). Mostrá `coef(mod)` y `confint(mod)`.
 
-b)  Ajustá `lm(salario_neto ~ años_experiencia)`. Mostrá `summary(modelo)$coefficients` y `confint(modelo)`.
+b)  Hacé bootstrap del coeficiente de `temp` con `replicate`. En cada réplica: muestreá filas con reemplazo (`sample(seq_len(nrow(bicis)), replace = TRUE)`), reajustá `lm`, extraé `coef(...)["temp"]`. Usá 500 réplicas.
 
-c)  Hacé bootstrap del coeficiente de "años de experiencia" con `replicate`. En cada réplica: `sample` de filas con reemplazo, ajustar `lm`, extraer el coeficiente. Calculá IC del 95% y compará con `confint`.
+c)  Calculá el IC del 95% por percentiles. Compará con `confint(mod)`.
 
-## Ejercicio 8: `graficar_bootstrap`
+## Ejercicio 10: uso de bicicletas como variable de interés
 
-a)  Definí `graficar_bootstrap(boot, etiqueta = "")` que: dibuje el histograma del vector `boot`, marque la media con una vertical roja, y los cuantiles 2.5% y 97.5% con dos verticales punteadas.
+a)  Calculá la mediana de `bicis$bikers` y aplicá `bootstrap_estimador` con `estimador = median`. 1000 réplicas.
 
-b)  Aplicala al bootstrap de la mediana de salario (ejercicio 6).
+b)  Calculá un IC del 95% para la mediana.
 
-c)  Aplicala al bootstrap del coeficiente de regresión (ejercicio 7).
+c)  Compará la mediana puntual con el IC. ¿Por qué el IC del bootstrap es informativo cuando la distribución es asimétrica?
 
-## Ejercicio 9: mini-pipeline integrador
+## Ejercicio 11: `graficar_bootstrap`
 
-a)  Definí `analizar_columna(df, columna, estimador = mean)` que: aplique `eda_minimo` (clase 4) sobre el `df`, ejecute `bootstrap_estimador` sobre la columna indicada, y llame a `graficar_bootstrap`. Devolvé una lista con los resultados.
+a)  Mirá la función `graficar_bootstrap` que viene en `auxiliares.R`. Probala con el resultado del ejercicio 10.
 
-b)  Aplicala a la columna de salario neto de sysarmy con `estimador = median`.
+b)  Aplicala al bootstrap del coeficiente del ejercicio 9.
 
-c)  Aplicala a una columna numérica de `airquality` con `estimador = mean`. ¿Qué te dice cada salida?
+c)  Modificala (haciendo una copia local) para que también muestre el cuantil 50% (mediana) con una línea verde.
 
-## Ejercicio 10: control de versiones
+## Ejercicio 12: simulación de un experimento
 
-a)  En la carpeta donde tenés guardadas todas las funciones del curso, hacé `git init`. Mirá `git status`.
+a)  Definí `simular_lanzamientos(n, p, n_sim = 1000)` que devuelva un vector con la cantidad de éxitos en `n_sim` simulaciones, cada una de `n` lanzamientos con probabilidad `p`.
+
+b)  Aplicala a `n = 100`, `p = 0.3`. Calculá la media de éxitos.
+
+c)  Compará con `n * p` (esperanza teórica) y `n * p * (1 - p)` (varianza teórica).
+
+## Ejercicio 13: ley de los grandes números
+
+a)  Para `n_lanzamientos = c(10, 100, 1000, 10000)`, simulá una secuencia de lanzamientos con `p = 0.5` y calculá la proporción acumulada de éxitos.
+
+b)  Graficá las cuatro trayectorias con `par(mfrow = c(2, 2))`.
+
+c)  ¿Qué observás cuando `n` crece? Conectalo con la ley de los grandes números.
+
+## Ejercicio 14: Monte Carlo para integración
+
+a)  Estimá `integral_0^1 x^2 dx = 1/3` por Monte Carlo: `mean(runif(10000)^2)`. Verificá.
+
+b)  Estimá `integral_0^1 sin(pi*x) dx = 2/pi` por Monte Carlo. Compará.
+
+c)  Estimá `pi` mediante el método del círculo en el cuadrado: muestreá puntos `runif` en `[-1, 1]^2`, contá los que caen en el círculo unitario, y multiplicá por 4.
+
+## Ejercicio 15: Newton-Raphson (caja negra parcial)
+
+a)  Implementá `newton(f, df, x0, tol = 1e-6, max_iter = 100)` donde `df` es la derivada de `f`. Iteración: `x <- x - f(x) / df(x)`.
+
+b)  Encontrá la raíz de `f(x) = x^2 - 2` con `df(x) = 2*x`, partiendo de `x0 = 1`.
+
+c)  Compará la cantidad de iteraciones con bisección sobre el mismo problema en `[1, 2]`.
+
+## Ejercicio 16: t-test como caja negra
+
+a)  Hacé `t.test(airquality$Wind)` y leé la salida. ¿Qué representa `mean of x`, `confidence interval`, `p-value`?
+
+b)  Compará el IC del `t.test` con tu IC bootstrap del ejercicio 4 sobre la misma columna.
+
+c)  Hacé `t.test(airquality$Wind ~ airquality$Month %in% c(5, 6))` (compara dos grupos). Leé la salida.
+
+## Ejercicio 17: pipeline de análisis
+
+a)  Definí `analizar_columna(df, columna, estimador = mean)` que: aplique `eda_minimo(df)` (clase 4), ejecute `bootstrap_estimador` sobre la columna, y llame a `graficar_bootstrap`. Devolvé una lista con los resultados.
+
+b)  Aplicala a `bicis$bikers` con `estimador = median`.
+
+c)  Aplicala a una columna numérica de `airquality` con `estimador = mean`. ¿Qué te informa cada salida?
+
+## Ejercicio 18: comparar dos pipelines
+
+a)  Aplicá `analizar_columna` a `bicis$bikers` separando por `bicis$workingday` (días hábiles vs fin de semana). Pista: subseteá el `data.frame` antes de pasarlo.
+
+b)  Mostrá los dos IC bootstrap. ¿Hay solapamiento?
+
+c)  ¿Qué conclusión preliminar podés sacar sobre el efecto del día hábil?
+
+## Ejercicio 19: tu propio mini-experimento
+
+a)  Elegí una columna numérica de `bicis` y formulá una pregunta concreta: "¿es mayor el uso en `X` que en `Y`?".
+
+b)  Diseñá el experimento: definí `X` y `Y`, calculá la mediana en cada uno, hacé bootstrap del estimador en cada subset.
+
+c)  Concluí: ¿los IC se solapan? Anotá la conclusión con sus limitaciones.
+
+## Ejercicio 20: control de versiones
+
+a)  En la carpeta donde tenés guardadas las funciones del curso, hacé `git init`. Mirá `git status`.
 
 b)  Hacé tres commits con mensajes que expliquen el porqué:
-    -   uno con `etiquetar_auto`, `dif_promedio`, `resumen_min` (clase 1),
-    -   otro con `clasificar_temp`, `bootstrap_media`, `clasificar_presion` (clase 2),
-    -   un último con `medias_por_grupo`, `cargar_y_describir`, `graficar_distribucion`, `eda_minimo`, `bootstrap_estimador`, `biseccion`, `analizar_columna`.
 
-c)  Mirá `git log --oneline`. ¿El historial cuenta una historia clara de lo que aprendiste? Si no, ¿qué cambiarías?
+    -   uno con las funciones de las clases 1 y 2 (`etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`, `clasificar_temp`, `bootstrap_media`, `clasificar_presion`),
+    -   otro con las de clase 3 y 4 (`medias_por_grupo`, `top_grupo`, `cargar_y_describir`, `graficar_distribucion`, `eda_minimo`, `normalizar`),
+    -   un último con las de clase 5 (`iterar`, `bootstrap_estimador`, `biseccion`, `analizar_columna`).
+
+c)  Mirá `git log --oneline`. ¿El historial cuenta una historia clara? ¿Qué cambiarías?

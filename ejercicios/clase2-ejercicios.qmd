@@ -9,91 +9,171 @@ format:
 
 ## Contexto
 
-Vamos a usar `airquality` (calidad del aire en NY, mayo a septiembre 1973). Tiene 153 filas y 6 columnas. Es un dataset realista: viene con valores faltantes (`NA`).
+Vamos a usar `airquality`, mediciones diarias de calidad del aire en Nueva York entre mayo y septiembre de 1973. Tiene 153 filas, 6 columnas y valores faltantes (`NA`) reales.
 
 ```r
 head(airquality)
 ?airquality
 ```
 
-A las funciones de la clase 1 (`etiquetar_auto`, `dif_promedio`, `resumen_min`) sumamos `clasificar_temp`, `contar_alertas`, `bootstrap_media` y `clasificar_presion`.
+A las funciones de la clase 1 (`etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`) sumamos `clasificar_temp`, `contar_eventos`, `primer_indice_que_cumple`, `bootstrap_media` y `clasificar_presion`.
 
-## Ejercicio 1: reconocer el dataset
+## Ejercicio 1: explorar el dataset
 
-a)  Cargá `airquality` y mirá `head`, `dim`, `colnames`, `?airquality`. Anotá qué representa cada columna.
+a)  Verificá `dim(airquality)`, `colnames(airquality)`, `?airquality`. Anotá qué representa cada columna y sus unidades.
 
-b)  ¿Cuántos `NA` tiene la columna `Ozone`? Pista: `sum(is.na(airquality$Ozone))`.
+b)  ¿Cuántos `NA` hay en cada columna? Pista: `sapply(airquality, function(col) sum(is.na(col)))`.
 
 c)  ¿Cuántas filas tienen al menos un `NA`? Pista: `sum(!complete.cases(airquality))`.
 
-## Ejercicio 2: clasificar temperatura con `if/else if/else`
+## Ejercicio 2: `if` simple
 
-a)  Definí `clasificar_temp(x)` (en °F) que devuelva `"frio"` si `x < 60`, `"templado"` si `60 <= x < 80`, `"caluroso"` si `x >= 80`.
+a)  Asigná `temp_observada <- 85` (en °F). Escribí un bloque `if` que imprima `"alerta de calor"` si `temp_observada >= 80`.
 
-b)  Aplicala dentro de un `for` a `c(50, 70, 90, 100)`. Imprimí cada categoría.
+b)  Reasigná `temp_observada <- 70` y volvé a correr. ¿Imprime algo?
 
-c)  Hacé lo mismo con `ifelse` vectorial anidado. Compará legibilidad.
+c)  ¿Qué pasa si `temp_observada` es `NA`? Probá. Identificá el problema.
 
-## Ejercicio 3: contar alertas
+## Ejercicio 3: `if` / `else`
 
-a)  Usando un `for`, contá cuántos días `airquality$Ozone > 80` (umbral OMS para alerta). Cuidado con los `NA`: salteálos con `next`.
+a)  Definí `categorizar_dia(temp)` que devuelva `"caluroso"` si `temp >= 80`, `"templado"` en otro caso.
 
-b)  Hacé lo mismo en una línea: `sum(airquality$Ozone > 80, na.rm = TRUE)`. Verificá que coincide.
+b)  Aplicala a `c(60, 75, 90)`. ¿Funciona vectorizada o no? Justificá.
 
-c)  Generalizá a `contar_alertas(x, umbral)`. Probá con `airquality$Wind` y `umbral = 15`.
+c)  Aplicala con `for` a `airquality$Temp[1:10]`.
 
-## Ejercicio 4: primer índice que cumple una condición
+## Ejercicio 4: `if` / `else if` / `else`
 
-a)  Con un `while` y `seq_along`, encontrá el primer día (índice) donde `Ozone > 100`. Cuidado con `NA`.
+a)  Definí `clasificar_temp(temp)` (en °F): `"frio"` si `temp < 60`, `"templado"` si `60 <= temp < 80`, `"caluroso"` si `temp >= 80`.
 
-b)  Compará con `which(airquality$Ozone > 100 & !is.na(airquality$Ozone))[1]`.
+b)  Probala con `c(50, 70, 90, 100)` dentro de un `for`.
 
-c)  Generalizá: definí `primer_indice(x, condicion_fun)` donde `condicion_fun` es una función que devuelve `TRUE`/`FALSE` para cada elemento. Probá con `function(z) z > 100` y con `function(z) z < 5`.
+c)  Hacé lo mismo con `ifelse` anidado vectorial. Compará legibilidad y velocidad (`system.time`).
 
-## Ejercicio 5: clasificación de los primeros 30 días
+## Ejercicio 5: operadores lógicos en condiciones
 
-a)  Para los primeros 30 días, imprimí `"Alta"` si `Ozone > 80`, `"Baja"` si `Ozone < 20`, el valor numérico en otro caso. Usá `for` + `if/else if/else`. Si hay `NA`, salteálo.
+a)  Definí `dia_alerta(temp, ozono)` que devuelva `TRUE` si **ambos** superan sus umbrales: `temp >= 85` Y `ozono >= 80`.
 
-b)  Reescribilo con `ifelse` anidado. ¿Es más fácil de leer o más confuso?
+b)  Probala con `dia_alerta(90, 85)` y `dia_alerta(70, 90)`.
 
-c)  ¿Cuándo conviene cada uno? Anotá una línea de criterio.
+c)  Aplicala con un `for` a las primeras 30 filas de `airquality`. Cuidado con `NA`: tratalos como `FALSE`.
 
-## Ejercicio 6: bootstrap de la media
+## Ejercicio 6: `for` básico
 
-a)  Definí `bootstrap_media(x, n_rep = 1000)` usando `replicate` + `sample`. Devolvé el vector de medias bootstrap.
+a)  Imprimí los cuadrados de los enteros del 1 al 10 con un `for`.
 
-b)  Aplicala a `airquality$Wind` (no tiene `NA`). La media de las medias debería estar cerca de `mean(airquality$Wind)`.
+b)  Recorré `airquality$Wind[1:5]` con un `for` e imprimí cada valor con dos decimales. Pista: `round(x, 2)`.
 
-c)  Calculá un IC del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int`.
+c)  Recorré las primeras cinco filas de `airquality` con un `for` e imprimí `paste("Día", i, ": Ozono =", airquality$Ozone[i])`.
 
-## Ejercicio 7: acumular en un vector
+## Ejercicio 7: `for` con `seq_along`
 
-a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná el vector y rellenalo. Si hay `NA`, dejá `NA`.
+a)  Recorré `airquality$Ozone` con `seq_along`. ¿Por qué `seq_along` es más seguro que `1:length(...)`? Pista: pensá qué pasa si `length` es 0.
 
-b)  Hacelo vectorizado en una línea: `airquality$Ozone^2 - airquality$Wind`. Verificá que coincide.
+b)  Calculá la suma de los valores no-`NA` de `Ozone` con un `for`. Cuidado con los `NA`: salteálos con `next`.
 
-c)  Cronometrá las dos versiones con `system.time`. ¿Cuánto más rápido es el vectorizado?
+c)  Compará con `sum(airquality$Ozone, na.rm = TRUE)`.
 
-## Ejercicio 8: `break` y `next`
+## Ejercicio 8: acumular en un vector pre-asignado
 
-a)  Recorré `airquality$Ozone` con un `for` y parate al primer `NA` con `break`. Imprimí en qué índice paró.
+a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná un vector `numeric(nrow(airquality))` y rellenalo. Cuidado con `NA` (dejalos como `NA`).
 
-b)  Recorré los días impares (saltá los pares con `next`). Imprimí los primeros 10.
+b)  Hacé lo mismo en una línea vectorizada: `airquality$Ozone^2 - airquality$Wind`. Verificá que coincide.
 
-c)  Combiná: imprimí los primeros 10 días donde `Ozone > 80`, salteando `NA` con `next`.
+c)  Cronometrá ambas versiones con `system.time`. Cuantificá la diferencia.
 
-## Ejercicio 9: `clasificar_presion`
+## Ejercicio 9: `for` anidado
 
-a)  Definí `clasificar_presion(sistolica)` según la AHA: `< 90` hipotenso, `90-119` normal, `120-129` elevada, `130-139` hipertensión 1, `>= 140` hipertensión 2. Devolvé `NA` si la entrada es `NA`.
+a)  Construí una matriz `M` de 5x5 donde `M[i, j] = i * j` con dos `for` anidados.
 
-b)  Probala con `c(85, 110, 125, 135, 150, NA)`. Verificá.
+b)  Verificá con `outer(1:5, 1:5, "*")` (caja negra). Coinciden.
+
+c)  Calculá la suma de los elementos pares de `M` recorriéndola con dos `for` anidados.
+
+## Ejercicio 10: `while` básico
+
+a)  Escribí un `while` que duplique `x = 1` mientras `x < 1000`. ¿En qué valor se detiene?
+
+b)  Modificalo para que cuente cuántas iteraciones hizo. Imprimí el contador final.
+
+c)  Compará con `ceiling(log2(1000))`.
+
+## Ejercicio 11: `while` con tolerancia
+
+a)  Escribí un `while` que estime `sqrt(2)` con la iteración Babilónica: `x <- (x + 2/x) / 2`, partiendo de `x = 1`. Detenete cuando `abs(x^2 - 2) < 1e-10`.
+
+b)  Imprimí el resultado y la cantidad de iteraciones.
+
+c)  Compará con `sqrt(2)` (caja negra).
+
+## Ejercicio 12: `break` para detenerse al encontrar
+
+a)  Recorré `airquality$Ozone` y detenete con `break` apenas encontrés un `NA`. Imprimí en qué índice se detuvo.
+
+b)  Verificá con `which(is.na(airquality$Ozone))[1]`.
+
+c)  Modificalo para detenerte al primer valor `> 100`. Compará con `which(airquality$Ozone > 100)[1]`.
+
+## Ejercicio 13: `next` para saltear
+
+a)  Recorré los primeros 30 días de `airquality$Ozone`. Salteá los `NA` con `next` e imprimí solo los valores numéricos.
+
+b)  Imprimí solo los valores `> 80`, salteando `NA` con `next`.
+
+c)  Imprimí solo los días impares con valores `> 50`. Combiná dos `next`.
+
+## Ejercicio 14: `contar_eventos`
+
+a)  Definí `contar_eventos(x, umbral)` que use un `for` para contar cuántos elementos de `x` son `> umbral`. Cuidado con `NA`.
+
+b)  Probala con `airquality$Ozone` y `umbral = 80` (alerta de la OMS).
+
+c)  Generalizala a `contar_eventos(x, umbral, comparacion = ">")` aceptando `">"`, `"<"`, `">="`, `"<="`. Pista: `match.arg`. Probala con `comparacion = "<"`.
+
+## Ejercicio 15: `primer_indice_que_cumple`
+
+a)  Definí `primer_indice_que_cumple(x, condicion_fun)` con un `while` y `seq_along`. `condicion_fun` es una **función** que devuelve `TRUE`/`FALSE` por elemento. Devolvé `NA` si no se cumple para ninguno.
+
+b)  Probala con `condicion_fun = function(z) !is.na(z) && z > 100` sobre `airquality$Ozone`.
+
+c)  Compará con `which(airquality$Ozone > 100 & !is.na(airquality$Ozone))[1]`.
+
+## Ejercicio 16: `clasificar_presion`
+
+a)  Definí `clasificar_presion(sistolica)` según la clasificación AHA: `< 90` `"hipotenso"`, `90-119` `"normal"`, `120-129` `"elevada"`, `130-139` `"hipertension 1"`, `>= 140` `"hipertension 2"`. Devolvé `NA` si la entrada es `NA`.
+
+b)  Probala con `c(85, 110, 125, 135, 150, NA)`.
 
 c)  Aplicala con `sapply` a un vector de 100 valores aleatorios `runif(100, 70, 180)`. Resumí con `table`.
 
-## Ejercicio 10: comentar el porqué
+## Ejercicio 17: `bootstrap_media`
 
-a)  Tomá tu solución del ejercicio 6 (bootstrap). Agregá UN comentario que explique POR QUÉ usás `quantile(..., c(0.025, 0.975))` para el IC.
+a)  Definí `bootstrap_media(x, n_rep = 1000)` con `replicate` y `sample`. Devolvé el vector de medias bootstrap.
 
-b)  Mirá el resto de tu código del ejercicio 6: borrá los comentarios que solo parafrasean lo que hace cada línea.
+b)  Aplicala a `airquality$Wind` (no tiene `NA`). La media de las medias debería estar cerca de `mean(airquality$Wind)`.
 
-c)  Compará la versión final con la inicial: ¿se entiende mejor con menos comentarios?
+c)  Calculá un intervalo del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int` (caja negra).
+
+## Ejercicio 18: bootstrap de una proporción
+
+a)  Definí `bootstrap_proporcion(x, p, n_rep = 1000)` que estime, vía bootstrap, la proporción de elementos de `x` que cumplen una condición lógica `p`. `p` es una función que devuelve `TRUE`/`FALSE`.
+
+b)  Probala con `airquality$Ozone` y `p = function(z) !is.na(z) && z > 80`.
+
+c)  Devolvé un IC del 95% para la proporción y comparalo con la proporción puntual.
+
+## Ejercicio 19: clasificar y resumir
+
+a)  Aplicá `clasificar_temp` (ejercicio 4) a `airquality$Temp` y guardá el resultado en una columna nueva del `data.frame`.
+
+b)  Resumí con `table(airquality$temp_categoria)`. ¿Qué proporción de días son calurosos?
+
+c)  Calculá la media de `Ozone` por categoría con `aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)` (caja negra para esta clase). Interpretá.
+
+## Ejercicio 20: comentar el porqué
+
+a)  Tomá tu solución del ejercicio 17 (bootstrap). Agregá un solo comentario que explique **por qué** usás `quantile(..., c(0.025, 0.975))` para el IC.
+
+b)  Mirá tu código del ejercicio 17: borrá los comentarios que solo parafrasean lo que hace cada línea.
+
+c)  Compará la versión final con la inicial. ¿Quedó más legible con menos comentarios?

@@ -1,6 +1,6 @@
 ---
 title: "Clase 4 - Ejercicios"
-subtitle: "Visualización y EDA con `airquality` y sysarmy"
+subtitle: "Visualización y exploración de datos"
 format:
   html:
     toc: true
@@ -9,20 +9,20 @@ format:
 
 ## Contexto
 
-Esta guía empuja toda la caja de herramientas hacia un EDA real. Datasets:
+Esta guía aplica las herramientas a un análisis exploratorio realista. Datasets:
 
--   `airquality` (lo conocés de la clase 2),
+-   `airquality`,
 -   `mtcars`,
--   la encuesta sysarmy de salarios IT (CSV crudo en GitHub).
+-   `bikeshare` (cargado con `cargar_bikeshare()` de `auxiliares.R`).
 
-Funciones nuevas: `graficar_distribucion`, `eda_minimo`, `normalizar`. Reusás `medias_por_grupo` (clase 3), `bootstrap_media` (clase 2), `cargar_y_describir` (clase 3).
+Funciones nuevas: `graficar_distribucion`, `eda_minimo`, `normalizar`. Reusamos `medias_por_grupo` (clase 3), `bootstrap_media` (clase 2) y `cargar_y_describir` (clase 3).
 
 ```r
-sueldos_url <- "https://raw.githubusercontent.com/openqube/openqube-sueldos/master/data/csv/argentina/2021.02.csv"
-sueldos <- read.csv(sueldos_url, check.names = TRUE)
+source("ejercicios/auxiliares.R")
+bicis <- cargar_bikeshare()
 ```
 
-## Ejercicio 1: histograma de ozono
+## Ejercicio 1: histograma con varios `breaks`
 
 a)  Hacé tres histogramas de `airquality$Ozone` con `breaks = 10`, `breaks = 20`, `breaks = 50`. Compará lo que se ve.
 
@@ -30,39 +30,55 @@ b)  En el histograma con `breaks = 20`, agregá título y eje en español.
 
 c)  Marcá la media con `abline(v = mean(airquality$Ozone, na.rm = TRUE), col = "red", lwd = 2)`.
 
-## Ejercicio 2: boxplot estacional
+## Ejercicio 2: boxplot por grupo
 
 a)  Boxplot de `Temp ~ Month` sobre `airquality`. Pintá las cajas con `col = "lightblue"`.
 
-b)  Convertí `Month` en factor con etiquetas `c("May", "Jun", "Jul", "Ago", "Sep")` y re-graficá. Pista: `factor(airquality$Month, labels = c("May", ...))`.
+b)  Convertí `Month` en factor con etiquetas `c("May", "Jun", "Jul", "Ago", "Sep")` y volvé a graficar. Pista: `factor(airquality$Month, labels = c("May", ...))`.
 
 c)  ¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rango intercuartílico)?
 
-## Ejercicio 3: scatter con regresión
+## Ejercicio 3: scatter con regresión lineal
 
 a)  Scatter de `mpg ~ hp` sobre `mtcars` con `pch = 19, col = "gray60"`.
 
-b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)`.
+b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)`. `lm` es una **caja negra** por ahora.
 
-c)  Agregá una línea horizontal en la media de `mpg` con `abline(h = mean(mtcars$mpg), lty = 2)` y una leyenda con `legend("topright", ...)`.
+c)  Agregá una línea horizontal en la media de `mpg` con `abline(h = mean(mtcars$mpg), lty = 2)` y una leyenda con `legend("topright", legend = c(...), col = c(...), lty = c(1, 2))`.
 
 ## Ejercicio 4: `graficar_distribucion`
 
-a)  Definí `graficar_distribucion(x, etiqueta = "")` que dibuje histograma + boxplot lado a lado en `par(mfrow = c(1, 2))`. Usá `etiqueta` en los títulos. Acordate de restablecer con `par(mfrow = c(1, 1))` al final.
+a)  Definí `graficar_distribucion(x, etiqueta = "")` que dibuje histograma + boxplot lado a lado en `par(mfrow = c(1, 2))`. Restablecé el layout con `par(mfrow = c(1, 1))` al final.
 
 b)  Aplicala a `airquality$Ozone` y `airquality$Wind`.
 
 c)  Aplicala a `mtcars$mpg`.
 
-## Ejercicio 5: resumen por mes
+## Ejercicio 5: comparar con la versión auxiliar
+
+a)  Cargá `auxiliares.R` y mirá la función `graficar_hist_box` provista.
+
+b)  Comparala con tu `graficar_distribucion`. ¿Qué hace `on.exit(par(par_anterior))`? Pista: `?on.exit`.
+
+c)  Reescribí `graficar_distribucion` agregando `on.exit` para que el layout siempre se restaure, incluso si la función falla.
+
+## Ejercicio 6: resumen por mes con barras
 
 a)  Reusá `medias_por_grupo` (clase 3): media de `Ozone` por `Month` en `airquality`.
 
-b)  Graficá con `barplot(height = ..., names.arg = ...)`.
+b)  Graficá con `barplot(height = ..., names.arg = ..., main = "Ozono medio por mes")`.
 
-c)  Agregá barras de error con el desvío estándar dividido por raíz de `n`. Pista: hacé un `aggregate` con `function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x))))`.
+c)  Agregá barras de error con `arrows(x0, y0, x1, y1, code = 3, angle = 90)`. Calculá los extremos como media ± `sd / sqrt(n)`. Pista: armá el resumen con `aggregate(... , FUN = function(x) c(media = mean(x, na.rm = TRUE), se = sd(x, na.rm = TRUE) / sqrt(sum(!is.na(x)))))`.
 
-## Ejercicio 6: `eda_minimo`
+## Ejercicio 7: varios gráficos con `par(mfrow)`
+
+a)  Dibujá los cuatro histogramas de `Ozone`, `Solar.R`, `Wind`, `Temp` en una grilla 2x2.
+
+b)  Restablecé el layout al final.
+
+c)  Hacé lo mismo pero con boxplots, también en grilla 2x2.
+
+## Ejercicio 8: `eda_minimo`
 
 a)  Definí `eda_minimo(df)` que: imprima `str(df)`, `summary(df)`, `head(df, 3)`, y para cada columna numérica llame a `graficar_distribucion`.
 
@@ -70,33 +86,97 @@ b)  Aplicala a `airquality`.
 
 c)  Aplicala a `mtcars`.
 
-## Ejercicio 7: `normalizar` con tests
+## Ejercicio 9: NAs en datos reales
+
+a)  Identificá las columnas de `airquality` con `NA`. ¿Cuántos hay en cada una?
+
+b)  Comparar el resultado de `mean(airquality$Ozone)` con `mean(airquality$Ozone, na.rm = TRUE)`.
+
+c)  Definí `media_robusta(x)` que devuelva `mean(x, na.rm = TRUE)` con un mensaje (`message()`) si encuentra `NA`. Probala.
+
+## Ejercicio 10: `normalizar` con tests
 
 a)  Definí `normalizar(x)` que devuelva `(x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)`.
 
-b)  Validá la implementación con dos `stopifnot`: media cercana a 0 y desvío cercano a 1 sobre `c(1, 2, 3, 4, 5)`. Tolerancia: `1e-10`.
+b)  Validala con dos `stopifnot` sobre `c(1, 2, 3, 4, 5)`: media cercana a 0 y desvío cercano a 1, ambas con tolerancia `1e-10`.
 
-c)  Aplicala a `airquality$Wind` y graficá el histograma del resultado.
+c)  Aplicala a `airquality$Wind`. Graficá el histograma del resultado.
 
-## Ejercicio 8: cargar sysarmy
+## Ejercicio 11: explorar `bikeshare`
 
-a)  Cargá el CSV de sysarmy con la URL del setup. Aplicá `cargar_y_describir` (clase 3). ¿Cuántas filas? ¿Cuántas columnas? ¿Cuántas tienen `NA`?
+a)  Cargá `bicis <- cargar_bikeshare()`. Aplicá `eda_minimo(bicis)`.
 
-b)  Mirá `colnames(sueldos)`. Identificá la columna del salario neto (algo parecido a `Salario.mensual.o.retiro.NETO..en.tu.moneda.local.`). Asignala a `salario_neto`.
+b)  ¿Cuántas filas tiene? ¿Cuántas columnas numéricas y cuántas factores?
 
-c)  ¿Qué tipo es la columna? Si vino como `character`, convertí a número con `as.numeric` y mirá cuántos `NA` te quedaron.
+c)  ¿Qué representa `bikers`? ¿Y `casual` versus `registered`? Pista: mirá la documentación al inicio de `auxiliares.R`.
 
-## Ejercicio 9: EDA sobre sysarmy
+## Ejercicio 12: distribución de viajes por hora
 
-a)  Aplicá `eda_minimo` a un sub-`data.frame` con tres columnas numéricas relevantes.
+a)  Histograma de `bicis$bikers`. ¿Por qué tiene una cola tan larga?
 
-b)  Histograma del salario neto acotado al percentil 99: `hist(salario_neto, xlim = c(0, quantile(salario_neto, 0.99, na.rm = TRUE)), breaks = 50)`. ¿Por qué acotamos?
+b)  Acotá el eje x al percentil 99: `xlim = c(0, quantile(bicis$bikers, 0.99))`. Volvé a graficar.
 
-c)  Boxplot del salario neto por seniority/rol (la columna `Trabajo.de` o equivalente). Cuidado con etiquetas largas: `par(mar = c(8, 4, 2, 2)); boxplot(..., las = 2)`.
+c)  Hacé el histograma de `log10(bicis$bikers + 1)`. Compará con la versión sin transformar. ¿Por qué `+ 1`?
 
-## Ejercicio 10: probar antes de creer
+## Ejercicio 13: viajes por estación
 
-a)  Mirá tu `normalizar`: ¿qué pasa si `x` tiene un solo valor? ¿Y si todos los valores son iguales (sd 0)? Predecí, después corré.
+a)  Boxplot de `bikers ~ season` sobre `bicis`. ¿Qué estación tiene mayor mediana?
+
+b)  Boxplot de `bikers ~ weekday`. ¿Hay diferencia entre días hábiles y fines de semana?
+
+c)  Calculá la media de `bikers` por estación y graficá con `barplot`. Compará con el boxplot.
+
+## Ejercicio 14: el ciclo diario
+
+a)  Calculá la media de `bikers` por hora con `aggregate(bikers ~ hr, data = bicis, mean)`.
+
+b)  Graficá la curva resultante con `plot(... , type = "l", lwd = 2)`. Identificá los picos.
+
+c)  Hacé lo mismo separando por `workingday` (días hábiles vs fines de semana). Pista: dos `aggregate` y dos `lines` sobre el mismo plot.
+
+## Ejercicio 15: temperatura y uso
+
+a)  Scatter de `bikers ~ temp` sobre `bicis` con `pch = 16, col = rgb(0, 0, 0, 0.05)`. ¿Por qué `alpha = 0.05`?
+
+b)  Agregá la recta de regresión `abline(lm(bikers ~ temp, data = bicis), col = "red", lwd = 2)`.
+
+c)  Calculá `cor(bicis$bikers, bicis$temp)` (caja negra). Interpretá el signo y la magnitud.
+
+## Ejercicio 16: dos variables a la vez
+
+a)  Calculá la media de `bikers` agrupando por `weekday` y `hr` con `aggregate(bikers ~ weekday + hr, data = bicis, mean)`.
+
+b)  Convertí el resultado a una matriz con `xtabs(media ~ weekday + hr, data = ...)`.
+
+c)  Graficala con `image(t(matriz_xtabs))` (heatmap básico). Identificá los picos visualmente.
+
+## Ejercicio 17: bootstrap con bikeshare
+
+a)  Aplicá `bootstrap_media` (clase 2) a `bicis$bikers` con 1000 réplicas.
+
+b)  Calculá un IC del 95% por percentiles.
+
+c)  Graficá el histograma de las medias bootstrap usando la función auxiliar `graficar_bootstrap` (de `auxiliares.R`). Mirá su código antes de usarla.
+
+## Ejercicio 18: regresión simple (caja negra)
+
+a)  Ajustá `mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)`. Mostrá `summary(mod)`. `lm` es una caja negra: lo importante es leer la salida.
+
+b)  Identificá los coeficientes estimados y su signo. ¿Cuál variable parece tener más peso?
+
+c)  Calculá `confint(mod)` y `coef(mod)`. Compará intervalos con coeficientes.
+
+## Ejercicio 19: `eda_minimo` extendido
+
+a)  Mirá tu `eda_minimo`: ¿imprime también la cantidad de `NA` por columna? Si no, agregalo.
+
+b)  Agregale: si una columna es `factor`, imprimí su `table`.
+
+c)  Aplicá `eda_minimo` a `bicis` y verificá que ahora muestra factores y `NA`.
+
+## Ejercicio 20: probar antes de creer
+
+a)  Mirá tu `normalizar` (ejercicio 10): ¿qué pasa si `x` tiene un solo elemento? ¿Y si todos los valores son iguales (sd `0`)? Predecí, después corré.
 
 b)  Agregá validaciones con `stopifnot`: `length(x) >= 2` y `sd(x, na.rm = TRUE) > 0`.
 
