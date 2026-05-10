@@ -18,7 +18,7 @@ Datasets:
 -   `bikeshare`: 8645 registros horarios de uso de un sistema de bicicletas (similar a Ecobici en CABA). Lo cargamos con la función auxiliar `cargar_bikeshare()`.
 
 ```r
-source("ejercicios/auxiliares.R")    # provee cargar_bikeshare()
+source("ejercicios/auxiliares.R")    # provee cargar_bikeshare(), generar_pacientes()
 bicis <- cargar_bikeshare()
 head(bicis)
 ```
@@ -33,6 +33,35 @@ b)  Accedé al primer síntoma con `$`, con `[[ ]]` y con `[ ]`. Mostrá `class(
 
 c)  Reusá `clasificar_presion` (clase 2) para agregar un campo `presion_categoria` a la lista. Verificá.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+paciente <- list(
+  id                = 1001L,
+  edad              = 47.5,
+  sintomas          = c("tos", "fiebre"),
+  tiene_diagnostico = TRUE,
+  presion_sistolica = 138
+)
+
+# b)
+paciente$sintomas[1]            # "tos"  (character)
+paciente[["sintomas"]][1]       # "tos"  (character)
+paciente["sintomas"]            # lista de 1 elemento (list)
+
+class(paciente$sintomas[1])         # "character"
+class(paciente[["sintomas"]][1])    # "character"
+class(paciente["sintomas"])         # "list"
+
+# c)
+paciente$presion_categoria <- clasificar_presion(paciente$presion_sistolica)
+paciente$presion_categoria   # "hipertension 1"
+```
+
+**Por qué `[ ]` devuelve lista:** `[ ]` es el indexado "preserva estructura": si tenés una lista, te devuelve una lista (eventualmente con varios elementos). `[[ ]]` extrae UN elemento. Esta es probablemente la trampa más común al trabajar con listas.
+
+:::
+
 ## Ejercicio 2: lista de pacientes (con un helper)
 
 a)  Cargá `auxiliares.R` y usá `pacientes <- generar_pacientes(n = 10)` para obtener una lista de 10 pacientes ficticios. Mirá el código de `generar_pacientes` para entender qué hace.
@@ -40,6 +69,29 @@ a)  Cargá `auxiliares.R` y usá `pacientes <- generar_pacientes(n = 10)` para o
 b)  Extraé las edades de todos con `sapply(pacientes, function(p) p$edad)`. Calculá la edad media.
 
 c)  Aplicá `clasificar_presion` (clase 2) a las presiones de todos los pacientes con `sapply`. Devolvé un vector de categorías y resumí con `table`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+source("ejercicios/auxiliares.R")
+pacientes <- generar_pacientes(n = 10)
+length(pacientes)   # 10
+pacientes[[1]]      # primer paciente
+
+# b)
+edades <- sapply(pacientes, function(p) p$edad)
+mean(edades)        # cerca de 50 (la generadora usa rnorm con mean = 50)
+
+# c)
+presiones <- sapply(pacientes, function(p) p$presion_sistolica)
+categorias <- sapply(presiones, clasificar_presion)
+table(categorias)
+# normal, elevada, hipertension 1, hipertension 2 (segun la semilla)
+```
+
+**Por qué usar un helper:** sin `generar_pacientes` tendrías que tipear 10 listas a mano antes de empezar a hacer estadística sobre ellas. La función custom encapsula esa parte tediosa para que el ejercicio sea sobre listas y `sapply`, no sobre escribir datos ficticios.
+
+:::
 
 ## Ejercicio 3: listas anidadas
 
@@ -49,6 +101,30 @@ b)  Accedé al nombre del primer paciente con `consultorio$pacientes[[1]]$nombre
 
 c)  Calculá la edad media de los pacientes del consultorio en una sola línea.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+consultorio <- list(
+  nombre    = "Hospital Central",
+  pacientes = pacientes
+)
+
+# b)
+# generar_pacientes no agrega nombre. Lo agrego a cada paciente:
+for (i in seq_along(consultorio$pacientes)) {
+  consultorio$pacientes[[i]]$nombre <- paste("Paciente", i)
+}
+consultorio$pacientes[[1]]$nombre   # "Paciente 1"
+
+# c)
+mean(sapply(consultorio$pacientes, function(p) p$edad))
+```
+
+**Idiom de R:** `sapply(lista, function(x) x$campo)` se usa todo el tiempo para extraer una columna virtual de una lista de listas. Hay alternativas más nuevas (`purrr::map_dbl`) pero esta sintaxis funciona sin dependencias.
+
+:::
+
 ## Ejercicio 4: matriz desde `airquality`
 
 a)  Convertí las cuatro columnas numéricas de `airquality` (`Ozone`, `Solar.R`, `Wind`, `Temp`) en una matriz: `M <- as.matrix(airquality[, 1:4])`.
@@ -56,6 +132,30 @@ a)  Convertí las cuatro columnas numéricas de `airquality` (`Ozone`, `Solar.R`
 b)  Calculá la media por columna con `colMeans(M, na.rm = TRUE)`.
 
 c)  Calculá `M_clean <- na.omit(M)` y luego `t(M_clean) %*% M_clean / nrow(M_clean)`. ¿Qué representa cada celda? Pista: el producto interno entre dos columnas, normalizado.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+M <- as.matrix(airquality[, 1:4])
+class(M)   # "matrix" "array"
+dim(M)     # 153 4
+
+# b)
+colMeans(M, na.rm = TRUE)
+# Ozone: 42.13   Solar.R: 185.93   Wind: 9.96   Temp: 77.88
+
+# c)
+M_clean <- na.omit(M)
+nrow(M_clean)   # 111 (descarto las 42 filas con al menos un NA)
+G <- t(M_clean) %*% M_clean / nrow(M_clean)
+G
+# 4x4. La celda (i, j) es la media del producto x_i * x_j.
+# La diagonal es la media de x_i^2 (segundo momento, no la varianza).
+```
+
+**Por qué importa este producto:** centrando las columnas (restando su media) antes de calcular `t(X) %*% X / n`, lo que sale es la **matriz de covarianza**. Sin centrar es el "momento de orden 2". Es el cálculo base de muchos métodos: PCA, regresión, geometría de datos.
+
+:::
 
 ## Ejercicio 5: operaciones con matrices
 
@@ -65,6 +165,29 @@ b)  Construí una matriz `A` de 3x3 con valores aleatorios (`matrix(rnorm(9), 3,
 
 c)  Calculá `A %*% t(A)`. ¿Por qué es simétrica?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+I5 <- diag(5)
+all(I5 %*% I5 == I5)   # TRUE
+
+# b)
+set.seed(42)
+A <- matrix(rnorm(9), 3, 3)
+identical(t(t(A)), A)   # TRUE
+
+# c)
+S <- A %*% t(A)
+all(S == t(S))   # TRUE  (es simetrica)
+```
+
+**Por qué `A %*% t(A)` siempre es simétrica:** llamemos `B = A %*% t(A)`. Entonces `t(B) = t(t(A)) %*% t(A) = A %*% t(A) = B`. Más aún: es **semi-definida positiva** (todos sus autovalores son no negativos). Es la base de muchas factorizaciones útiles (Cholesky, SVD).
+
+**Detalle de igualdad:** `all(S == t(S))` puede fallar por punto flotante. Para comparar matrices con tolerancia: `all(abs(S - t(S)) < 1e-10)`.
+
+:::
+
 ## Ejercicio 6: filtrar y modificar `airquality`
 
 a)  Filtrá `airquality` para quedarte con los días de junio (`Month == 6`). ¿Cuántas filas quedan?
@@ -72,6 +195,26 @@ a)  Filtrá `airquality` para quedarte con los días de junio (`Month == 6`). ¿
 b)  Agregale al subset una columna `temp_categoria` aplicando `clasificar_temp` (clase 2) a `Temp`. Convertila en `factor`.
 
 c)  Mostrá `table(temp_categoria)`. ¿Qué proporción de días son calurosos?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+junio <- airquality[airquality$Month == 6, ]
+nrow(junio)   # 30
+
+# b)
+junio$temp_categoria <- factor(sapply(junio$Temp, clasificar_temp))
+
+# c)
+table(junio$temp_categoria)
+prop.table(table(junio$temp_categoria))
+# en junio, ~50% son templados, ~50% son calurosos (poco frio)
+```
+
+**Caso a tener en cuenta:** al subsetear un `data.frame` con `[fila, ]`, R por defecto preserva las row.names originales. Si querés indexar por nuevos números, usá `rownames(junio) <- NULL`.
+
+:::
 
 ## Ejercicio 7: `medias_por_grupo`
 
@@ -81,6 +224,29 @@ b)  Aplicala a `airquality`: media de `Ozone` por `Month`.
 
 c)  Aplicala a `iris`: media de `Sepal.Length` por `Species`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+medias_por_grupo <- function(df, columna_numerica, columna_grupo) {
+  formula <- as.formula(paste(columna_numerica, "~", columna_grupo))
+  resumen <- aggregate(formula, data = df, FUN = mean, na.rm = TRUE)
+  names(resumen) <- c("grupo", "media")
+  resumen
+}
+
+# b)
+medias_por_grupo(airquality, "Ozone", "Month")
+# 5: ~24,  6: ~30,  7: ~59,  8: ~60,  9: ~31
+
+# c)
+medias_por_grupo(iris, "Sepal.Length", "Species")
+# setosa: 5.01,  versicolor: 5.94,  virginica: 6.59
+```
+
+**Por qué `as.formula`:** `aggregate` espera una fórmula como `Ozone ~ Month`. Pero acá los nombres de columna vienen como strings. `as.formula(paste(...))` arma la fórmula a partir de strings. Es el patrón estándar para escribir funciones que reciben nombres de columna como parámetros.
+
+:::
+
 ## Ejercicio 8: `top_grupo`
 
 a)  Definí `top_grupo(resumen)` que reciba la salida de `medias_por_grupo` y devuelva el grupo con la media más alta.
@@ -88,6 +254,24 @@ a)  Definí `top_grupo(resumen)` que reciba la salida de `medias_por_grupo` y de
 b)  Aplicala al resultado de 7b. ¿Qué mes tiene mayor ozono medio?
 
 c)  Aplicala al resultado de 7c. ¿Qué especie tiene los sépalos más largos en promedio?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+top_grupo <- function(resumen) {
+  resumen$grupo[which.max(resumen$media)]
+}
+
+# b)
+top_grupo(medias_por_grupo(airquality, "Ozone", "Month"))   # 8 (agosto)
+
+# c)
+top_grupo(medias_por_grupo(iris, "Sepal.Length", "Species"))   # "virginica"
+```
+
+**Caso no contemplado:** si hay empate en la media máxima, `which.max` devuelve solo el **primer** índice. Si querés todos los empatados: `resumen$grupo[resumen$media == max(resumen$media)]`.
+
+:::
 
 ## Ejercicio 9: `factor` con orden
 
@@ -97,6 +281,30 @@ b)  Convertilo en `factor` ordenado `c("4", "6", "8")` con `ordered = TRUE`. Ver
 
 c)  Aplicá `medias_por_grupo(mtcars, "mpg", "cyl")`. ¿Confirma la intuición de que más cilindros implica menos `mpg`?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+cyl_f <- factor(mtcars$cyl)
+levels(cyl_f)   # "4" "6" "8"
+
+# b)
+cyl_ord <- factor(mtcars$cyl, levels = c(4, 6, 8), ordered = TRUE)
+cyl_ord[1] < cyl_ord[2]   # depende de los autos
+"4" < "8"                 # FALSE como string (orden lexicografico)
+factor(8, levels = c(4, 6, 8), ordered = TRUE) > factor(4, levels = c(4, 6, 8), ordered = TRUE)
+# TRUE  (compara como ordinal)
+
+# c)
+medias_por_grupo(mtcars, "mpg", "cyl")
+# 4: 26.66   6: 19.74   8: 15.10
+# Confirma: mas cilindros = menos millas por galon.
+```
+
+**Cuándo conviene factor ordinal:** modelos lineales con factores ordinales usan **contrastes polinómicos** por defecto, en vez de comparar contra la categoría base. Para regresión exploratoria suele dar coeficientes más interpretables.
+
+:::
+
 ## Ejercicio 10: tablas de frecuencias
 
 a)  Calculá `table(iris$Species)`. ¿Cuántas observaciones hay por especie?
@@ -104,6 +312,34 @@ a)  Calculá `table(iris$Species)`. ¿Cuántas observaciones hay por especie?
 b)  Calculá `prop.table(table(iris$Species))`. ¿Qué representa cada valor?
 
 c)  Calculá una tabla cruzada (contingencia) entre `airquality$Month` y `clasificar_temp(airquality$Temp)` con `table`. ¿Cuántos días calurosos hubo en agosto?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+table(iris$Species)
+# setosa: 50,  versicolor: 50,  virginica: 50  (perfectamente balanceado)
+
+# b)
+prop.table(table(iris$Species))
+# 0.333, 0.333, 0.333  -> proporciones que suman 1
+
+# c)
+temp_cat <- sapply(airquality$Temp, clasificar_temp)
+tabla <- table(airquality$Month, temp_cat)
+tabla
+#        caluroso  frio  templado
+#    5         0     2        29
+#    6         0     0        30
+#    7        17     0        14
+#    8        15     0        16
+#    9         0     7        23
+tabla["8", "caluroso"]   # 15
+```
+
+**Margen de la tabla:** `addmargins(tabla)` agrega filas y columnas con totales. Útil para verificar a ojo. Para tablas de proporciones por fila: `prop.table(tabla, margin = 1)`.
+
+:::
 
 ## Ejercicio 11: explorar `iris`
 
@@ -113,6 +349,29 @@ b)  Subseteá `iris` para quedarte con flores de especie `"virginica"` que tenga
 
 c)  Calculá `medias_por_grupo(iris, "Petal.Length", "Species")`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+dim(iris)              # 150 5
+colnames(iris)         # Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, Species
+class(iris$Species)    # "factor"
+nlevels(iris$Species)  # 3
+
+# b)
+v <- iris[iris$Species == "virginica" & iris$Petal.Length > 6, ]
+nrow(v)   # 27 (27 de las 50 virginicas tienen petalos > 6)
+
+# c)
+medias_por_grupo(iris, "Petal.Length", "Species")
+# setosa: 1.46,  versicolor: 4.26,  virginica: 5.55
+# Las virginicas tienen petalos casi 4x mas largos que las setosas.
+```
+
+**Por qué `iris` es popular:** las tres especies son **linealmente separables** en el espacio 4D de medidas (especialmente setosa vs el resto). Se usa como benchmark mínimo para clustering, clasificación y reducción de dimensionalidad. Origen: Fisher, 1936.
+
+:::
+
 ## Ejercicio 12: cargar `bikeshare` con la función auxiliar
 
 a)  Cargá `bicis <- cargar_bikeshare()`. Mirá `str(bicis)` y `head(bicis)`. Identificá tipos.
@@ -120,6 +379,30 @@ a)  Cargá `bicis <- cargar_bikeshare()`. Mirá `str(bicis)` y `head(bicis)`. Id
 b)  ¿Cuál es la columna `bikers`? ¿Y `casual` y `registered`? Pista: `?bikeshare` no existe; mirá `head` y deducí.
 
 c)  ¿Cuántos `NA` tiene cada columna? Pista: `sapply(bicis, function(col) sum(is.na(col)))`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+source("ejercicios/auxiliares.R")
+bicis <- cargar_bikeshare()
+str(bicis)
+# 8645 obs. 15 vars. season factor, mnth chr, day int, hr int, ...
+head(bicis)
+
+# b)
+# casual: viajes hechos por usuarios casuales (no registrados, alquiler puntual)
+# registered: viajes hechos por usuarios con membresia
+# bikers: total = casual + registered
+all(bicis$bikers == bicis$casual + bicis$registered)   # TRUE
+
+# c)
+sapply(bicis, function(col) sum(is.na(col)))
+# todas las columnas: 0 NAs (dataset limpio)
+```
+
+**Curiosidad:** este dataset es del paquete ISLR2 y es uno de los preferidos para enseñar regresión Poisson y series temporales. La distribución de `bikers` es muy asimétrica (cola larga a la derecha) por dos razones: (1) muchas horas de poco uso (madrugada) y (2) picos altos de hora pico. Vamos a verlo gráficamente en clase 4.
+
+:::
 
 ## Ejercicio 13: explorar `bikeshare` con `aggregate`
 
@@ -129,6 +412,31 @@ b)  Calculá la media por día de la semana (`weekday`).
 
 c)  Calculá la media por hora (`hr`). ¿En qué horas aparece el pico?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+aggregate(bikers ~ season, data = bicis, mean)
+# invierno: 111,  primavera: 208,  verano: 236,  otono: 199
+# El verano lidera (la gente sale mas en buen clima).
+
+# b)
+aggregate(bikers ~ weekday, data = bicis, mean)
+# dom: ~178, lun-vie: ~190-195, sab: ~190
+# Bastante parejo, sutilmente mayor en dias habiles.
+
+# c)
+por_hora <- aggregate(bikers ~ hr, data = bicis, mean)
+por_hora[which.max(por_hora$bikers), ]
+# Pico a las 17h (hora pico de salida del trabajo).
+# Segundo pico a las 8h (entrada al trabajo).
+plot(por_hora$hr, por_hora$bikers, type = "b")
+```
+
+**Patrón clásico:** este "doble pico" 8h y 17h es típico de sistemas de bicicletas en ciudades con uso commuter intenso. En sistemas más turísticos (como algunos de Buenos Aires en ciertos barrios), el pico es del mediodía.
+
+:::
+
 ## Ejercicio 14: `cargar_y_describir`
 
 a)  Definí `cargar_y_describir(archivo, sep = " ")` que devuelva una **lista** con: `df` (el `data.frame`), `dimensiones` (vector de 2), `tipos` (vector con `class` por columna), `n_na` (vector con `sum(is.na)` por columna).
@@ -136,6 +444,34 @@ a)  Definí `cargar_y_describir(archivo, sep = " ")` que devuelva una **lista** 
 b)  Aplicala al CSV `datos/bikeshare.csv`. Pista: el archivo está separado por espacios, no por comas, así que pasá `sep = " "`.
 
 c)  Mostrá los tipos y las columnas con más de cero `NA`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+cargar_y_describir <- function(archivo, sep = " ") {
+  df <- read.table(archivo, header = TRUE, sep = sep, stringsAsFactors = FALSE)
+  list(
+    df          = df,
+    dimensiones = c(filas = nrow(df), columnas = ncol(df)),
+    tipos       = sapply(df, class),
+    n_na        = sapply(df, function(col) sum(is.na(col)))
+  )
+}
+
+# b)
+descripcion <- cargar_y_describir("datos/bikeshare.csv")
+descripcion$dimensiones    # filas: 8645  columnas: 15
+
+# c)
+descripcion$tipos
+# season int, mnth char, day int, ...
+nas <- descripcion$n_na
+nas[nas > 0]   # ninguna columna tiene NA
+```
+
+**Cuidado al cargar:** `read.table` con `sep = " "` colapsa múltiples espacios consecutivos como un único separador. Si el archivo usara separadores literales (un solo espacio entre cada campo), tendrías que usar `read.delim` o ajustar `quote`. Probá `?read.table` para los detalles.
+
+:::
 
 ## Ejercicio 15: `is.numeric` para identificar columnas
 
@@ -145,6 +481,32 @@ b)  Quedate solo con las columnas numéricas. Pista: `df[, sapply(df, is.numeric
 
 c)  Aplicá `resumen_min` (clase 1) a cada columna numérica con `lapply`. Guardá el resultado.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+df <- descripcion$df
+
+# a)
+es_num <- sapply(df, is.numeric)
+es_num
+# season, day, hr, weekday, workingday, temp, atemp, hum, windspeed,
+# casual, registered, bikers: TRUE
+# mnth, holiday, weathersit: FALSE
+
+# b)
+df_num <- df[, es_num]
+ncol(df_num)   # 12
+
+# c)
+resumenes <- lapply(df_num, resumen_min)
+length(resumenes)        # 12
+resumenes$bikers         # media: 144,  min: 1,  max: 977
+```
+
+**Por qué `lapply` y no `sapply`:** `resumen_min` devuelve una lista (con 4 elementos). `sapply` intentaría simplificar a una matriz 4x12, que también funcionaría. `lapply` deja una lista de listas, que es más explícito y se accede con `$`. Cualquiera de las dos formas es válida; la elección es de estilo.
+
+:::
+
 ## Ejercicio 16: la columna con mayor amplitud
 
 a)  Para cada columna numérica, calculá `max - min` (la amplitud).
@@ -152,6 +514,28 @@ a)  Para cada columna numérica, calculá `max - min` (la amplitud).
 b)  Identificá la columna con mayor amplitud y la de menor amplitud.
 
 c)  Justificá por qué `bikers` y `temp` tienen amplitudes muy distintas.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+amplitudes <- sapply(df_num, function(c) max(c) - min(c))
+amplitudes
+
+# b)
+which.max(amplitudes)   # bikers (rango ~ 977)
+which.min(amplitudes)   # workingday o holiday (rango = 1, son booleanos)
+
+# c)
+# bikers es un conteo: va de 1 a casi 1000.
+# temp esta NORMALIZADO (0 a 1), por eso su amplitud es ~1.
+# Comparar amplitudes brutas no tiene sentido si las unidades son distintas.
+# Para comparar, hay que estandarizar: (x - mean) / sd, lo que hace `scale`.
+```
+
+**Lección general:** las amplitudes brutas no son comparables entre variables con escalas distintas. Es la principal razón para **estandarizar** antes de aplicar métodos sensibles a la escala (PCA, k-means, regularización).
+
+:::
 
 ## Ejercicio 17: combinar listas y `data.frame`
 
@@ -161,6 +545,26 @@ b)  Aplicá `nrow` a cada uno con `sapply`.
 
 c)  Aplicá `colMeans` a cada uno con `lapply`. ¿Por qué `lapply` y no `sapply` aquí?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+datos <- list(autos = mtcars, flores = iris[, 1:4])
+
+# b)
+sapply(datos, nrow)
+# autos: 32   flores: 150
+
+# c)
+lapply(datos, colMeans)
+# $autos: vector de 11 medias
+# $flores: vector de 4 medias
+```
+
+**Por qué no `sapply`:** los `colMeans` de cada `data.frame` tienen distintas longitudes (11 en `mtcars`, 4 en `iris[,1:4]`). `sapply` no puede simplificar a matriz porque no son rectangulares. Termina devolviendo una lista (igual que `lapply`), así que conviene ser explícitos con `lapply`.
+
+:::
+
 ## Ejercicio 18: combinar `data.frame` con `do.call(rbind, ...)`
 
 a)  Construí tres `data.frame` chiquitos con la misma estructura (mismas columnas).
@@ -168,6 +572,30 @@ a)  Construí tres `data.frame` chiquitos con la misma estructura (mismas column
 b)  Combinálos verticalmente con `do.call(rbind, lista_de_dfs)`. Verificá `dim`.
 
 c)  Hacé lo mismo con tres subsetes de `airquality` (uno por mes 5, 6, 7).
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+df1 <- data.frame(x = 1:2, y = c("a", "b"))
+df2 <- data.frame(x = 3:4, y = c("c", "d"))
+df3 <- data.frame(x = 5:6, y = c("e", "f"))
+
+# b)
+combinado <- do.call(rbind, list(df1, df2, df3))
+dim(combinado)   # 6 2
+
+# c)
+mayo  <- airquality[airquality$Month == 5, ]
+junio <- airquality[airquality$Month == 6, ]
+julio <- airquality[airquality$Month == 7, ]
+verano <- do.call(rbind, list(mayo, junio, julio))
+nrow(verano)   # 92
+```
+
+**Por qué `do.call`:** `rbind(df1, df2, df3)` funciona si tengo los `df`s separados. Pero si están en una **lista** (variable largo), necesito `do.call(rbind, lista)`, que despacha cada elemento como argumento. Es el patrón canónico para "aplicar `rbind` a una colección variable".
+
+:::
 
 ## Ejercicio 19: `medias_por_grupo` sobre bikeshare
 
@@ -177,6 +605,29 @@ b)  Aplicá `medias_por_grupo` con `bikers` por `weekday`. Convertí `weekday` a
 
 c)  Identificá el día y la estación con mayor uso usando `top_grupo`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+medias_por_grupo(bicis, "bikers", "season")
+# invierno: 111, primavera: 208, verano: 236, otono: 199
+
+# b)
+bicis$weekday <- factor(bicis$weekday,
+                        levels = c("lun", "mar", "mie", "jue", "vie", "sab", "dom"),
+                        ordered = TRUE)
+medias_por_grupo(bicis, "bikers", "weekday")
+
+# c)
+top_grupo(medias_por_grupo(bicis, "bikers", "season"))   # "verano"
+top_grupo(medias_por_grupo(bicis, "bikers", "weekday"))
+# entre lun y vie suelen estar parejos, sale el ganador por poco
+```
+
+**Detalle del orden:** la función auxiliar `cargar_bikeshare` ya pone `weekday` como factor pero con orden `dom, lun, ..., sab` (calendario inglés). Para ordenarlo "lun-dom" hay que reasignarlo como en el ejercicio.
+
+:::
+
 ## Ejercicio 20: una función, una responsabilidad
 
 a)  Mirá tu `cargar_y_describir` del ejercicio 14: ¿hace una sola cosa o varias? Listá las responsabilidades por separado.
@@ -184,3 +635,47 @@ a)  Mirá tu `cargar_y_describir` del ejercicio 14: ¿hace una sola cosa o varia
 b)  Partila en cuatro funciones: `cargar_csv(archivo, sep)`, `dimensiones_df(df)`, `tipos_columnas(df)`, `na_por_columna(df)`. Reescribí `cargar_y_describir` para que llame a las cuatro.
 
 c)  ¿Qué función es más fácil de testear ahora? ¿Cuál se podría reusar en otro contexto?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a) Responsabilidades de cargar_y_describir:
+#    1. abrir un archivo CSV
+#    2. medir dimensiones
+#    3. extraer tipos por columna
+#    4. contar NAs por columna
+#    5. ensamblar todo en una lista
+
+# b)
+cargar_csv <- function(archivo, sep = " ") {
+  read.table(archivo, header = TRUE, sep = sep, stringsAsFactors = FALSE)
+}
+
+dimensiones_df <- function(df) {
+  c(filas = nrow(df), columnas = ncol(df))
+}
+
+tipos_columnas <- function(df) sapply(df, class)
+
+na_por_columna <- function(df) sapply(df, function(c) sum(is.na(c)))
+
+cargar_y_describir <- function(archivo, sep = " ") {
+  df <- cargar_csv(archivo, sep)
+  list(
+    df          = df,
+    dimensiones = dimensiones_df(df),
+    tipos       = tipos_columnas(df),
+    n_na        = na_por_columna(df)
+  )
+}
+
+# c)
+# Cada funcion chica es testeable de forma aislada:
+#   tipos_columnas(data.frame(a = 1, b = "x"))   # devuelve c("integer", "character")
+# Y son reusables: tipos_columnas se puede aplicar a cualquier df,
+# no solo al de bikeshare.
+```
+
+**Beneficio en concreto:** si mañana quiero describir un `data.frame` que ya tengo en memoria (no viene de CSV), uso `dimensiones_df`, `tipos_columnas`, `na_por_columna` directamente. Si todo estuviera dentro de `cargar_y_describir`, tendría que duplicar el código o pasarlo de fuerza por un archivo intermedio.
+
+:::

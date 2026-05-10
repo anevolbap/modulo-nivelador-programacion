@@ -18,6 +18,8 @@ head(mtcars)
 
 A lo largo de esta guía construimos una pequeña caja de herramientas que vamos a reusar en las clases siguientes: `etiquetar_auto`, `dif_promedio`, `dentro_rango`, `resumen_min`.
 
+Las soluciones están en bloques colapsables debajo de cada ejercicio. **Conviene probar primero** y mirar la solución solo después.
+
 ## Ejercicio 1: variables y tipos atómicos
 
 a)  Asigná cuatro variables que describan el primer auto de `mtcars`: `nombre_auto` (string con `rownames(mtcars)[1]`), `consumo_mpg` (double, `mtcars$mpg[1]`), `cilindros` (integer, `as.integer(mtcars$cyl[1])`) y `transmision_manual` (logical, `mtcars$am[1] == 1`). Verificá `class()` de cada una.
@@ -25,6 +27,33 @@ a)  Asigná cuatro variables que describan el primer auto de `mtcars`: `nombre_a
 b)  Verificá también `typeof()`. ¿En qué se diferencian `class` y `typeof` para `consumo_mpg`?
 
 c)  ¿Qué devuelve `is.numeric(cilindros)`? ¿Y `is.numeric(transmision_manual)`? Justificá.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+nombre_auto        <- rownames(mtcars)[1]            # "Mazda RX4"
+consumo_mpg        <- mtcars$mpg[1]                  # 21
+cilindros          <- as.integer(mtcars$cyl[1])      # 6L
+transmision_manual <- mtcars$am[1] == 1              # TRUE
+
+class(nombre_auto)         # "character"
+class(consumo_mpg)         # "numeric"
+class(cilindros)           # "integer"
+class(transmision_manual)  # "logical"
+
+# b)
+typeof(consumo_mpg)        # "double"  (class dice "numeric", typeof dice "double")
+typeof(cilindros)          # "integer"
+
+# c)
+is.numeric(cilindros)           # TRUE   integer es subconjunto de numeric
+is.numeric(transmision_manual)  # FALSE  logical no entra
+```
+
+**Curiosidad:** `is.numeric` también devuelve `TRUE` para `integer`. Si necesitás distinguir el tipo exacto, usá `is.double` o `is.integer`. En R, `numeric` es la clase paraguas para "número" y `integer` se considera un caso particular.
+
+:::
 
 ## Ejercicio 2: coerción de tipos
 
@@ -34,6 +63,25 @@ b)  Predecí qué devuelve `c(TRUE, 1, "a")`. Justificá usando la regla de coer
 
 c)  ¿Qué pasa al evaluar `consumo_mpg + transmision_manual`? Identificá qué tipo predomina.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+c(TRUE, 1L, 1.5)        # 1.0 1.0 1.5  (double — promueve TRUE a 1, integer a double)
+
+# b)
+c(TRUE, 1, "a")         # "TRUE" "1" "a"  (character — gana el más general)
+
+# c)
+consumo_mpg + transmision_manual    # 22  (TRUE coerce a 1; resultado numeric)
+```
+
+**Regla:** cuando se mezclan tipos en un vector o una operación, R promueve todo al tipo más general en la jerarquía `logical → integer → double → character`.
+
+**Caso no obvio:** `c(TRUE, NA)` devuelve `c(TRUE, NA)` y `class` es `logical`. Pero `c(1L, NA)` da `integer` y `c(1.5, NA)` da `double`. `NA` se adapta al contexto.
+
+:::
+
 ## Ejercicio 3: vector de consumos
 
 a)  Asigná `consumos <- mtcars$mpg`. Verificá `length(consumos)` y `class(consumos)`.
@@ -41,6 +89,31 @@ a)  Asigná `consumos <- mtcars$mpg`. Verificá `length(consumos)` y `class(cons
 b)  Calculá `mean`, `median`, `min` y `max` de `consumos`. Compará con la salida de `summary(consumos)`.
 
 c)  Quedate con los consumos por encima del promedio usando indexado lógico. ¿Cuántos son?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+consumos <- mtcars$mpg
+length(consumos)   # 32
+class(consumos)    # "numeric"
+
+# b)
+mean(consumos)     # 20.09
+median(consumos)   # 19.2
+min(consumos)      # 10.4
+max(consumos)      # 33.9
+summary(consumos)  # min, Q1, mediana, media, Q3, max
+
+# c)
+consumos_altos <- consumos[consumos > mean(consumos)]
+length(consumos_altos)            # 18
+sum(consumos > mean(consumos))    # mismo resultado, mas idiomatico
+```
+
+**Nota:** mediana < media indica una distribución sesgada hacia valores grandes. Acá son cercanas (~19 vs ~20), así que el sesgo es leve.
+
+:::
 
 ## Ejercicio 4: indexar `mtcars`
 
@@ -50,6 +123,28 @@ b)  Encontrá el auto con mayor `mpg` con `which.max`. Mostrá su nombre con `ro
 
 c)  Mostrá las primeras tres columnas (`mpg`, `cyl`, `disp`) de los primeros cinco autos. Verificá la estructura del resultado.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+mtcars[1, ]              # primera fila completa (data.frame de 1x11)
+mtcars$hp                # columna hp (vector numerico)
+mtcars[5, "mpg"]         # 18.1
+
+# b)
+which.max(mtcars$mpg)                       # 20
+rownames(mtcars)[which.max(mtcars$mpg)]     # "Toyota Corolla"
+
+# c)
+sub <- mtcars[1:5, c("mpg", "cyl", "disp")]
+class(sub)   # "data.frame"
+dim(sub)     # 5 3
+```
+
+**Detalle sobre dimensiones:** `mtcars[5, "mpg"]` devuelve un vector de longitud 1, no un `data.frame`. Si querés mantener la estructura tabular usá `drop = FALSE`: `mtcars[5, "mpg", drop = FALSE]`.
+
+:::
+
 ## Ejercicio 5: filtros con condiciones múltiples
 
 a)  Filtrá los autos con `mpg > 25`. ¿Cuántos son?
@@ -57,6 +152,25 @@ a)  Filtrá los autos con `mpg > 25`. ¿Cuántos son?
 b)  Filtrá los autos con `mpg > 25` Y `cyl == 4`. Pista: operador `&`.
 
 c)  Filtrá los autos con `cyl == 4` o `cyl == 8`. Pista: `|` o `%in%`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+sum(mtcars$mpg > 25)    # 6
+
+# b)
+sum(mtcars$mpg > 25 & mtcars$cyl == 4)   # 6
+# los seis autos con mpg > 25 son todos de 4 cilindros
+
+# c)
+sum(mtcars$cyl %in% c(4, 8))   # 25 (todos menos los de 6 cilindros)
+sum(mtcars$cyl == 4 | mtcars$cyl == 8)   # equivalente
+```
+
+**Curiosidad:** `%in%` es más legible que la cadena de `|` cuando hay tres o más valores. Internamente usa `match`. Para conjuntos grandes (>1000 valores) hay diferencias de performance, pero a esta escala dan lo mismo.
+
+:::
 
 ## Ejercicio 6: función `etiquetar_auto`
 
@@ -66,6 +180,27 @@ b)  Probala con valores extraídos de `mtcars`: `etiquetar_auto(rownames(mtcars)
 
 c)  Agregale un valor por defecto `mpg = NA` y observá la salida cuando se omite el segundo argumento.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+etiquetar_auto <- function(modelo, mpg = NA) {
+  paste0(modelo, ": ", mpg, " mpg")
+}
+
+# a)
+etiquetar_auto("Mazda RX4", 21)              # "Mazda RX4: 21 mpg"
+
+# b)
+etiquetar_auto(rownames(mtcars)[1], mtcars$mpg[1])   # "Mazda RX4: 21 mpg"
+
+# c)
+etiquetar_auto("Auto X")    # "Auto X: NA mpg"
+```
+
+**Caso interesante:** `paste0` es vectorizado: `etiquetar_auto(rownames(mtcars), mtcars$mpg)` devuelve un vector con las 32 etiquetas en una sola llamada.
+
+:::
+
 ## Ejercicio 7: función `dif_promedio`
 
 a)  Definí `dif_promedio(x)` que devuelva `x - mean(x)`. Aplicala a `mtcars$mpg`. Calculá la suma de las diferencias. Justificá el resultado teóricamente.
@@ -73,6 +208,28 @@ a)  Definí `dif_promedio(x)` que devuelva `x - mean(x)`. Aplicala a `mtcars$mpg
 b)  ¿Cuántos autos están por encima del promedio? Pista: `sum(dif_promedio(x) > 0)`.
 
 c)  ¿Cuál es el auto que más se aleja del promedio en valor absoluto? Pista: `which.max(abs(...))`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+dif_promedio <- function(x) x - mean(x)
+
+# a)
+sum(dif_promedio(mtcars$mpg))    # ~ 0  (en realidad un numero como 1.5e-14)
+# Teorico: sum(x_i - mean(x)) = sum(x_i) - n*mean(x) = sum(x_i) - sum(x_i) = 0
+# El residuo es ruido de punto flotante.
+
+# b)
+sum(dif_promedio(mtcars$mpg) > 0)   # 18
+
+# c)
+i <- which.max(abs(dif_promedio(mtcars$mpg)))
+rownames(mtcars)[i]    # "Toyota Corolla" (el de mayor mpg)
+```
+
+**Nota numérica:** la suma "exacta" es 0 pero R devuelve algo como `1.5e-14` por aritmética de punto flotante. Comparar con `==` falla; usá `abs(suma) < 1e-10`.
+
+:::
 
 ## Ejercicio 8: función `dentro_rango`
 
@@ -82,6 +239,23 @@ b)  Probala con `dentro_rango(c(1, 5, 10, 15, 20), 5, 15)`.
 
 c)  Aplicala a `mtcars$mpg` con rango `c(20, 25)`. ¿Cuántos autos caen dentro del rango?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+dentro_rango <- function(x, a, b) x >= a & x <= b
+
+# b)
+dentro_rango(c(1, 5, 10, 15, 20), 5, 15)
+# FALSE TRUE TRUE TRUE FALSE
+
+# c)
+sum(dentro_rango(mtcars$mpg, 20, 25))   # 8
+```
+
+**Sutileza:** la versión vectorizada usa `&` (operador elemento a elemento). `&&` solo evalúa el primer elemento (cortocircuito) y se usa típicamente en condiciones de `if`. Confundirlos es un error común.
+
+:::
+
 ## Ejercicio 9: conversión de unidades
 
 a)  Definí `mpg_a_km_l(x)` que convierta de `mpg` (millas por galón) a `km/L`. Factor: `1 mpg ≈ 0.4251 km/L`.
@@ -89,6 +263,23 @@ a)  Definí `mpg_a_km_l(x)` que convierta de `mpg` (millas por galón) a `km/L`.
 b)  Aplicala a `mtcars$mpg` para obtener un vector de consumos en `km/L`.
 
 c)  Definí `km_l_a_mpg(x)` (función inversa). Verificá que `km_l_a_mpg(mpg_a_km_l(20))` devuelve aproximadamente `20`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+mpg_a_km_l <- function(x) x * 0.4251
+km_l_a_mpg <- function(x) x / 0.4251
+
+# b)
+mpg_a_km_l(mtcars$mpg)   # vector con 32 consumos en km/L
+
+# c)
+km_l_a_mpg(mpg_a_km_l(20))   # 20.0  (igual hasta el redondeo)
+```
+
+**Curiosidad:** el factor exacto es `1.609344 / 3.785411784 = 0.42514...`. Si querés precisión, definí la constante con más decimales o leela de un paquete como `units`.
+
+:::
 
 ## Ejercicio 10: función `resumen_min`
 
@@ -98,6 +289,30 @@ b)  Aplicala a `mtcars$mpg`. Verificá `class()` del resultado.
 
 c)  Aplicala a `mtcars$hp`. Compará el rango con el de `mpg`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+resumen_min <- function(x) {
+  list(media   = mean(x),
+       mediana = median(x),
+       min     = min(x),
+       max     = max(x))
+}
+
+# b)
+resumen_min(mtcars$mpg)
+# $media: 20.09  $mediana: 19.2  $min: 10.4  $max: 33.9
+class(resumen_min(mtcars$mpg))   # "list"
+
+# c)
+resumen_min(mtcars$hp)
+# rango: 52 a 335 (mucho mas amplio que mpg)
+```
+
+**Caso no contemplado:** si `x` tiene `NA`, todas las funciones devuelven `NA`. Para hacerla robusta agregaríamos un argumento `na.rm = FALSE` y lo pasaríamos a cada llamada. Lo vamos a ver en la guía 4.
+
+:::
+
 ## Ejercicio 11: lista que describe un auto
 
 a)  Creá una lista `auto_1` con: `modelo` (string), `mpg` (double), `cilindros` (integer), `caja` (`"manual"` o `"automatica"`). Usá los datos del primer auto de `mtcars`.
@@ -105,6 +320,34 @@ a)  Creá una lista `auto_1` con: `modelo` (string), `mpg` (double), `cilindros`
 b)  Accedé a cada campo con `$`, con `[[ ]]` y con `[ ]`. Mostrá `class()` de cada acceso.
 
 c)  Cambiá el valor de `mpg` reasignándolo (`auto_1$mpg <- ...`). Verificá.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+auto_1 <- list(
+  modelo     = rownames(mtcars)[1],
+  mpg        = mtcars$mpg[1],
+  cilindros  = as.integer(mtcars$cyl[1]),
+  caja       = ifelse(mtcars$am[1] == 1, "manual", "automatica")
+)
+
+# b)
+auto_1$modelo            # "Mazda RX4" (character)
+auto_1[["modelo"]]       # "Mazda RX4" (character)
+auto_1["modelo"]         # lista de 1 elemento (list)
+
+class(auto_1$modelo)         # "character"
+class(auto_1[["modelo"]])    # "character"
+class(auto_1["modelo"])      # "list"
+
+# c)
+auto_1$mpg <- 22
+auto_1$mpg   # 22
+```
+
+**Atajo mental para listas:** `[[ ]]` saca el contenido (un elemento), `[ ]` saca un sub-cajón (otra lista, posiblemente con varios elementos). `$` es la versión "atajo" de `[[ ]]` con nombre.
+
+:::
 
 ## Ejercicio 12: comparar dos autos
 
@@ -114,6 +357,32 @@ b)  Probala con dos autos cualesquiera de `mtcars`.
 
 c)  Si llamás `comparar_autos(list(mpg = 20), list(consumo = 25))`, ¿qué pasa? Identificá el problema.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+comparar_autos <- function(auto_a, auto_b) {
+  list(
+    dif_mpg       = auto_a$mpg - auto_b$mpg,
+    dif_cilindros = auto_a$cilindros - auto_b$cilindros
+  )
+}
+
+# b)
+a1 <- list(mpg = mtcars$mpg[1], cilindros = mtcars$cyl[1])
+a2 <- list(mpg = mtcars$mpg[2], cilindros = mtcars$cyl[2])
+comparar_autos(a1, a2)
+# $dif_mpg: 0   $dif_cilindros: 0  (los dos primeros Mazdas son iguales)
+
+# c)
+comparar_autos(list(mpg = 20), list(consumo = 25))
+# $dif_mpg: NA  (auto_b$mpg es NULL, NULL - 20 da numeric(0), envuelto en NA)
+# $dif_cilindros: NA  (ambos campos faltan)
+```
+
+**Para una versión defensiva:** validá los nombres con `stopifnot(c("mpg", "cilindros") %in% names(auto_a))`. Lo vamos a ver en la guía 4.
+
+:::
+
 ## Ejercicio 13: ordenar por consumo
 
 a)  Ordená `mtcars` por `mpg` descendente. Pista: `order(-mtcars$mpg)` o `order(..., decreasing = TRUE)`.
@@ -121,6 +390,26 @@ a)  Ordená `mtcars` por `mpg` descendente. Pista: `order(-mtcars$mpg)` o `order
 b)  Mostrá los nombres de los tres autos con mayor `mpg`.
 
 c)  Mostrá los tres con menor `mpg`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+ordenado <- mtcars[order(mtcars$mpg, decreasing = TRUE), ]
+head(ordenado, 3)
+
+# b)
+rownames(ordenado)[1:3]
+# "Toyota Corolla"  "Fiat 128"  "Honda Civic"
+
+# c)
+rownames(ordenado)[(nrow(ordenado) - 2):nrow(ordenado)]
+# "Camaro Z28"  "Cadillac Fleetwood"  "Lincoln Continental"
+```
+
+**Diferencia clave:** `sort` ordena los valores; `order` devuelve los **índices** que ordenarían el vector. `order` se usa para reordenar un `data.frame` por una columna.
+
+:::
 
 ## Ejercicio 14: aplicar `resumen_min` a varias columnas
 
@@ -130,6 +419,29 @@ b)  Hacé lo mismo en una sola línea con `lapply`. Pista: `lapply(mtcars[, c("m
 
 c)  ¿Qué tipo devuelve `lapply` y qué devuelve `sapply`? Compará los resultados.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+resumenes <- list(
+  mpg = resumen_min(mtcars$mpg),
+  hp  = resumen_min(mtcars$hp),
+  wt  = resumen_min(mtcars$wt)
+)
+
+# b)
+resumenes_v2 <- lapply(mtcars[, c("mpg", "hp", "wt")], resumen_min)
+identical(resumenes, resumenes_v2)   # TRUE
+
+# c)
+class(resumenes_v2)                                       # "list"
+class(sapply(mtcars[, c("mpg", "hp", "wt")], resumen_min))  # "matrix" (4x3)
+```
+
+**Cuándo cada uno:** `lapply` siempre devuelve lista (predecible). `sapply` intenta simplificar a vector o matriz si todos los elementos tienen la misma forma. Para código robusto, `lapply` es más seguro.
+
+:::
+
 ## Ejercicio 15: tu propio `data.frame`
 
 a)  Creá un `data.frame` con tres pacientes y cuatro columnas: `id` (integer), `edad` (double), `peso_kg` (double), `fuma` (logical).
@@ -137,6 +449,32 @@ a)  Creá un `data.frame` con tres pacientes y cuatro columnas: `id` (integer), 
 b)  Aplicá `resumen_min` a la columna `edad`.
 
 c)  Aplicá `summary()` al `data.frame` completo. Compará la salida con la de `resumen_min`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+pacientes <- data.frame(
+  id      = c(1L, 2L, 3L),
+  edad    = c(34, 56, 47),
+  peso_kg = c(72.5, 88.0, 65.3),
+  fuma    = c(FALSE, TRUE, FALSE)
+)
+
+# b)
+resumen_min(pacientes$edad)
+# media: 45.67  mediana: 47  min: 34  max: 56
+
+# c)
+summary(pacientes)
+# para columnas numericas: min/Q1/median/mean/Q3/max
+# para fuma (logical): cuenta de TRUE y FALSE
+# para id (integer): igual que numericas
+```
+
+**Diferencia con `resumen_min`:** `summary` hace una cosa distinta para cada tipo de columna (numérico, factor, lógico, character). Es un caso clásico de **dispatch de método** sobre clases en R: la función real es `summary.data.frame`, que llama a `summary.numeric`, `summary.logical`, etc.
+
+:::
 
 ## Ejercicio 16: percentiles con `quantile`
 
@@ -146,6 +484,34 @@ b)  Aplicá `quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9))`. ¿Qué representa 
 
 c)  Definí `rango_intercuartilico(x)` usando `quantile`. Aplicalo a `mtcars$mpg` y compará con `IQR(mtcars$mpg)`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+quantile(mtcars$mpg)
+# 0%    25%   50%   75%   100%
+# 10.4  15.4  19.2  22.8  33.9
+# Q1 = 15.4, mediana = 19.2, Q3 = 22.8
+
+# b)
+quantile(mtcars$mpg, probs = c(0.1, 0.5, 0.9))
+# 10%   50%   90%
+# 14.3  19.2  30.1
+# 10% de los autos tienen mpg <= 14.3; 90% tienen mpg <= 30.1
+
+# c)
+rango_intercuartilico <- function(x) {
+  q <- quantile(x, probs = c(0.25, 0.75))
+  unname(q[2] - q[1])
+}
+rango_intercuartilico(mtcars$mpg)   # 7.375
+IQR(mtcars$mpg)                      # 7.375
+```
+
+**Curiosidad:** `quantile` admite 9 algoritmos distintos para interpolar entre puntos cuando el percentil cae entre dos observaciones (`type = 1, 2, ..., 9`). Por defecto usa `type = 7`. Diferentes paquetes y libros usan tipos distintos, por eso a veces los resultados no coinciden exactamente.
+
+:::
+
 ## Ejercicio 17: correlación con `cor`
 
 a)  Calculá `cor(mtcars$mpg, mtcars$hp)`. Interpretá el signo y la magnitud (`cor` toma valores entre `-1` y `1`).
@@ -153,6 +519,28 @@ a)  Calculá `cor(mtcars$mpg, mtcars$hp)`. Interpretá el signo y la magnitud (`
 b)  Calculá la matriz de correlaciones entre `mpg`, `hp`, `wt` y `cyl` con `cor(mtcars[, c("mpg", "hp", "wt", "cyl")])`.
 
 c)  Identificá el par de variables más correlacionado y el menos correlacionado.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+cor(mtcars$mpg, mtcars$hp)   # -0.776
+# correlacion fuerte y negativa: mas potencia, menos consumo eficiente
+
+# b)
+M <- cor(mtcars[, c("mpg", "hp", "wt", "cyl")])
+# todas negativas con mpg, fuertes positivas entre hp/wt/cyl
+
+# c)
+M[upper.tri(M)]                       # solo el triangulo superior
+abs_off <- abs(M); diag(abs_off) <- 0  # ignorar la diagonal (1s)
+which(abs_off == max(abs_off), arr.ind = TRUE)
+# par mas correlacionado: cyl-hp (~0.83) o similar
+```
+
+**Curiosidad:** `cor` por defecto usa Pearson (lineal). Para relaciones no lineales monotónicas (como rangos) usá `cor(..., method = "spearman")` o `"kendall"`. Pearson puede ser engañoso si los datos no son aproximadamente lineales.
+
+:::
 
 ## Ejercicio 18: leer la documentación
 
@@ -162,6 +550,32 @@ b)  Probá `sapply(1:5, function(i) i^2)`. ¿Devuelve un vector o una lista?
 
 c)  Probá `lapply(1:5, function(i) i^2)`. Compará con la salida de `sapply` y explicá cuándo conviene cada uno.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+?sapply
+# X: el vector/lista a recorrer
+# FUN: la funcion a aplicar a cada elemento
+# simplify: si TRUE (default), simplifica a vector/matriz si puede
+
+# b)
+sapply(1:5, function(i) i^2)
+# 1 4 9 16 25 (vector numerico)
+
+# c)
+lapply(1:5, function(i) i^2)
+# lista de 5 elementos: [[1]] 1, [[2]] 4, ..., [[5]] 25
+```
+
+**Cuándo cada uno:**
+
+- Si todos los resultados tienen la misma forma (escalar o vector de igual largo): `sapply` para vector/matriz simplificada.
+- Si los resultados pueden tener formas distintas, o querés garantía de tipo: `lapply` siempre devuelve lista.
+- Para código robusto, `vapply(X, FUN, FUN.VALUE = ...)` exige una forma específica y falla temprano si algo no la cumple.
+
+:::
+
 ## Ejercicio 19: la caja de herramientas sobre datos sintéticos
 
 a)  Generá un vector `x` con `rnorm(100, mean = 50, sd = 10)` (100 valores normales). Para detalles, `?rnorm`.
@@ -169,6 +583,27 @@ a)  Generá un vector `x` con `rnorm(100, mean = 50, sd = 10)` (100 valores norm
 b)  Aplicale `resumen_min`, `dif_promedio` y `dentro_rango` con `a = 40, b = 60`.
 
 c)  ¿Aproximadamente cuántos valores caen en `[40, 60]`? Compará con la regla 68-95-99.7 de la distribución normal (esperado: ~68%).
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+set.seed(42)   # opcional, para reproducir el ejemplo
+x <- rnorm(100, mean = 50, sd = 10)
+
+# b)
+resumen_min(x)   # media ~50, mediana ~50, rango ~25-75
+hist(dif_promedio(x))   # debe verse centrada en 0
+sum(dentro_rango(x, 40, 60))   # ~68
+
+# c)
+prop <- mean(dentro_rango(x, 40, 60))
+prop   # 0.65 a 0.72 segun la semilla
+# La regla 68-95-99.7 predice 68% para [mu - sigma, mu + sigma].
+```
+
+**Curiosidad:** la regla 68-95-99.7 es exacta solo en el límite (n → ∞). Con n = 100 hay variabilidad de muestra. Si repetís muchas veces y promediás, vas a converger al 68.27% exacto: `pnorm(1) - pnorm(-1)`.
+
+:::
 
 ## Ejercicio 20: buenos nombres
 
@@ -185,3 +620,21 @@ a)  Tomá este snippet:
 b)  Reescribilo cambiando los nombres para que la intención sea clara sin necesidad de comentarios. Pensá nombres descriptivos para `f`, `a`, `x`, `y`.
 
 c)  Justificá tu elección en una línea.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# Reescritura
+km_a_mi <- function(millas_base, kilometros) {
+  millas_base + kilometros * 0.6213
+}
+
+distancia_km <- 100
+print(km_a_mi(0, distancia_km))   # 62.13
+```
+
+**Justificación:** el nombre de la función dice qué convierte y los parámetros indican qué cantidad va en cada lugar (`millas_base` parte de un offset, `kilometros` es lo que se convierte). Quien lee el código entiende sin pista.
+
+**Mejora extra:** si el offset siempre es `0`, sacarlo: `km_a_mi <- function(km) km * 0.6213`. La función queda más simple. Eliminar argumentos siempre-iguales también es buena práctica.
+
+:::

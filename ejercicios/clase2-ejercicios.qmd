@@ -28,6 +28,27 @@ b)  ¿Cuántos `NA` hay en cada columna? Pista: `sapply(airquality, function(col
 
 c)  ¿Cuántas filas tienen al menos un `NA`? Pista: `sum(!complete.cases(airquality))`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+dim(airquality)         # 153 6
+colnames(airquality)    # "Ozone" "Solar.R" "Wind" "Temp" "Month" "Day"
+# Ozone: ppb, Solar.R: lang (langleys), Wind: mph, Temp: F, Month, Day: enteros
+
+# b)
+sapply(airquality, function(col) sum(is.na(col)))
+# Ozone: 37  Solar.R: 7  Wind: 0  Temp: 0  Month: 0  Day: 0
+
+# c)
+sum(!complete.cases(airquality))   # 42 filas con al menos un NA
+nrow(airquality) - 42              # 111 filas completas
+```
+
+**Curiosidad:** la mayor parte de los `NA` están en `Ozone` (37 de 153, casi 25%). Esto importa: cualquier análisis sobre `Ozone` arranca con la decisión de qué hacer con los faltantes (omitir, imputar, modelar).
+
+:::
+
 ## Ejercicio 2: `if` simple
 
 a)  Asigná `temp_observada <- 85` (en °F). Escribí un bloque `if` que imprima `"alerta de calor"` si `temp_observada >= 80`.
@@ -35,6 +56,28 @@ a)  Asigná `temp_observada <- 85` (en °F). Escribí un bloque `if` que imprima
 b)  Reasigná `temp_observada <- 70` y volvé a correr. ¿Imprime algo?
 
 c)  ¿Qué pasa si `temp_observada` es `NA`? Probá. Identificá el problema.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+temp_observada <- 85
+if (temp_observada >= 80) print("alerta de calor")
+
+# b)
+temp_observada <- 70
+if (temp_observada >= 80) print("alerta de calor")
+# no imprime nada (la condicion es FALSE)
+
+# c)
+temp_observada <- NA
+if (temp_observada >= 80) print("alerta de calor")
+# Error: missing value where TRUE/FALSE needed
+```
+
+**Por qué falla con NA:** la comparación `NA >= 80` devuelve `NA` (no `TRUE` ni `FALSE`), e `if` requiere un valor lógico definido. Hay que decidir explícitamente qué hacer con `NA`. Patrón común: `if (!is.na(x) && x >= 80)`.
+
+:::
 
 ## Ejercicio 3: `if` / `else`
 
@@ -44,6 +87,29 @@ b)  Aplicala a `c(60, 75, 90)`. ¿Funciona vectorizada o no? Justificá.
 
 c)  Aplicala con `for` a `airquality$Temp[1:10]`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+categorizar_dia <- function(temp) {
+  if (temp >= 80) "caluroso" else "templado"
+}
+
+# b)
+categorizar_dia(c(60, 75, 90))
+# Warning: "the condition has length > 1 and only the first element will be used"
+# Devuelve "templado" usando solo el primer elemento (60).
+# La funcion NO esta vectorizada porque if requiere un escalar.
+
+# c)
+for (t in airquality$Temp[1:10]) {
+  print(categorizar_dia(t))
+}
+```
+
+**Nota:** desde R 4.2, pasarle un vector a `if` lanza error en lugar de warning si el environment lo permite. Es una mejora: hace el bug visible.
+
+:::
+
 ## Ejercicio 4: `if` / `else if` / `else`
 
 a)  Definí `clasificar_temp(temp)` (en °F): `"frio"` si `temp < 60`, `"templado"` si `60 <= temp < 80`, `"caluroso"` si `temp >= 80`.
@@ -51,6 +117,39 @@ a)  Definí `clasificar_temp(temp)` (en °F): `"frio"` si `temp < 60`, `"templad
 b)  Probala con `c(50, 70, 90, 100)` dentro de un `for`.
 
 c)  Hacé lo mismo con `ifelse` anidado vectorial. Compará legibilidad y velocidad (`system.time`).
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+clasificar_temp <- function(temp) {
+  if (is.na(temp))       NA
+  else if (temp < 60)    "frio"
+  else if (temp < 80)    "templado"
+  else                   "caluroso"
+}
+
+# b)
+for (t in c(50, 70, 90, 100)) {
+  print(clasificar_temp(t))
+}
+# "frio"  "templado"  "caluroso"  "caluroso"
+
+# c) Version vectorizada con ifelse anidado
+clasificar_temp_vec <- function(temp) {
+  ifelse(is.na(temp), NA,
+  ifelse(temp < 60,   "frio",
+  ifelse(temp < 80,   "templado",
+                      "caluroso")))
+}
+
+system.time(replicate(1000, sapply(airquality$Temp, clasificar_temp)))
+system.time(replicate(1000, clasificar_temp_vec(airquality$Temp)))
+# La version vectorizada es ~50x mas rapida.
+```
+
+**Trade-off:** la versión con `if/else if/else` se lee más natural ("cae en este caso, sino en este otro..."). `ifelse` anidado es más rápido y vectorizado pero menos legible cuando hay muchos casos. Cuando son más de 3-4 niveles, `cut(temp, breaks = c(-Inf, 60, 80, Inf), labels = c("frio", "templado", "caluroso"))` es la forma más prolija.
+
+:::
 
 ## Ejercicio 5: operadores lógicos en condiciones
 
@@ -60,6 +159,32 @@ b)  Probala con `dia_alerta(90, 85)` y `dia_alerta(70, 90)`.
 
 c)  Aplicala con un `for` a las primeras 30 filas de `airquality`. Cuidado con `NA`: tratalos como `FALSE`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+dia_alerta <- function(temp, ozono) {
+  if (is.na(temp) || is.na(ozono)) return(FALSE)
+  temp >= 85 && ozono >= 80
+}
+
+# b)
+dia_alerta(90, 85)   # TRUE
+dia_alerta(70, 90)   # FALSE (temp baja)
+
+# c)
+n_alertas <- 0
+for (i in 1:30) {
+  if (dia_alerta(airquality$Temp[i], airquality$Ozone[i])) {
+    n_alertas <- n_alertas + 1
+  }
+}
+n_alertas
+```
+
+**Detalle:** dentro de `if` usamos `&&` y `||` (corto-circuito, escalares). Para vectores usaríamos `&` y `|`. Si te confunden, `&&` es para condiciones de un solo valor; `&` es para vectores enteros.
+
+:::
+
 ## Ejercicio 6: `for` básico
 
 a)  Imprimí los cuadrados de los enteros del 1 al 10 con un `for`.
@@ -67,6 +192,30 @@ a)  Imprimí los cuadrados de los enteros del 1 al 10 con un `for`.
 b)  Recorré `airquality$Wind[1:5]` con un `for` e imprimí cada valor con dos decimales. Pista: `round(x, 2)`.
 
 c)  Recorré las primeras cinco filas de `airquality` con un `for` e imprimí `paste("Día", i, ": Ozono =", airquality$Ozone[i])`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+for (i in 1:10) print(i^2)
+
+# b)
+for (w in airquality$Wind[1:5]) {
+  print(round(w, 2))
+}
+
+# c)
+for (i in 1:5) {
+  print(paste("Día", i, ": Ozono =", airquality$Ozone[i]))
+}
+# "Día 1 : Ozono = 41"
+# "Día 2 : Ozono = 36"
+# ...
+```
+
+**Caso que pisa:** si `airquality$Ozone[i]` es `NA`, `paste` lo muestra como `"NA"`. No falla, pero es bueno saber que `paste` convierte cualquier cosa a string.
+
+:::
 
 ## Ejercicio 7: `for` con `seq_along`
 
@@ -76,6 +225,32 @@ b)  Calculá la suma de los valores no-`NA` de `Ozone` con un `for`. Cuidado con
 
 c)  Compará con `sum(airquality$Ozone, na.rm = TRUE)`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+# Si x tiene length 0:
+x <- numeric(0)
+length(x)        # 0
+1:length(x)      # c(1, 0)  <-- bucle ejecuta DOS veces, indices invalidos
+seq_along(x)     # integer(0)  <-- bucle no ejecuta, correcto
+
+# b)
+suma <- 0
+for (i in seq_along(airquality$Ozone)) {
+  if (is.na(airquality$Ozone[i])) next
+  suma <- suma + airquality$Ozone[i]
+}
+suma   # 4887
+
+# c)
+sum(airquality$Ozone, na.rm = TRUE)   # 4887
+```
+
+**Curiosidad:** el bug de `1:length(x)` con `x` vacío es uno de los más clásicos en R. Pasa silenciosamente porque `1:0` es `c(1, 0)`, el bucle entra dos veces, e índices `x[1]` y `x[0]` devuelven `NA` o vacío. La salida puede parecer correcta pero está mal.
+
+:::
+
 ## Ejercicio 8: acumular en un vector pre-asignado
 
 a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná un vector `numeric(nrow(airquality))` y rellenalo. Cuidado con `NA` (dejalos como `NA`).
@@ -83,6 +258,39 @@ a)  Calculá `Ozone^2 - Wind` para cada día con un `for`. Pre-asigná un vector
 b)  Hacé lo mismo en una línea vectorizada: `airquality$Ozone^2 - airquality$Wind`. Verificá que coincide.
 
 c)  Compará el tiempo de las dos versiones con la función auxiliar `benchmark_funcion(fn, n_rep = 10)` (de `auxiliares.R`). Reportá la media y el desvío. ¿Cuántas veces más rápida es la versión vectorizada?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+source("ejercicios/auxiliares.R")
+
+# a)
+calc_for <- function() {
+  out <- numeric(nrow(airquality))
+  for (i in seq_len(nrow(airquality))) {
+    out[i] <- airquality$Ozone[i]^2 - airquality$Wind[i]
+  }
+  out
+}
+
+# b)
+calc_vec <- function() {
+  airquality$Ozone^2 - airquality$Wind
+}
+
+identical(calc_for(), calc_vec())   # TRUE
+
+# c)
+benchmark_funcion(calc_for, n_rep = 100)
+# media ~0.0008s, sd ~0.0001s
+benchmark_funcion(calc_vec, n_rep = 100)
+# media ~0.00002s, sd ~0.000003s
+# La version vectorizada es ~30-50x mas rapida en este dataset.
+```
+
+**Por qué tanta diferencia:** las operaciones vectorizadas en R están implementadas en C, mientras que el `for` interpreta cada iteración. La brecha crece con el tamaño del vector. Con `airquality` (153 filas) ya se nota; con un millón de filas la diferencia es decisiva.
+
+:::
 
 ## Ejercicio 9: `for` anidado
 
@@ -92,6 +300,37 @@ b)  Verificá con `outer(1:5, 1:5, "*")`. Coinciden.
 
 c)  Calculá la suma de los elementos pares de `M` recorriéndola con dos `for` anidados.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+M <- matrix(0, nrow = 5, ncol = 5)
+for (i in 1:5) {
+  for (j in 1:5) {
+    M[i, j] <- i * j
+  }
+}
+
+# b)
+identical(M, outer(1:5, 1:5, "*"))   # TRUE
+
+# c)
+suma_pares <- 0
+for (i in 1:5) {
+  for (j in 1:5) {
+    if (M[i, j] %% 2 == 0) suma_pares <- suma_pares + M[i, j]
+  }
+}
+suma_pares   # 90
+
+# vectorizado:
+sum(M[M %% 2 == 0])   # 90
+```
+
+**Tabla que sale gratis:** `M` construida con `i * j` es la **tabla de multiplicar** del 1 al 5. `outer` generaliza esto a cualquier función binaria: `outer(1:3, 1:3, "+")` da la tabla de sumar.
+
+:::
+
 ## Ejercicio 10: `while` básico
 
 a)  Escribí un `while` que duplique `x = 1` mientras `x < 1000`. ¿En qué valor se detiene?
@@ -99,6 +338,31 @@ a)  Escribí un `while` que duplique `x = 1` mientras `x < 1000`. ¿En qué valo
 b)  Modificalo para que cuente cuántas iteraciones hizo. Imprimí el contador final.
 
 c)  Compará con `ceiling(log2(1000))`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+x <- 1
+while (x < 1000) x <- x * 2
+x   # 1024
+
+# b)
+x <- 1
+iter <- 0
+while (x < 1000) {
+  x <- x * 2
+  iter <- iter + 1
+}
+iter   # 10
+
+# c)
+ceiling(log2(1000))   # 10
+```
+
+**Por qué coincide:** después de `n` duplicaciones, `x = 2^n`. Buscamos el primer `n` tal que `2^n >= 1000`, que es `ceiling(log2(1000)) = 10`. Esto generaliza: si arrancás con `x` y duplicás hasta superar `M`, hacés `ceiling(log2(M / x))` iteraciones.
+
+:::
 
 ## Ejercicio 11: `while` con tolerancia
 
@@ -108,6 +372,27 @@ b)  Imprimí el resultado y la cantidad de iteraciones.
 
 c)  Compará con `sqrt(2)`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a, b)
+x <- 1
+iter <- 0
+while (abs(x^2 - 2) > 1e-10) {
+  x <- (x + 2/x) / 2
+  iter <- iter + 1
+}
+x      # 1.414214
+iter   # 5
+
+# c)
+sqrt(2) - x   # ~ 1.6e-12  (mucho mas chico que 1e-10)
+```
+
+**Curiosidad:** la iteración Babilónica es un caso particular de Newton-Raphson aplicado a `f(x) = x^2 - 2`. Converge cuadráticamente: la cantidad de dígitos correctos se duplica en cada paso. Con 5 iteraciones ya tenés ~12 dígitos correctos.
+
+:::
+
 ## Ejercicio 12: `break` para detenerse al encontrar
 
 a)  Recorré `airquality$Ozone` y detenete con `break` apenas encontrés un `NA`. Imprimí en qué índice se detuvo.
@@ -115,6 +400,35 @@ a)  Recorré `airquality$Ozone` y detenete con `break` apenas encontrés un `NA`
 b)  Verificá con `which(is.na(airquality$Ozone))[1]`.
 
 c)  Modificalo para detenerte al primer valor `> 100`. Compará con `which(airquality$Ozone > 100)[1]`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+for (i in seq_along(airquality$Ozone)) {
+  if (is.na(airquality$Ozone[i])) {
+    print(i)
+    break
+  }
+}
+# 5
+
+# b)
+which(is.na(airquality$Ozone))[1]   # 5
+
+# c)
+for (i in seq_along(airquality$Ozone)) {
+  if (!is.na(airquality$Ozone[i]) && airquality$Ozone[i] > 100) {
+    print(i)
+    break
+  }
+}
+which(airquality$Ozone > 100)[1]   # incluye NAs en el indice
+```
+
+**Atención:** `which(airquality$Ozone > 100)[1]` ignora los `NA` automáticamente (porque `NA > 100` es `NA`, no se incluye en el resultado de `which`). El for con `break` necesita el chequeo explícito de `NA` para no dar error.
+
+:::
 
 ## Ejercicio 13: `next` para saltear
 
@@ -124,6 +438,36 @@ b)  Imprimí solo los valores `> 80`, salteando `NA` con `next`.
 
 c)  Imprimí solo los días impares con valores `> 50`. Combiná dos `next`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+for (i in 1:30) {
+  if (is.na(airquality$Ozone[i])) next
+  print(airquality$Ozone[i])
+}
+
+# b)
+for (i in 1:30) {
+  v <- airquality$Ozone[i]
+  if (is.na(v)) next
+  if (v <= 80)  next
+  print(v)
+}
+
+# c)
+for (i in 1:30) {
+  v <- airquality$Ozone[i]
+  if (i %% 2 == 0) next
+  if (is.na(v) || v <= 50) next
+  cat("dia", i, ":", v, "\n")
+}
+```
+
+**Estilo:** múltiples `next` al inicio del cuerpo del bucle son una forma común de "guard clauses". Mantienen el cuerpo principal con poca indentación. Es preferible a anidar varios `if`.
+
+:::
+
 ## Ejercicio 14: `contar_eventos`
 
 a)  Definí `contar_eventos(x, umbral)` que use un `for` para contar cuántos elementos de `x` son `> umbral`. Cuidado con `NA`.
@@ -131,6 +475,39 @@ a)  Definí `contar_eventos(x, umbral)` que use un `for` para contar cuántos el
 b)  Probala con `airquality$Ozone` y `umbral = 80` (alerta de la OMS).
 
 c)  Generalizala a `contar_eventos(x, umbral, comparacion = ">")` aceptando `">"`, `"<"`, `">="`, `"<="`. Pista: `match.arg`. Probala con `comparacion = "<"`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+contar_eventos <- function(x, umbral) {
+  n <- 0
+  for (v in x) {
+    if (!is.na(v) && v > umbral) n <- n + 1
+  }
+  n
+}
+
+# b)
+contar_eventos(airquality$Ozone, 80)   # 17
+
+# c)
+contar_eventos <- function(x, umbral, comparacion = c(">", "<", ">=", "<=")) {
+  comparacion <- match.arg(comparacion)
+  cmp <- match.fun(comparacion)
+  n <- 0
+  for (v in x) {
+    if (!is.na(v) && cmp(v, umbral)) n <- n + 1
+  }
+  n
+}
+
+contar_eventos(airquality$Ozone, 20, "<")   # ~30
+```
+
+**`match.arg` y `match.fun`:** dos de las herramientas más útiles en funciones genéricas. `match.arg` valida que el argumento sea uno de los permitidos. `match.fun` resuelve un string al objeto función correspondiente. Combinadas, dan funciones flexibles y robustas.
+
+:::
 
 ## Ejercicio 15: `primer_indice_que_cumple`
 
@@ -140,6 +517,33 @@ b)  Probala con `condicion_fun = function(z) !is.na(z) && z > 100` sobre `airqua
 
 c)  Compará con `which(airquality$Ozone > 100 & !is.na(airquality$Ozone))[1]`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+primer_indice_que_cumple <- function(x, condicion_fun) {
+  i <- 1
+  while (i <= length(x)) {
+    if (condicion_fun(x[i])) return(i)
+    i <- i + 1
+  }
+  NA
+}
+
+# b)
+primer_indice_que_cumple(
+  airquality$Ozone,
+  function(z) !is.na(z) && z > 100
+)
+# 30
+
+# c)
+which(airquality$Ozone > 100 & !is.na(airquality$Ozone))[1]   # 30
+```
+
+**Diferencia conceptual:** la versión `while` recorre hasta encontrar y corta. `which` evalúa la condición sobre TODO el vector y devuelve el primer índice. Para vectores chicos no importa; para uno de millones de elementos, `which` puede gastar memoria y tiempo.
+
+:::
+
 ## Ejercicio 16: `clasificar_presion`
 
 a)  Definí `clasificar_presion(sistolica)` según la clasificación AHA: `< 90` `"hipotenso"`, `90-119` `"normal"`, `120-129` `"elevada"`, `130-139` `"hipertension 1"`, `>= 140` `"hipertension 2"`. Devolvé `NA` si la entrada es `NA`.
@@ -147,6 +551,33 @@ a)  Definí `clasificar_presion(sistolica)` según la clasificación AHA: `< 90`
 b)  Probala con `c(85, 110, 125, 135, 150, NA)`.
 
 c)  Aplicala con `sapply` a un vector de 100 valores aleatorios `runif(100, 70, 180)`. Resumí con `table`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+clasificar_presion <- function(sistolica) {
+  if (is.na(sistolica))      NA
+  else if (sistolica < 90)   "hipotenso"
+  else if (sistolica < 120)  "normal"
+  else if (sistolica < 130)  "elevada"
+  else if (sistolica < 140)  "hipertension 1"
+  else                       "hipertension 2"
+}
+
+# b)
+sapply(c(85, 110, 125, 135, 150, NA), clasificar_presion)
+# "hipotenso"  "normal"  "elevada"  "hipertension 1"  "hipertension 2"  NA
+
+# c)
+set.seed(42)
+sis <- runif(100, 70, 180)
+table(sapply(sis, clasificar_presion), useNA = "always")
+# elevada  hipertension 1  hipertension 2  hipotenso  normal  <NA>
+```
+
+**Curiosidad de `runif`:** genera valores uniformes, no presiones reales. La distribución de presiones reales es aproximadamente normal centrada en ~120, no uniforme. El ejercicio enfatiza la función, no la modelación.
+
+:::
 
 ## Ejercicio 17: `bootstrap_media`
 
@@ -156,6 +587,29 @@ b)  Aplicala a `airquality$Wind` (no tiene `NA`). La media de las medias deberí
 
 c)  Calculá un intervalo del 95% por percentiles: `quantile(boot, c(0.025, 0.975))`. Compará con `t.test(airquality$Wind)$conf.int`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+bootstrap_media <- function(x, n_rep = 1000) {
+  replicate(n_rep, mean(sample(x, replace = TRUE)))
+}
+
+# b)
+set.seed(42)
+boot <- bootstrap_media(airquality$Wind, 1000)
+mean(boot)                  # ~9.96
+mean(airquality$Wind)       # 9.96 (coincide en general, hay ruido de muestra)
+
+# c)
+quantile(boot, c(0.025, 0.975))   # ~ (9.40, 10.50)
+t.test(airquality$Wind)$conf.int  # (9.39, 10.51)
+# Casi identicos para una distribucion aproximadamente simetrica.
+```
+
+**Para distribuciones asimétricas:** el IC bootstrap suele ser **mejor** que el t-test, porque no asume normalidad. Conviene usarlo cuando los datos están sesgados (como `Ozone`).
+
+:::
+
 ## Ejercicio 18: bootstrap de una proporción
 
 a)  Definí `bootstrap_proporcion(x, p, n_rep = 1000)` que estime, vía bootstrap, la proporción de elementos de `x` que cumplen una condición lógica `p`. `p` es una función que devuelve `TRUE`/`FALSE`.
@@ -163,6 +617,42 @@ a)  Definí `bootstrap_proporcion(x, p, n_rep = 1000)` que estime, vía bootstra
 b)  Probala con `airquality$Ozone` y `p = function(z) !is.na(z) && z > 80`.
 
 c)  Devolvé un IC del 95% para la proporción y comparalo con la proporción puntual.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+bootstrap_proporcion <- function(x, p, n_rep = 1000) {
+  replicate(n_rep, {
+    re_muestra <- sample(x, replace = TRUE)
+    mean(sapply(re_muestra, p))
+  })
+}
+
+# b)
+set.seed(42)
+boot_p <- bootstrap_proporcion(
+  airquality$Ozone,
+  function(z) !is.na(z) && z > 80,
+  n_rep = 1000
+)
+
+# c)
+prop_puntual <- mean(sapply(airquality$Ozone,
+                            function(z) !is.na(z) && z > 80))
+prop_puntual                       # 0.111
+quantile(boot_p, c(0.025, 0.975))  # ~ (0.07, 0.16)
+```
+
+**Mejora de eficiencia:** dentro del `replicate`, evitar `sapply` y vectorizar la condición:
+
+```r
+mask <- !is.na(airquality$Ozone) & airquality$Ozone > 80
+boot_p <- replicate(1000, mean(sample(mask, replace = TRUE)))
+```
+
+Hace lo mismo, mucho más rápido.
+
+:::
 
 ## Ejercicio 19: clasificar y resumir
 
@@ -172,6 +662,29 @@ b)  Resumí con `table(airquality$temp_categoria)`. ¿Qué proporción de días 
 
 c)  Calculá la media de `Ozone` por categoría con `aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)`. Interpretá.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+airquality$temp_categoria <- sapply(airquality$Temp, clasificar_temp)
+
+# b)
+table(airquality$temp_categoria)
+# caluroso: 32   frio: 9   templado: 112
+prop.table(table(airquality$temp_categoria))
+# caluroso ~21%, frio ~6%, templado ~73%
+
+# c)
+aggregate(Ozone ~ temp_categoria, data = airquality, mean, na.rm = TRUE)
+# caluroso: ~73   frio: ~18   templado: ~32
+# Mayor temperatura, mayor ozono. Tiene sentido fisicoquimico:
+# las reacciones fotoquimicas que producen ozono son mas rapidas con calor.
+```
+
+**Por qué tiene sentido:** el ozono troposférico se forma por reacciones entre óxidos de nitrógeno y compuestos orgánicos volátiles, **catalizadas por la radiación solar y la temperatura**. Por eso los picos de ozono ocurren en días calurosos y soleados.
+
+:::
+
 ## Ejercicio 20: comentar el porqué
 
 a)  Tomá tu solución del ejercicio 17 (bootstrap). Agregá un solo comentario que explique **por qué** usás `quantile(..., c(0.025, 0.975))` para el IC.
@@ -179,3 +692,29 @@ a)  Tomá tu solución del ejercicio 17 (bootstrap). Agregá un solo comentario 
 b)  Mirá tu código del ejercicio 17: borrá los comentarios que solo parafrasean lo que hace cada línea.
 
 c)  Compará la versión final con la inicial. ¿Quedó más legible con menos comentarios?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# Antes (con comentarios redundantes)
+bootstrap_media <- function(x, n_rep = 1000) {
+  # repite n_rep veces la media de una muestra con reemplazo
+  replicate(n_rep, mean(sample(x, replace = TRUE)))
+}
+boot <- bootstrap_media(airquality$Wind)   # calculo el bootstrap
+# calculo el IC por percentiles
+ic <- quantile(boot, c(0.025, 0.975))
+
+# Despues (un comentario que agrega contexto)
+bootstrap_media <- function(x, n_rep = 1000) {
+  replicate(n_rep, mean(sample(x, replace = TRUE)))
+}
+boot <- bootstrap_media(airquality$Wind)
+# IC del 95% por percentiles del bootstrap: no asume normalidad,
+# robusto cuando la distribucion de la media muestral es asimetrica.
+ic <- quantile(boot, c(0.025, 0.975))
+```
+
+**Heurística:** si tenés que parafrasear el código, mejorá el nombre. Si lo que comentás es una decisión (por qué este umbral, por qué este método, qué supone), el comentario aporta. Lo demás es ruido.
+
+:::

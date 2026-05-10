@@ -26,6 +26,37 @@ b)  Probala con `f <- function(x) (x + 2/x) / 2`, `x0 = 1`, `n = 10`. ¿A qué n
 
 c)  Modificá `iterar` para que devuelva la **trayectoria** completa (vector de longitud `n + 1`). Graficala con `plot(..., type = "b")`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+iterar <- function(f, x0, n) {
+  x <- x0
+  for (i in seq_len(n)) x <- f(x)
+  x
+}
+
+# b)
+f_baby <- function(x) (x + 2/x) / 2
+iterar(f_baby, 1, 10)   # 1.414214 (sqrt(2))
+
+# c)
+iterar_traza <- function(f, x0, n) {
+  out <- numeric(n + 1)
+  out[1] <- x0
+  for (i in seq_len(n)) out[i + 1] <- f(out[i])
+  out
+}
+
+trayectoria <- iterar_traza(f_baby, 1, 10)
+plot(0:10, trayectoria, type = "b", pch = 19,
+     xlab = "iteracion", ylab = "x_n")
+abline(h = sqrt(2), col = "red", lty = 2)
+```
+
+**Tasa de convergencia:** la iteración Babilónica converge **cuadráticamente**: la cantidad de dígitos correctos se duplica en cada paso. Es uno de los algoritmos numéricos más rápidos para raíces. La iteración del coseno (ejercicio 2) converge linealmente, mucho más lento.
+
+:::
+
 ## Ejercicio 2: punto fijo
 
 a)  Definí `punto_fijo(f, x0, tol = 1e-6, max_iter = 100)` que itere `x <- f(x)` hasta que `abs(f(x) - x) < tol` o se alcance `max_iter`. Devolvé una lista con `valor`, `iteraciones`, `convergio`.
@@ -33,6 +64,35 @@ a)  Definí `punto_fijo(f, x0, tol = 1e-6, max_iter = 100)` que itere `x <- f(x)
 b)  Aplicala a `f <- function(x) cos(x)`, `x0 = 0`. ¿Qué valor encuentra?
 
 c)  Aplicala a `f <- function(x) (x + 2/x) / 2`. ¿Cuántas iteraciones tarda en converger?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+punto_fijo <- function(f, x0, tol = 1e-6, max_iter = 100) {
+  x <- x0
+  for (i in seq_len(max_iter)) {
+    nuevo <- f(x)
+    if (abs(nuevo - x) < tol) {
+      return(list(valor = nuevo, iteraciones = i, convergio = TRUE))
+    }
+    x <- nuevo
+  }
+  list(valor = x, iteraciones = max_iter, convergio = FALSE)
+}
+
+# b)
+punto_fijo(cos, x0 = 0)
+# valor: 0.7390851, iteraciones: ~70, convergio: TRUE
+# Es el famoso "numero de Dottie": el unico real con cos(x) = x.
+
+# c)
+punto_fijo(function(x) (x + 2/x) / 2, x0 = 1)
+# valor: 1.414214, iteraciones: 5, convergio: TRUE
+```
+
+**Cuándo converge punto fijo:** la iteración `x_{n+1} = f(x_n)` converge si `|f'(x*)| < 1` cerca del punto fijo `x*`. Para `cos` cerca de 0.74, `|cos'(0.74)| = |sin(0.74)| ≈ 0.67 < 1`, así que converge (lento). Si la derivada es ≥ 1, la iteración diverge.
+
+:::
 
 ## Ejercicio 3: Monte Carlo con monedas
 
@@ -42,6 +102,35 @@ b)  Compará con `1 - pbinom(5, 10, 0.5)` (`pbinom` da la función de distribuci
 
 c)  Repetí la estimación variando `n_rep = c(100, 1000, 10000, 100000)`. Graficá la estimación contra `n_rep` y observá la convergencia.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+set.seed(42)
+sim <- replicate(10000, {
+  caras <- sum(sample(c(0, 1), 10, replace = TRUE))
+  caras >= 6
+})
+mean(sim)   # ~0.376
+
+# b)
+1 - pbinom(5, 10, 0.5)   # 0.3769531
+
+# c)
+n_reps <- c(100, 1000, 10000, 100000)
+estim <- sapply(n_reps, function(n) {
+  mean(replicate(n, sum(sample(c(0, 1), 10, replace = TRUE)) >= 6))
+})
+plot(n_reps, estim, log = "x", type = "b", pch = 19,
+     xlab = "n_rep (escala log)", ylab = "estimacion",
+     ylim = c(0.30, 0.45))
+abline(h = 1 - pbinom(5, 10, 0.5), col = "red", lty = 2)
+```
+
+**Tasa de convergencia Monte Carlo:** el error es `O(1/sqrt(n))`. Para reducir el error a la mitad, hay que **cuadruplicar** las réplicas. Por eso pasar de 10000 a 100000 mejora poco; pasar de 100 a 1000 mejora mucho. Lo verás en el gráfico.
+
+:::
+
 ## Ejercicio 4: `bootstrap_estimador` generalizado
 
 a)  Definí `bootstrap_estimador(x, estimador = mean, n_rep = 1000)` que reemplace `bootstrap_media` (clase 2). El argumento `estimador` es una **función**.
@@ -49,6 +138,33 @@ a)  Definí `bootstrap_estimador(x, estimador = mean, n_rep = 1000)` que reempla
 b)  Probala con `mean`, `median` y `sd` sobre `airquality$Wind`. Calculá un IC del 95% en cada caso.
 
 c)  Reescribí `bootstrap_media` como un wrapper de `bootstrap_estimador` con `estimador = mean` por defecto.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+bootstrap_estimador <- function(x, estimador = mean, n_rep = 1000) {
+  replicate(n_rep, estimador(sample(x, replace = TRUE)))
+}
+
+# b)
+set.seed(42)
+boot_mean   <- bootstrap_estimador(airquality$Wind, mean, 1000)
+boot_median <- bootstrap_estimador(airquality$Wind, median, 1000)
+boot_sd     <- bootstrap_estimador(airquality$Wind, sd, 1000)
+
+quantile(boot_mean,   c(0.025, 0.975))   # ~ (9.40, 10.50)
+quantile(boot_median, c(0.025, 0.975))   # ~ (8.6, 10.0)
+quantile(boot_sd,     c(0.025, 0.975))   # ~ (3.0, 3.9)
+
+# c)
+bootstrap_media <- function(x, n_rep = 1000) {
+  bootstrap_estimador(x, estimador = mean, n_rep = n_rep)
+}
+```
+
+**Por qué generalizar:** el patrón "muestreá con reemplazo, aplicá el estadístico, repetí" es siempre el mismo. Generalizarlo evita repetir código y abre la puerta a usar **cualquier** estadístico (kurtosis, mediana, percentiles, coeficientes de regresión). El bootstrap es un método extremadamente flexible justamente por esto.
+
+:::
 
 ## Ejercicio 5: bootstrap con NA
 
@@ -58,6 +174,38 @@ b)  Modificá `bootstrap_estimador` para que filtre `NA` al inicio y avise con `
 
 c)  Compará el IC del 95% para la mediana de `Ozone` con `quantile(airquality$Ozone, c(0.025, 0.975), na.rm = TRUE)`. ¿Por qué difieren?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+boot <- bootstrap_estimador(airquality$Ozone, mean, 100)
+# Devuelve muchos NA porque sample puede caer en filas con NA,
+# y mean sin na.rm propaga el NA.
+
+# b)
+bootstrap_estimador <- function(x, estimador = mean, n_rep = 1000) {
+  n_na <- sum(is.na(x))
+  if (n_na > 0) {
+    message("bootstrap_estimador: ignorando ", n_na, " NA")
+    x <- x[!is.na(x)]
+  }
+  replicate(n_rep, estimador(sample(x, replace = TRUE)))
+}
+
+# c)
+set.seed(42)
+boot_med <- bootstrap_estimador(airquality$Ozone, median, 1000)
+quantile(boot_med, c(0.025, 0.975))
+# IC del 95% para la MEDIANA: ~ (24, 35)
+
+quantile(airquality$Ozone, c(0.025, 0.975), na.rm = TRUE)
+# Percentiles 2.5% y 97.5% de los DATOS: ~ (3, 110)
+```
+
+**Diferencia conceptual:** el primer IC es para la **mediana** (un parámetro fijo de la población), el segundo es el rango donde cae el 95% de los **datos**. Son cosas distintas: el primero refleja **incertidumbre del estimador**, el segundo describe la **variabilidad de los datos**. Confundirlos es uno de los errores más comunes.
+
+:::
+
 ## Ejercicio 6: paradoja del cumpleaños
 
 a)  Definí `prob_coincidencia(n, n_sim = 10000)` que estime la probabilidad de coincidencia de cumpleaños en un grupo de `n` personas. Pista: `any(duplicated(sample(1:365, n, replace = TRUE)))`.
@@ -65,6 +213,32 @@ a)  Definí `prob_coincidencia(n, n_sim = 10000)` que estime la probabilidad de 
 b)  Aplicala a `n = c(5, 10, 15, 20, 23, 30, 50)` y graficá los resultados con `plot(n, p, type = "b")`.
 
 c)  Encontrá el `n` mínimo para `P > 0.5` recorriendo de uno en uno con un `while`. Compará con la respuesta clásica (`n = 23`).
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+prob_coincidencia <- function(n, n_sim = 10000) {
+  mean(replicate(n_sim, any(duplicated(sample(1:365, n, replace = TRUE)))))
+}
+
+# b)
+ns <- c(5, 10, 15, 20, 23, 30, 50)
+ps <- sapply(ns, prob_coincidencia)
+plot(ns, ps, type = "b", pch = 19,
+     xlab = "n personas", ylab = "P(al menos una coincidencia)")
+abline(h = 0.5, col = "red", lty = 2)
+
+# c)
+n <- 1
+while (prob_coincidencia(n) < 0.5) {
+  n <- n + 1
+}
+n   # ~22-24, depende del seed (sale con ruido por simulacion)
+```
+
+**Por qué 23:** la probabilidad analítica es `1 - prod((365:343) / 365)`, que cruza 0.5 en `n = 23`. Es contraintuitiva porque comparamos con cuántos pares hay (`n*(n-1)/2`), no con `n` solo. Con 23 personas hay 253 pares, muchos más de los que parece.
+
+:::
 
 ## Ejercicio 7: bisección
 
@@ -74,6 +248,38 @@ b)  Encontrá la raíz de `f(x) = cos(x) - x` en `[0, 1]`. Compará con `uniroot
 
 c)  Modificá `biseccion` para que devuelva una lista con `raiz`, `iteraciones` y `tolerancia_final`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+biseccion <- function(f, a, b, tol = 1e-6) {
+  stopifnot(f(a) * f(b) < 0)
+  iter <- 0
+  while ((b - a) / 2 > tol) {
+    m <- (a + b) / 2
+    if (f(a) * f(m) < 0) b <- m else a <- m
+    iter <- iter + 1
+  }
+  list(raiz = (a + b) / 2,
+       iteraciones = iter,
+       tolerancia_final = (b - a) / 2)
+}
+
+# b)
+biseccion(function(x) cos(x) - x, 0, 1)
+# raiz: 0.7390851, iter: ~20
+
+uniroot(function(x) cos(x) - x, c(0, 1))$root
+# 0.7390851 (mismo resultado)
+uniroot(function(x) cos(x) - x, c(0, 1))$iter
+# ~7 (mucho menos: uniroot usa Brent, mas inteligente)
+
+# c) ya esta arriba
+```
+
+**Comparación bisección vs Brent (uniroot):** bisección converge linealmente; el método de Brent (que combina bisección, secante e interpolación) suele ser **superlineal** y converge en menos iteraciones. Para problemas reales conviene usar `uniroot`. Bisección sigue siendo útil para entender el principio y como fallback robusto.
+
+:::
+
 ## Ejercicio 8: bisección y la paradoja
 
 a)  Reusá `prob_coincidencia` (ejercicio 6) y `biseccion` (ejercicio 7) para encontrar el `n` (real) tal que `P(coincidencia) = 0.5`. Pista: `f(n) = prob_coincidencia(round(n)) - 0.5`.
@@ -81,6 +287,27 @@ a)  Reusá `prob_coincidencia` (ejercicio 6) y `biseccion` (ejercicio 7) para en
 b)  Probala con `n` en el intervalo `[5, 50]`.
 
 c)  ¿Por qué la simulación introduce ruido? ¿Cómo afecta a la bisección?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a, b)
+set.seed(42)
+g <- function(n) prob_coincidencia(round(n), n_sim = 10000) - 0.5
+biseccion(g, 5, 50, tol = 0.5)
+# raiz: ~22.5, sale cerca del clasico 23 pero con ruido
+
+# c)
+# La probabilidad estimada por Monte Carlo tiene error ~1/sqrt(n_sim).
+# Para n_sim = 10000, el error tipico es ~0.005.
+# Cerca del 0.5, eso puede cambiar el signo de g(n) en distintas
+# corridas. La biseccion "ve" una funcion ruidosa y puede oscilar.
+# Solucion: aumentar n_sim cerca del cruce, o promediar varias simulaciones.
+```
+
+**Cuándo importa el ruido:** acá la respuesta es entera (n personas), así que el error de ±1 no es grave. Pero si la función real tuviera una raíz "exacta" en un valor real, la bisección sobre Monte Carlo sería poco confiable. En esos casos se usan métodos de optimización estocástica (SGD, Robbins-Monro).
+
+:::
 
 ## Ejercicio 9: bootstrap del coeficiente de regresión
 
@@ -90,6 +317,33 @@ b)  Aplicá la función auxiliar `bootstrap_coef(formula, data, variable, n_rep)
 
 c)  Calculá el IC del 95% por percentiles del vector que devuelve `bootstrap_coef`. Compará con `confint(mod)`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+mod <- lm(bikers ~ temp, data = bicis)
+coef(mod)
+# (Intercept), temp
+confint(mod)
+# IC del 95% para cada coeficiente
+
+# b)
+set.seed(42)
+boot <- bootstrap_coef(bikers ~ temp, data = bicis,
+                       variable = "temp", n_rep = 500)
+length(boot)   # 500
+
+# c)
+quantile(boot, c(0.025, 0.975))
+# IC bootstrap
+confint(mod)["temp", ]
+# IC analitico
+# Suelen ser parecidos cuando los supuestos del modelo se cumplen.
+```
+
+**Por qué difieren a veces:** el `confint` analítico asume **normalidad de los residuos** y **homoscedasticidad** (varianza constante). El bootstrap no asume nada de eso. Si los supuestos fallan (por ejemplo, los residuos están sesgados), el IC bootstrap es más confiable. Para `bikers` (conteos), los supuestos no se cumplen exactamente, así que vale la pena comparar.
+
+:::
+
 ## Ejercicio 10: uso de bicicletas como variable de interés
 
 a)  Calculá la mediana de `bicis$bikers` y aplicá `bootstrap_estimador` con `estimador = median`. 1000 réplicas.
@@ -97,6 +351,27 @@ a)  Calculá la mediana de `bicis$bikers` y aplicá `bootstrap_estimador` con `e
 b)  Calculá un IC del 95% para la mediana.
 
 c)  Compará la mediana puntual con el IC. ¿Por qué el IC del bootstrap es informativo cuando la distribución es asimétrica?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+set.seed(42)
+boot_med <- bootstrap_estimador(bicis$bikers, median, 1000)
+
+# b)
+median(bicis$bikers)              # ~95
+quantile(boot_med, c(0.025, 0.975))   # ~ (90, 102)
+
+# c)
+# Con n = 8645, el IC es muy chico (ancho ~12 alrededor de la mediana 95).
+# Para distribuciones asimetricas la formula clasica (mediana +- z * sd / sqrt(n))
+# no aplica. Bootstrap funciona sin asumir simetria.
+```
+
+**Bootstrap de la mediana vs media:** la varianza de la mediana muestral depende de la **densidad** alrededor de la mediana de la población, no solo de la varianza global. La fórmula analítica involucra esa densidad, que rara vez se conoce. Bootstrap evita ese cálculo.
+
+:::
 
 ## Ejercicio 11: `graficar_bootstrap`
 
@@ -106,6 +381,39 @@ b)  Aplicala al bootstrap del coeficiente del ejercicio 9.
 
 c)  Modificala (haciendo una copia local) para que también muestre el cuantil 50% (mediana) con una línea verde.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+graficar_bootstrap(boot_med, "Mediana bootstrap de bikers")
+
+# b)
+graficar_bootstrap(boot, "Coeficiente bootstrap de temp")
+
+# c)
+graficar_bootstrap_v2 <- function(boot, etiqueta = "estadistico bootstrap") {
+  ic <- quantile(boot, c(0.025, 0.975), na.rm = TRUE)
+  med <- quantile(boot, 0.5, na.rm = TRUE)
+  hist(boot, breaks = 30, main = etiqueta, xlab = etiqueta,
+       col = "gray85", border = "white")
+  abline(v = mean(boot), col = "red", lwd = 2)
+  abline(v = med, col = "green3", lwd = 2)
+  abline(v = ic, col = "blue", lwd = 2, lty = 2)
+  legend("topright",
+         legend = c("media", "mediana", "IC 95%"),
+         col    = c("red", "green3", "blue"),
+         lwd    = 2,
+         lty    = c(1, 1, 2),
+         bty    = "n")
+}
+
+graficar_bootstrap_v2(boot_med, "Mediana bootstrap")
+```
+
+**Cuándo media != mediana del bootstrap:** si la distribución del bootstrap es asimétrica (caso típico para varianza, sd, mediana en muestras chicas), media y mediana del vector bootstrap difieren. La mediana suele ser un mejor "centro" en ese caso.
+
+:::
+
 ## Ejercicio 12: simulación de un experimento
 
 a)  Definí `simular_lanzamientos(n, p, n_sim = 1000)` que devuelva un vector con la cantidad de éxitos en `n_sim` simulaciones, cada una de `n` lanzamientos con probabilidad `p`.
@@ -113,6 +421,30 @@ a)  Definí `simular_lanzamientos(n, p, n_sim = 1000)` que devuelva un vector co
 b)  Aplicala a `n = 100`, `p = 0.3`. Calculá la media de éxitos.
 
 c)  Compará con `n * p` (esperanza teórica) y `n * p * (1 - p)` (varianza teórica).
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+simular_lanzamientos <- function(n, p, n_sim = 1000) {
+  replicate(n_sim, sum(sample(c(0, 1), n, replace = TRUE,
+                              prob = c(1 - p, p))))
+}
+
+# b)
+set.seed(42)
+sim <- simular_lanzamientos(100, 0.3, 1000)
+mean(sim)   # ~30 (cerca de n*p = 30)
+var(sim)    # ~21 (cerca de n*p*(1-p) = 21)
+
+# c)
+n <- 100; p <- 0.3
+n * p           # 30  (esperanza)
+n * p * (1 - p) # 21  (varianza)
+```
+
+**Atajo:** R tiene `rbinom(n_sim, size = n, prob = p)` que hace exactamente esto pero ~100x más rápido (implementado en C). El ejercicio "a mano" sirve para entender qué hace `rbinom` debajo. En código de producción usás `rbinom`.
+
+:::
 
 ## Ejercicio 13: ley de los grandes números
 
@@ -122,6 +454,37 @@ b)  Graficá las cuatro trayectorias con `par(mfrow = c(2, 2))`.
 
 c)  ¿Qué observás cuando `n` crece? Conectalo con la ley de los grandes números.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+trayectoria_proporcion <- function(n, p = 0.5) {
+  lanzamientos <- sample(c(0, 1), n, replace = TRUE, prob = c(1 - p, p))
+  cumsum(lanzamientos) / seq_len(n)
+}
+
+# a, b)
+set.seed(42)
+par(mfrow = c(2, 2))
+for (n in c(10, 100, 1000, 10000)) {
+  y <- trayectoria_proporcion(n, 0.5)
+  plot(seq_len(n), y, type = "l", lwd = 1.5,
+       xlab = "tirada", ylab = "proporcion acumulada",
+       main = paste("n =", n), ylim = c(0, 1))
+  abline(h = 0.5, col = "red", lty = 2)
+}
+par(mfrow = c(1, 1))
+
+# c)
+# Con n chico (10), la proporcion oscila lejos de 0.5.
+# A medida que n crece, la proporcion CONVERGE a 0.5.
+# Es la version concreta de la ley de grandes numeros:
+# proporcion muestral -> probabilidad real (en probabilidad).
+```
+
+**LGN vs Teorema Central del Límite:** la LGN dice que la proporción converge a `p`. El TCL dice **cómo de rápido** converge: el error tiene desviación ~`sqrt(p(1-p)/n)`. El ancho del intervalo se achica como `1/sqrt(n)`. Por eso pasar de 100 a 10000 mejora `sqrt(100) = 10` veces el ancho.
+
+:::
+
 ## Ejercicio 14: Monte Carlo para integración
 
 a)  Estimá `integral_0^1 x^2 dx = 1/3` por Monte Carlo: `mean(runif(10000)^2)`. Verificá.
@@ -129,6 +492,33 @@ a)  Estimá `integral_0^1 x^2 dx = 1/3` por Monte Carlo: `mean(runif(10000)^2)`.
 b)  Estimá `integral_0^1 sin(pi*x) dx = 2/pi` por Monte Carlo. Compará.
 
 c)  Estimá `pi` mediante el método del círculo en el cuadrado: muestreá puntos `runif` en `[-1, 1]^2`, contá los que caen en el círculo unitario, y multiplicá por 4.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+set.seed(42)
+mean(runif(10000)^2)        # ~0.333  (cerca de 1/3 = 0.333)
+1/3
+
+# b)
+mean(sin(pi * runif(10000)))   # ~0.636 (cerca de 2/pi = 0.6366)
+2 / pi
+
+# c)
+n <- 100000
+x <- runif(n, -1, 1)
+y <- runif(n, -1, 1)
+dentro <- (x^2 + y^2) <= 1
+4 * mean(dentro)   # ~3.14
+pi
+```
+
+**Generalización:** `mean(f(runif(n)))` estima `integral_0^1 f(x) dx`. Para integrar en `[a, b]`: `(b - a) * mean(f(runif(n, a, b)))`. Para integrales en dimensiones altas, Monte Carlo es competitivo con métodos de cuadratura: la velocidad de cuadratura empeora con la dimensión, Monte Carlo no.
+
+**Curiosidad:** el método del círculo es muy ineficiente para estimar `pi`. Hay métodos mucho mejores (Borwein, BBP, Chudnovsky), pero como ejemplo de Monte Carlo es didáctico.
+
+:::
 
 ## Ejercicio 15: Newton-Raphson
 
@@ -138,6 +528,35 @@ b)  Encontrá la raíz de `f(x) = x^2 - 2` con `df(x) = 2*x`, partiendo de `x0 =
 
 c)  Compará la cantidad de iteraciones con bisección sobre el mismo problema en `[1, 2]`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+newton <- function(f, df, x0, tol = 1e-6, max_iter = 100) {
+  x <- x0
+  for (i in seq_len(max_iter)) {
+    paso <- f(x) / df(x)
+    x <- x - paso
+    if (abs(paso) < tol) {
+      return(list(raiz = x, iteraciones = i, convergio = TRUE))
+    }
+  }
+  list(raiz = x, iteraciones = max_iter, convergio = FALSE)
+}
+
+# b)
+res <- newton(function(x) x^2 - 2, function(x) 2*x, x0 = 1)
+res$raiz          # 1.414214
+res$iteraciones   # 5
+
+# c)
+biseccion(function(x) x^2 - 2, 1, 2)$iteraciones   # ~20
+# Newton: 5  vs  Biseccion: 20
+```
+
+**Por qué Newton es más rápido:** Newton converge **cuadráticamente** (los dígitos correctos se duplican por iteración), bisección converge **linealmente** (un dígito decimal cada ~3.3 iteraciones). Pero Newton necesita la derivada y puede divergir si `f'(x*) = 0` o si `x0` está lejos. Bisección siempre funciona si los signos son distintos.
+
+:::
+
 ## Ejercicio 16: `t.test` y comparación con bootstrap
 
 a)  Hacé `t.test(airquality$Wind)` y leé la salida. ¿Qué representa `mean of x`, `confidence interval`, `p-value`?
@@ -145,6 +564,33 @@ a)  Hacé `t.test(airquality$Wind)` y leé la salida. ¿Qué representa `mean of
 b)  Compará el IC del `t.test` con tu IC bootstrap del ejercicio 4 sobre la misma columna.
 
 c)  Hacé `t.test(airquality$Wind ~ airquality$Month %in% c(5, 6))` (compara dos grupos). Leé la salida.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+t.test(airquality$Wind)
+# t = 64, df = 152, p-value < 2.2e-16
+# alternative hypothesis: true mean is not equal to 0
+# 95 percent confidence interval: 9.39  10.51
+# mean of x: 9.96
+#
+# El test verifica H0: media = 0 (que aca es trivial: el viento existe).
+# Lo informativo es el IC para la media: (9.39, 10.51).
+
+# b)
+quantile(boot_mean, c(0.025, 0.975))  # (9.40, 10.50)
+# Practicamente identicos al IC del t.test.
+
+# c)
+t.test(airquality$Wind ~ airquality$Month %in% c(5, 6))
+# Compara la media de Wind entre los meses 5-6 (TRUE) y los demas (FALSE).
+# Si p-value < 0.05, hay diferencia estadisticamente significativa.
+```
+
+**Cuándo `t.test` falla:** asume que la media muestral es aproximadamente normal (Teorema Central del Límite con `n` grande, o normalidad de los datos con `n` chico). Si los datos están muy sesgados o tienen outliers extremos, el `t.test` puede dar IC poco realistas. Bootstrap tolera mejor estas violaciones.
+
+:::
 
 ## Ejercicio 17: pipeline de análisis
 
@@ -154,6 +600,38 @@ b)  Aplicala a `bicis$bikers` con `estimador = median`.
 
 c)  Aplicala a una columna numérica de `airquality` con `estimador = mean`. ¿Qué te informa cada salida?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+analizar_columna <- function(df, columna, estimador = mean) {
+  cat("\n--- EDA del data.frame ---\n")
+  eda_minimo(df)
+
+  cat("\n--- Bootstrap de", deparse(substitute(estimador)),
+      "sobre", columna, "---\n")
+  boot <- bootstrap_estimador(df[[columna]], estimador, n_rep = 1000)
+  ic   <- quantile(boot, c(0.025, 0.975), na.rm = TRUE)
+  graficar_bootstrap(boot, paste(deparse(substitute(estimador)), "de", columna))
+
+  list(boot = boot, ic = ic,
+       puntual = estimador(df[[columna]], na.rm = TRUE))
+}
+
+# b)
+res_bikers <- analizar_columna(bicis, "bikers", median)
+res_bikers$ic       # IC bootstrap de la mediana
+res_bikers$puntual  # mediana puntual
+
+# c)
+res_wind <- analizar_columna(airquality, "Wind", mean)
+res_wind$ic       # IC bootstrap de la media de Wind
+res_wind$puntual  # media puntual
+```
+
+**`deparse(substitute(...))`:** truco para capturar el **nombre** de un argumento como string. Útil para etiquetas en gráficos. Si pasás `estimador = median`, devuelve `"median"`. Es metaprogramación básica de R.
+
+:::
+
 ## Ejercicio 18: comparar dos pipelines
 
 a)  Aplicá `analizar_columna` a `bicis$bikers` separando por `bicis$workingday` (días hábiles vs fin de semana). Pista: subseteá el `data.frame` antes de pasarlo.
@@ -162,6 +640,30 @@ b)  Mostrá los dos IC bootstrap. ¿Hay solapamiento?
 
 c)  ¿Qué conclusión preliminar podés sacar sobre el efecto del día hábil?
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+habil  <- analizar_columna(bicis[bicis$workingday, ],   "bikers", mean)
+fde    <- analizar_columna(bicis[!bicis$workingday, ],  "bikers", mean)
+
+# b)
+habil$ic    # ~ (155, 165)
+fde$ic      # ~ (118, 132)
+
+# c)
+# Los IC NO se solapan: la media de bikers es claramente mayor en
+# dias habiles (~160) que en fines de semana / feriados (~125).
+# Conclusion: el dia habil aumenta el uso medio en ~30 viajes/hora.
+# Limitacion: comparamos medias por hora ignorando la hora del dia,
+# que sabemos que tiene un efecto enorme. Para una conclusion mas
+# solida habria que estratificar por hora o usar un modelo.
+```
+
+**El no-solapamiento NO es un test:** que dos IC no se superpongan **sugiere** una diferencia significativa, pero no es lo mismo que un test formal. La razón es que el IC para la diferencia de medias suele ser **más angosto** que la suma de los IC individuales. Para concluir formalmente, usá `t.test(grupo_a, grupo_b)`.
+
+:::
+
 ## Ejercicio 19: tu propio mini-experimento
 
 a)  Elegí una columna numérica de `bicis` y formulá una pregunta concreta: "¿es mayor el uso en `X` que en `Y`?".
@@ -169,6 +671,38 @@ a)  Elegí una columna numérica de `bicis` y formulá una pregunta concreta: "�
 b)  Diseñá el experimento: definí `X` y `Y`, calculá la mediana en cada uno, hacé bootstrap del estimador en cada subset.
 
 c)  Concluí: ¿los IC se solapan? Anotá la conclusión con sus limitaciones.
+
+::: {.callout-tip collapse="true" title="Solución (un ejemplo)"}
+
+```r
+# Pregunta: ¿se usan mas las bicis en horas pico (8h o 17h)
+#            que en otras horas?
+
+set.seed(42)
+horas_pico <- bicis[bicis$hr %in% c(8, 17), ]
+horas_otras <- bicis[!(bicis$hr %in% c(8, 17)), ]
+
+boot_pico  <- bootstrap_estimador(horas_pico$bikers,   median, 1000)
+boot_otras <- bootstrap_estimador(horas_otras$bikers,  median, 1000)
+
+ic_pico  <- quantile(boot_pico,  c(0.025, 0.975))
+ic_otras <- quantile(boot_otras, c(0.025, 0.975))
+
+ic_pico    # mediana ~440, IC ~(420, 460)
+ic_otras   # mediana ~80,  IC ~(76, 84)
+
+# Los IC son disjuntos por un factor de ~5x.
+# Conclusion: las horas pico tienen MUCHO mas uso que el resto.
+#
+# Limitaciones:
+# - mezclamos dias habiles y no habiles; el efecto puede ser distinto en cada uno
+# - "horas pico" definidas a ojo (8h y 17h); deberiamos verlo en los datos
+# - no controlamos por estacion o clima
+```
+
+**Diseño de experimento:** lo más importante es **formular la pregunta antes** de ver los datos. Si elegís el corte después de ver los datos ("vamos a comparar el grupo que se ve distinto"), el resultado tiene sesgo de selección y los IC son demasiado optimistas.
+
+:::
 
 ## Ejercicio 20: control de versiones
 
@@ -181,3 +715,41 @@ b)  Hacé tres commits con mensajes que expliquen el porqué:
     -   un último con las de clase 5 (`iterar`, `bootstrap_estimador`, `biseccion`, `analizar_columna`).
 
 c)  Mirá `git log --oneline`. ¿El historial cuenta una historia clara? ¿Qué cambiarías?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```bash
+# a) En la terminal, dentro de la carpeta del proyecto
+git init
+git status   # muestra los archivos .R como "untracked"
+
+# b)
+git add clase1.R clase2.R
+git commit -m "feat: agregar herramientas basicas de tipos y bucles
+
+Funciones para describir autos (mtcars) y para hacer
+boostrap simple sobre airquality. Punto de partida del curso."
+
+git add clase3.R clase4.R
+git commit -m "feat: estructuras compuestas y EDA
+
+medias_por_grupo, cargar_y_describir, graficar_distribucion,
+eda_minimo, normalizar. Cubren clases 3 y 4 del nivelador."
+
+git add clase5.R
+git commit -m "feat: simulacion y algoritmos iterativos
+
+bootstrap_estimador (generalizacion), biseccion, newton,
+analizar_columna (pipeline). Cierre del nivelador."
+
+# c)
+git log --oneline
+# Tres lineas, cada una con prefijo feat: y un titulo breve.
+# El log cuenta la trayectoria: tipos -> estructuras -> simulacion.
+```
+
+**Convenciones de commit:** los prefijos (`feat:`, `fix:`, `docs:`, `refactor:`, `chore:`) son del estándar [Conventional Commits](https://www.conventionalcommits.org/). No son obligatorios pero ayudan a leer el historial. Para proyectos personales chicos podés omitirlos.
+
+**Mensaje de commit que sirve:** primera línea ~50 caracteres con el qué. Línea en blanco. Cuerpo con el porqué (qué problema soluciona, qué decisión tomaste, qué alternativas descartaste). Lo que NO debería decir: "actualicé el archivo".
+
+:::

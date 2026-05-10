@@ -30,6 +30,31 @@ b)  En el histograma con `breaks = 20`, agregá título y eje en español.
 
 c)  Marcá la media con `abline(v = mean(airquality$Ozone, na.rm = TRUE), col = "red", lwd = 2)`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+par(mfrow = c(1, 3))
+hist(airquality$Ozone, breaks = 10,  main = "breaks = 10")
+hist(airquality$Ozone, breaks = 20,  main = "breaks = 20")
+hist(airquality$Ozone, breaks = 50,  main = "breaks = 50")
+par(mfrow = c(1, 1))
+# breaks=10 esconde la cola, breaks=50 introduce ruido,
+# breaks=20 es un buen compromiso.
+
+# b, c)
+hist(airquality$Ozone,
+     breaks = 20,
+     main = "Ozono diario en NY (1973)",
+     xlab = "Ozono (ppb)",
+     col  = "lightgray", border = "white")
+abline(v = mean(airquality$Ozone, na.rm = TRUE), col = "red", lwd = 2)
+```
+
+**Curiosidad sobre `breaks`:** R no necesariamente respeta el número exacto que pidas. `breaks = 20` es una **sugerencia**: internamente busca puntos de corte "lindos" cerca de ese número. Para forzar un valor exacto, pasá un vector: `breaks = seq(0, 200, by = 10)`.
+
+:::
+
 ## Ejercicio 2: boxplot por grupo
 
 a)  Boxplot de `Temp ~ Month` sobre `airquality`. Pintá las cajas con `col = "lightblue"`.
@@ -37,6 +62,30 @@ a)  Boxplot de `Temp ~ Month` sobre `airquality`. Pintá las cajas con `col = "l
 b)  Convertí `Month` en factor con etiquetas `c("May", "Jun", "Jul", "Ago", "Sep")` y volvé a graficar. Pista: `factor(airquality$Month, labels = c("May", ...))`.
 
 c)  ¿Qué mes tiene la mediana más alta? ¿Cuál tiene mayor dispersión (rango intercuartílico)?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+boxplot(Temp ~ Month, data = airquality, col = "lightblue",
+        xlab = "Mes", ylab = "Temperatura (F)")
+
+# b)
+airquality$Mes <- factor(airquality$Month,
+                         labels = c("May", "Jun", "Jul", "Ago", "Sep"))
+boxplot(Temp ~ Mes, data = airquality, col = "lightblue",
+        xlab = "Mes", ylab = "Temperatura (F)")
+
+# c)
+medianas <- aggregate(Temp ~ Month, data = airquality, median)
+medianas[which.max(medianas$Temp), ]   # Julio
+iqrs <- aggregate(Temp ~ Month, data = airquality, IQR)
+iqrs[which.max(iqrs$Temp), ]           # Mayo o Septiembre (dependiendo del año)
+```
+
+**Curiosidad:** los meses con mayor IQR son típicamente los de transición (mayo y septiembre): la temperatura varía mucho entre el inicio y el final del mes. En verano (junio-agosto) la dispersión es más chica porque el clima es más estable.
+
+:::
 
 ## Ejercicio 3: scatter con regresión lineal
 
@@ -46,6 +95,28 @@ b)  Agregá la recta de regresión: `abline(lm(mpg ~ hp, data = mtcars), col = "
 
 c)  Agregá una línea horizontal en la media de `mpg` con `abline(h = mean(mtcars$mpg), lty = 2)` y una leyenda con `legend("topright", legend = c(...), col = c(...), lty = c(1, 2))`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+plot(mtcars$hp, mtcars$mpg,
+     pch = 19, col = "gray60",
+     xlab = "Potencia (hp)",
+     ylab = "Consumo (mpg)",
+     main = "Consumo vs potencia")
+abline(lm(mpg ~ hp, data = mtcars), col = "tomato", lwd = 2)
+abline(h = mean(mtcars$mpg), lty = 2, col = "black")
+legend("topright",
+       legend = c("ajuste lineal", "media de mpg"),
+       col    = c("tomato", "black"),
+       lty    = c(1, 2),
+       lwd    = c(2, 1),
+       bty    = "n")
+```
+
+**Sutileza estadística:** la recta de regresión por mínimos cuadrados **siempre** pasa por el punto `(mean(x), mean(y))`. Es una propiedad geométrica del método. Por eso la línea horizontal en `mean(y)` cruza la recta en `mean(x)`.
+
+:::
+
 ## Ejercicio 4: `graficar_distribucion`
 
 a)  Definí `graficar_distribucion(x, etiqueta = "")` que dibuje histograma + boxplot lado a lado en `par(mfrow = c(1, 2))`. Restablecé el layout con `par(mfrow = c(1, 1))` al final.
@@ -53,6 +124,30 @@ a)  Definí `graficar_distribucion(x, etiqueta = "")` que dibuje histograma + bo
 b)  Aplicala a `airquality$Ozone` y `airquality$Wind`.
 
 c)  Aplicala a `mtcars$mpg`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+graficar_distribucion <- function(x, etiqueta = "") {
+  par(mfrow = c(1, 2))
+  hist(x, main = paste("Histograma:", etiqueta),
+       xlab = etiqueta, col = "gray85", border = "white")
+  boxplot(x, main = paste("Boxplot:", etiqueta),
+          horizontal = TRUE, col = "lightblue")
+  par(mfrow = c(1, 1))
+}
+
+# b)
+graficar_distribucion(airquality$Ozone, "Ozono (ppb)")
+graficar_distribucion(airquality$Wind,  "Viento (mph)")
+
+# c)
+graficar_distribucion(mtcars$mpg, "Consumo (mpg)")
+```
+
+**Mejor con `on.exit`:** la versión actual restablece `par` solo si la función termina sin errores. Si `hist` o `boxplot` fallan, el layout queda en 1x2 para todos los gráficos siguientes. La solución correcta usa `on.exit`, lo vemos en el ejercicio 5.
+
+:::
 
 ## Ejercicio 5: comparar con la versión auxiliar
 
@@ -62,6 +157,33 @@ b)  Comparala con tu `graficar_distribucion`. ¿Qué hace `on.exit(par(par_anter
 
 c)  Reescribí `graficar_distribucion` agregando `on.exit` para que el layout siempre se restaure, incluso si la función falla.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a, b)
+# graficar_hist_box (en auxiliares.R) usa:
+#   par_anterior <- par(mfrow = c(1, 2))
+#   on.exit(par(par_anterior))
+#
+# on.exit registra una expresion que se ejecuta cuando la funcion sale,
+# tanto si termina normal como si lanza error. Garantiza que el layout
+# se restaura siempre.
+
+# c)
+graficar_distribucion <- function(x, etiqueta = "") {
+  par_anterior <- par(mfrow = c(1, 2))
+  on.exit(par(par_anterior))
+  hist(x, main = paste("Histograma:", etiqueta),
+       xlab = etiqueta, col = "gray85", border = "white")
+  boxplot(x, main = paste("Boxplot:", etiqueta),
+          horizontal = TRUE, col = "lightblue")
+}
+```
+
+**`on.exit` en general:** sirve para limpiar **recursos**: cerrar archivos (`close`), liberar conexiones, restaurar opciones (`options`, `par`), borrar archivos temporales (`unlink`). Patrón canónico: la primera línea de la función abre el recurso, la segunda registra `on.exit` para cerrarlo. Es el equivalente al `try/finally` de Python.
+
+:::
+
 ## Ejercicio 6: resumen por mes con barras
 
 a)  Reusá `medias_por_grupo` (clase 3): media de `Ozone` por `Month` en `airquality`.
@@ -69,6 +191,31 @@ a)  Reusá `medias_por_grupo` (clase 3): media de `Ozone` por `Month` en `airqua
 b)  Graficá con `barplot(height = ..., names.arg = ..., main = "Ozono medio por mes")`.
 
 c)  Agregá barras de error usando la función auxiliar `barplot_con_error(x, grupo, ...)` (de `auxiliares.R`). Es un helper custom que calcula media y error estándar por grupo y los grafica de un solo viaje. Mirá su código si querés ver cómo se construye con `aggregate` + `arrows`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+resumen <- medias_por_grupo(airquality, "Ozone", "Month")
+resumen
+
+# b)
+barplot(resumen$media,
+        names.arg = resumen$grupo,
+        main = "Ozono medio por mes",
+        xlab = "Mes", ylab = "Ozono (ppb)",
+        col  = "lightblue")
+
+# c)
+barplot_con_error(airquality$Ozone, airquality$Month,
+                  etiqueta_x = "mes",
+                  etiqueta_y = "Ozono (ppb)",
+                  titulo = "Ozono medio por mes (con SE)")
+```
+
+**Por qué importa el SE:** la barra muestra la **incertidumbre** sobre la media. Si dos meses tienen barras de error que se superponen, no se puede afirmar con certeza que las medias sean diferentes. Es un sustituto rápido (no riguroso) para un test de medias.
+
+:::
 
 ## Ejercicio 7: varios gráficos con `par(mfrow)`
 
@@ -78,6 +225,30 @@ b)  Restablecé el layout al final.
 
 c)  Hacé lo mismo pero con boxplots, también en grilla 2x2.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a, b)
+par_anterior <- par(mfrow = c(2, 2))
+hist(airquality$Ozone,   main = "Ozono",        xlab = "ppb")
+hist(airquality$Solar.R, main = "Radiacion",    xlab = "lang")
+hist(airquality$Wind,    main = "Viento",       xlab = "mph")
+hist(airquality$Temp,    main = "Temperatura",  xlab = "F")
+par(par_anterior)
+
+# c)
+par_anterior <- par(mfrow = c(2, 2))
+boxplot(airquality$Ozone,   main = "Ozono",       horizontal = TRUE)
+boxplot(airquality$Solar.R, main = "Radiacion",   horizontal = TRUE)
+boxplot(airquality$Wind,    main = "Viento",      horizontal = TRUE)
+boxplot(airquality$Temp,    main = "Temperatura", horizontal = TRUE)
+par(par_anterior)
+```
+
+**Para reutilizar:** se puede generalizar a `lapply(nombres_columnas, function(c) hist(df[[c]], main = c))`. Sale más prolijo cuando son muchas columnas.
+
+:::
+
 ## Ejercicio 8: `eda_minimo`
 
 a)  Definí `eda_minimo(df)` que: imprima `str(df)`, `summary(df)`, `head(df, 3)`, y para cada columna numérica llame a `graficar_distribucion`.
@@ -85,6 +256,33 @@ a)  Definí `eda_minimo(df)` que: imprima `str(df)`, `summary(df)`, `head(df, 3)
 b)  Aplicala a `airquality`.
 
 c)  Aplicala a `mtcars`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+eda_minimo <- function(df) {
+  cat("Estructura:\n");  str(df)
+  cat("\nResumen:\n");   print(summary(df))
+  cat("\nPrimeras filas:\n"); print(head(df, 3))
+
+  for (nombre in colnames(df)) {
+    if (is.numeric(df[[nombre]])) {
+      graficar_distribucion(df[[nombre]], etiqueta = nombre)
+      readline("Enter para continuar...")   # opcional, para pausar
+    }
+  }
+}
+
+# b)
+eda_minimo(airquality)
+
+# c)
+eda_minimo(mtcars)
+```
+
+**Caso real:** este patrón ("para cada columna, hacé X") es la base de los reportes automáticos. Paquetes como `skimr` y `DataExplorer` están construidos sobre la misma idea pero con presentación más prolija. Si querés ver una versión "industrial", probá `skimr::skim(airquality)`.
+
+:::
 
 ## Ejercicio 9: NAs en datos reales
 
@@ -94,6 +292,32 @@ b)  Comparar el resultado de `mean(airquality$Ozone)` con `mean(airquality$Ozone
 
 c)  Definí `media_robusta(x)` que devuelva `mean(x, na.rm = TRUE)` con un mensaje (`message()`) si encuentra `NA`. Probala.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+sapply(airquality, function(c) sum(is.na(c)))
+# Ozone: 37, Solar.R: 7, otras: 0
+
+# b)
+mean(airquality$Ozone)                # NA
+mean(airquality$Ozone, na.rm = TRUE)  # 42.13
+
+# c)
+media_robusta <- function(x) {
+  n_na <- sum(is.na(x))
+  if (n_na > 0) message("media_robusta: ignorando ", n_na, " NA")
+  mean(x, na.rm = TRUE)
+}
+media_robusta(airquality$Ozone)
+# message: ignorando 37 NA
+# 42.13
+```
+
+**Decisión silenciosa:** `mean(..., na.rm = TRUE)` es práctico pero **oculta información**: no sabés cuántos faltantes había. `media_robusta` deja una huella audible. En análisis exploratorios, este tipo de función ayuda a detectar problemas de datos que de otra forma pasarían inadvertidos.
+
+:::
+
 ## Ejercicio 10: `normalizar` con tests
 
 a)  Definí `normalizar(x)` que devuelva `(x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)`.
@@ -101,6 +325,28 @@ a)  Definí `normalizar(x)` que devuelva `(x - mean(x, na.rm = TRUE)) / sd(x, na
 b)  Validala con dos `stopifnot` sobre `c(1, 2, 3, 4, 5)`: media cercana a 0 y desvío cercano a 1, ambas con tolerancia `1e-10`.
 
 c)  Aplicala a `airquality$Wind`. Graficá el histograma del resultado.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+normalizar <- function(x) {
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+# b)
+z <- normalizar(c(1, 2, 3, 4, 5))
+stopifnot(abs(mean(z))     < 1e-10)
+stopifnot(abs(sd(z) - 1)   < 1e-10)
+
+# c)
+hist(normalizar(airquality$Wind),
+     main = "Wind normalizada (z-score)",
+     xlab = "z", breaks = 20)
+```
+
+**Convención del z-score:** la función `scale(x)` de R hace lo mismo pero devuelve una **matriz** de una columna, no un vector. Por eso es común escribir nuestra propia versión que devuelva el mismo tipo que recibe.
+
+:::
 
 ## Ejercicio 11: explorar `bikeshare`
 
@@ -110,6 +356,28 @@ b)  ¿Cuántas filas tiene? ¿Cuántas columnas numéricas y cuántas factores?
 
 c)  ¿Qué representa `bikers`? ¿Y `casual` versus `registered`? Pista: mirá la documentación al inicio de `auxiliares.R`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+bicis <- cargar_bikeshare()
+eda_minimo(bicis)
+
+# b)
+nrow(bicis)                      # 8645
+sum(sapply(bicis, is.numeric))   # 12 (incluye los enteros)
+sum(sapply(bicis, is.factor))    # 2 (season, weekday)
+
+# c)
+# bikers = casual + registered
+# casual: viajes de usuarios sin membresia (alquiler puntual)
+# registered: viajes de usuarios con membresia (commuters)
+all(bicis$bikers == bicis$casual + bicis$registered)   # TRUE
+```
+
+**Diferencia entre tipos de usuario:** `registered` suele dominar el patrón doble-pico de hora pico (ida y vuelta al trabajo), mientras que `casual` se concentra en fines de semana y horarios diurnos. Si comparás los dos por separado, el patrón cambia notablemente.
+
+:::
+
 ## Ejercicio 12: distribución de viajes por hora
 
 a)  Histograma de `bicis$bikers`. ¿Por qué tiene una cola tan larga?
@@ -117,6 +385,33 @@ a)  Histograma de `bicis$bikers`. ¿Por qué tiene una cola tan larga?
 b)  Acotá el eje x al percentil 99: `xlim = c(0, quantile(bicis$bikers, 0.99))`. Volvé a graficar.
 
 c)  Hacé el histograma de `log10(bicis$bikers + 1)`. Compará con la versión sin transformar. ¿Por qué `+ 1`?
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+hist(bicis$bikers, breaks = 50)
+# Cola larga: muchas horas tienen 1-50 viajes (madrugada, lluvia),
+# pero algunas tienen 700+ (hora pico de buen tiempo).
+
+# b)
+hist(bicis$bikers,
+     xlim = c(0, quantile(bicis$bikers, 0.99)),
+     breaks = 50,
+     main = "Bikers por hora (acotado al p99)")
+
+# c)
+hist(log10(bicis$bikers + 1),
+     breaks = 50,
+     main = "log10(bikers + 1)",
+     xlab = "log10")
+```
+
+**Por qué `+ 1`:** `log10(0)` es `-Inf`, lo que rompe el histograma. Sumar 1 (transformación log1p) convierte el cero en log10(1) = 0. Es el truco estándar para datos de conteos con ceros.
+
+**Forma resultante:** la transformación `log10` aplana la cola larga y la distribución se ve más simétrica. Eso facilita usar técnicas que asumen normalidad (regresión, t-test).
+
+:::
 
 ## Ejercicio 13: viajes por estación
 
@@ -126,6 +421,30 @@ b)  Boxplot de `bikers ~ weekday`. ¿Hay diferencia entre días hábiles y fines
 
 c)  Calculá la media de `bikers` por estación y graficá con `barplot`. Compará con el boxplot.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+boxplot(bikers ~ season, data = bicis, col = "lightblue")
+# Verano y otoño tienen las medianas mas altas; invierno la mas baja.
+
+# b)
+boxplot(bikers ~ weekday, data = bicis, col = "lightblue")
+# Las medianas son parecidas. La dispersion es ligeramente menor en
+# fin de semana (sin pico tan alto de hora pico).
+
+# c)
+medias <- medias_por_grupo(bicis, "bikers", "season")
+barplot(medias$media, names.arg = medias$grupo,
+        main = "Bikers medios por estacion")
+# El barplot muestra solo la media; oculta la dispersion.
+# El boxplot muestra mediana + cuartiles + outliers.
+```
+
+**Mediana vs media en distribuciones asimétricas:** con cola larga a la derecha, `media > mediana`. La media se infla por los outliers de hora pico. Si querés un "valor típico" robusto, usá la mediana. Para sumas (energía total, costo total), la media es la métrica correcta.
+
+:::
+
 ## Ejercicio 14: el ciclo diario
 
 a)  Calculá la media de `bikers` por hora con `aggregate(bikers ~ hr, data = bicis, mean)`.
@@ -133,6 +452,34 @@ a)  Calculá la media de `bikers` por hora con `aggregate(bikers ~ hr, data = bi
 b)  Graficá la curva resultante con `plot(... , type = "l", lwd = 2)`. Identificá los picos.
 
 c)  Hacé lo mismo separando por `workingday` (días hábiles vs fines de semana). Pista: dos `aggregate` y dos `lines` sobre el mismo plot.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a, b)
+por_hora <- aggregate(bikers ~ hr, data = bicis, mean)
+plot(por_hora$hr, por_hora$bikers,
+     type = "l", lwd = 2,
+     xlab = "Hora", ylab = "Bikers medios",
+     main = "Ciclo diario de uso")
+# Picos a las 8h y 17h (ida y vuelta del trabajo).
+
+# c)
+habil   <- aggregate(bikers ~ hr, data = bicis[bicis$workingday, ],   mean)
+no_hab  <- aggregate(bikers ~ hr, data = bicis[!bicis$workingday, ],  mean)
+
+plot(habil$hr, habil$bikers, type = "l", lwd = 2, col = "tomato",
+     xlab = "Hora", ylab = "Bikers medios",
+     main = "Habiles vs no habiles")
+lines(no_hab$hr, no_hab$bikers, lwd = 2, col = "steelblue")
+legend("topleft",
+       legend = c("dia habil", "fin de semana / feriado"),
+       col = c("tomato", "steelblue"), lwd = 2, bty = "n")
+```
+
+**Patrón clásico:** los días hábiles muestran el doble pico, los no hábiles tienen una sola joroba centrada en el mediodía. Es el firma de uso commuter vs uso recreativo. Cualquier modelo que prediga `bikers` necesita capturar esta interacción día×hora.
+
+:::
 
 ## Ejercicio 15: temperatura y uso
 
@@ -142,6 +489,33 @@ b)  Agregá la recta de regresión `abline(lm(bikers ~ temp, data = bicis), col 
 
 c)  Calculá `cor(bicis$bikers, bicis$temp)`. Interpretá el signo y la magnitud (entre -1 y 1).
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+plot(bicis$temp, bicis$bikers,
+     pch = 16, col = rgb(0, 0, 0, 0.05),
+     xlab = "Temperatura (normalizada)",
+     ylab = "Bikers",
+     main = "Bikers vs temperatura")
+# alpha = 0.05 hace los puntos casi transparentes.
+# Con 8645 puntos, sin transparencia se ve un boron negro.
+# Con transparencia se ve la densidad: zonas oscuras = muchos puntos.
+
+# b)
+abline(lm(bikers ~ temp, data = bicis), col = "red", lwd = 2)
+
+# c)
+cor(bicis$bikers, bicis$temp)   # ~0.40
+# Correlacion positiva moderada: a mas temperatura, mas viajes.
+# Pero no es perfecta: a temperaturas muy altas (>0.85 normalizado)
+# el uso vuelve a bajar (incomodo).
+```
+
+**Truco de los datasets grandes:** con 10k+ puntos, `pch = 16` y `col = rgb(0,0,0, alpha)` es la forma más simple de hacer un "density plot" en base R. Para un density plot real: `smoothScatter(x, y)` o `MASS::kde2d`.
+
+:::
+
 ## Ejercicio 16: heatmap por día y hora (con un helper)
 
 a)  Usá la función auxiliar `heatmap_grupo(x, fila, columna, ...)` (de `auxiliares.R`) para graficar la media de `bicis$bikers` por día de la semana y hora del día. Mirá su código para entender cómo combina `aggregate`, `xtabs` e `image`.
@@ -149,6 +523,35 @@ a)  Usá la función auxiliar `heatmap_grupo(x, fila, columna, ...)` (de `auxili
 b)  Identificá visualmente los picos. ¿Aparecen los dos picos del ciclo diario en días hábiles?
 
 c)  Volvé a hacer el heatmap solo con días hábiles (`bicis[bicis$workingday, ]`) y solo con fines de semana. Compará.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+heatmap_grupo(bicis$bikers, bicis$weekday, bicis$hr,
+              etiqueta_x = "hora", etiqueta_y = "dia")
+
+# b)
+# Los dos picos (8h, 17h) son claramente visibles en lun-vie.
+# Sab-dom: una sola joroba ancha entre 12h y 18h.
+
+# c)
+habil <- bicis[bicis$workingday, ]
+fde   <- bicis[!bicis$workingday, ]
+
+par(mfrow = c(1, 2))
+heatmap_grupo(habil$bikers, habil$weekday, habil$hr,
+              etiqueta_x = "hora", etiqueta_y = "dia",
+              titulo = "Habiles")
+heatmap_grupo(fde$bikers, fde$weekday, fde$hr,
+              etiqueta_x = "hora", etiqueta_y = "dia",
+              titulo = "Fin de semana / feriado")
+par(mfrow = c(1, 1))
+```
+
+**Visualización vs estadística:** un heatmap como este captura un efecto **interactivo** (día × hora) que sería invisible en un análisis univariado. Mirar los datos en el espacio que tiene sentido es un paso que ningún modelo automatiza por vos.
+
+:::
 
 ## Ejercicio 17: bootstrap con bikeshare
 
@@ -158,6 +561,27 @@ b)  Calculá un IC del 95% por percentiles.
 
 c)  Graficá el histograma de las medias bootstrap usando la función auxiliar `graficar_bootstrap` (de `auxiliares.R`). Mirá su código antes de usarla.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+set.seed(42)
+boot <- bootstrap_media(bicis$bikers, n_rep = 1000)
+length(boot)   # 1000
+
+# b)
+quantile(boot, c(0.025, 0.975))
+# ~ (140.5, 147.5)
+mean(bicis$bikers)   # 144
+
+# c)
+graficar_bootstrap(boot, "Media bootstrap de bikers")
+```
+
+**Por qué el IC es tan angosto:** cuando `n` es grande (8645), el error estándar de la media (`sd(x) / sqrt(n)`) es chico. El bootstrap también tiene baja dispersión. Para muestras chicas (n < 30), el IC es más ancho y el bootstrap aporta más.
+
+:::
+
 ## Ejercicio 18: regresión lineal múltiple
 
 a)  Ajustá `mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)`. Mostrá `summary(mod)`. Lo importante en este momento es leer la salida y entender qué reporta.
@@ -165,6 +589,32 @@ a)  Ajustá `mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)`. Mostrá 
 b)  Identificá los coeficientes estimados y su signo. ¿Cuál variable parece tener más peso?
 
 c)  Calculá `confint(mod)` y `coef(mod)`. Compará intervalos con coeficientes.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+mod <- lm(bikers ~ temp + hum + windspeed, data = bicis)
+summary(mod)
+# Estimate, Std. Error, t value, Pr(>|t|) por cada coeficiente.
+# Mas un R^2 al final.
+
+# b)
+coef(mod)
+# (Intercept), temp, hum, windspeed
+# temp: positivo (mas calor, mas viajes)
+# hum: negativo (mas humedad, menos viajes)
+# windspeed: negativo (mas viento, menos viajes)
+# La magnitud absoluta de temp suele ser la mas grande.
+
+# c)
+confint(mod)
+# Cada fila: IC del 95% para el coeficiente.
+# Si el IC NO incluye 0, el coeficiente es "significativo" al 5%.
+```
+
+**Cuidado al interpretar:** los coeficientes están en la **escala original** de cada variable. Como `temp`, `hum` y `windspeed` están normalizados (0 a 1), sus magnitudes SÍ son comparables acá. Pero si una estuviera en `°C` y otra en `mph`, no podríamos compararlos directamente sin estandarizar.
+
+:::
 
 ## Ejercicio 19: `eda_minimo` extendido
 
@@ -174,6 +624,39 @@ b)  Agregale: si una columna es `factor`, imprimí su `table`.
 
 c)  Aplicá `eda_minimo` a `bicis` y verificá que ahora muestra factores y `NA`.
 
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+eda_minimo <- function(df) {
+  cat("Estructura:\n");  str(df)
+  cat("\nResumen:\n");   print(summary(df))
+  cat("\nPrimeras filas:\n"); print(head(df, 3))
+
+  cat("\nNAs por columna:\n")
+  print(sapply(df, function(c) sum(is.na(c))))
+
+  cat("\nFactores:\n")
+  for (nombre in colnames(df)) {
+    if (is.factor(df[[nombre]])) {
+      cat("\n  ", nombre, ":\n")
+      print(table(df[[nombre]]))
+    }
+  }
+
+  for (nombre in colnames(df)) {
+    if (is.numeric(df[[nombre]])) {
+      graficar_distribucion(df[[nombre]], etiqueta = nombre)
+    }
+  }
+}
+
+eda_minimo(bicis)
+```
+
+**Mejora futura:** este patrón se repite en muchos análisis. Vale la pena moverlo a un paquete propio (con `package.skeleton` o `usethis::create_package`). Más adelante en la maestría van a ver cómo empaquetar funciones para reusarlas.
+
+:::
+
 ## Ejercicio 20: probar antes de creer
 
 a)  Mirá tu `normalizar` (ejercicio 10): ¿qué pasa si `x` tiene un solo elemento? ¿Y si todos los valores son iguales (sd `0`)? Predecí, después corré.
@@ -181,3 +664,29 @@ a)  Mirá tu `normalizar` (ejercicio 10): ¿qué pasa si `x` tiene un solo eleme
 b)  Agregá validaciones con `stopifnot`: `length(x) >= 2` y `sd(x, na.rm = TRUE) > 0`.
 
 c)  Escribí un test que confirme que `normalizar(c(1, 1, 1))` lanza error con un mensaje claro. Pista: `tryCatch(normalizar(c(1, 1, 1)), error = function(e) message("Falla esperada: ", conditionMessage(e)))`.
+
+::: {.callout-tip collapse="true" title="Solución"}
+
+```r
+# a)
+normalizar(5)         # NaN  (sd de un solo valor es NA)
+normalizar(c(1,1,1))  # NaN NaN NaN  (dividir por sd = 0)
+
+# b)
+normalizar <- function(x) {
+  stopifnot(length(x) >= 2,
+            sd(x, na.rm = TRUE) > 0)
+  (x - mean(x, na.rm = TRUE)) / sd(x, na.rm = TRUE)
+}
+
+# c)
+tryCatch(
+  normalizar(c(1, 1, 1)),
+  error = function(e) message("Falla esperada: ", conditionMessage(e))
+)
+# Falla esperada: sd(x, na.rm = TRUE) > 0 is not TRUE
+```
+
+**Filosofía de `stopifnot`:** las precondiciones explícitas son **documentación ejecutable**. Cualquiera que lea `stopifnot(length(x) >= 2)` sabe inmediatamente que la función espera al menos dos elementos. Sin la línea, el error sería `Error in (x - mean(x))/sd(x): NaN/numeric value...`, mucho más oscuro.
+
+:::
