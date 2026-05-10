@@ -272,6 +272,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Probala con <code>f &lt;- function(x) (x + 2/x) / 2</code>, <code>x0 = 1</code>, <code>n = 10</code>. ¿A qué número converge? Pista: es la iteración Babilónica para <code>sqrt(2)</code>.</p></li>
 <li><p>Modificá <code>iterar</code> para que devuelva la <strong>trayectoria</strong> completa (vector de longitud <code>n + 1</code>). Graficala con <code>plot(..., type = "b")</code>.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iterar <span class="ot">&lt;-</span> <span class="cf">function</span>(f, x0, n) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x0</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) x <span class="ot">&lt;-</span> <span class="fu">f</span>(x)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  x</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>f_baby <span class="ot">&lt;-</span> <span class="cf">function</span>(x) (x <span class="sc">+</span> <span class="dv">2</span><span class="sc">/</span>x) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">iterar</span>(f_baby, <span class="dv">1</span>, <span class="dv">10</span>)   <span class="co"># 1.414214 (sqrt(2))</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>iterar_traza <span class="ot">&lt;-</span> <span class="cf">function</span>(f, x0, n) {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  out <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  out[<span class="dv">1</span>] <span class="ot">&lt;-</span> x0</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) out[i <span class="sc">+</span> <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">f</span>(out[i])</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  out</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>trayectoria <span class="ot">&lt;-</span> <span class="fu">iterar_traza</span>(f_baby, <span class="dv">1</span>, <span class="dv">10</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, trayectoria, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"iteracion"</span>, <span class="at">ylab =</span> <span class="st">"x_n"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fu">sqrt</span>(<span class="dv">2</span>), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Tasa de convergencia:</strong> la iteración Babilónica converge <strong>cuadráticamente</strong>: la cantidad de dígitos correctos se duplica en cada paso. Es uno de los algoritmos numéricos más rápidos para raíces. La iteración del coseno (ejercicio 2) converge linealmente, mucho más lento.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-2-punto-fijo" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-2-punto-fijo">Ejercicio 2: punto fijo</h2>
@@ -280,6 +318,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicala a <code>f &lt;- function(x) cos(x)</code>, <code>x0 = 0</code>. ¿Qué valor encuentra?</p></li>
 <li><p>Aplicala a <code>f &lt;- function(x) (x + 2/x) / 2</code>. ¿Cuántas iteraciones tarda en converger?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>punto_fijo <span class="ot">&lt;-</span> <span class="cf">function</span>(f, x0, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x0</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(max_iter)) {</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    nuevo <span class="ot">&lt;-</span> <span class="fu">f</span>(x)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(nuevo <span class="sc">-</span> x) <span class="sc">&lt;</span> tol) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">valor =</span> nuevo, <span class="at">iteraciones =</span> i, <span class="at">convergio =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> nuevo</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">valor =</span> x, <span class="at">iteraciones =</span> max_iter, <span class="at">convergio =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">punto_fijo</span>(cos, <span class="at">x0 =</span> <span class="dv">0</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># valor: 0.7390851, iteraciones: ~70, convergio: TRUE</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Es el famoso "numero de Dottie": el unico real con cos(x) = x.</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">punto_fijo</span>(<span class="cf">function</span>(x) (x <span class="sc">+</span> <span class="dv">2</span><span class="sc">/</span>x) <span class="sc">/</span> <span class="dv">2</span>, <span class="at">x0 =</span> <span class="dv">1</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># valor: 1.414214, iteraciones: 5, convergio: TRUE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Cuándo converge punto fijo:</strong> la iteración <code>x_{n+1} = f(x_n)</code> converge si <code>|f'(x*)| &lt; 1</code> cerca del punto fijo <code>x*</code>. Para <code>cos</code> cerca de 0.74, <code>|cos'(0.74)| = |sin(0.74)| ≈ 0.67 &lt; 1</code>, así que converge (lento). Si la derivada es ≥ 1, la iteración diverge.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-3-monte-carlo-con-monedas" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-3-monte-carlo-con-monedas">Ejercicio 3: Monte Carlo con monedas</h2>
@@ -288,6 +362,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Compará con <code>1 - pbinom(5, 10, 0.5)</code> (<code>pbinom</code> da la función de distribución acumulada de una binomial; <code>?pbinom</code> para detalles).</p></li>
 <li><p>Repetí la estimación variando <code>n_rep = c(100, 1000, 10000, 100000)</code>. Graficá la estimación contra <code>n_rep</code> y observá la convergencia.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">10000</span>, {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  caras <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  caras <span class="sc">&gt;=</span> <span class="dv">6</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sim)   <span class="co"># ~0.376</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="fl">0.5</span>)   <span class="co"># 0.3769531</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>n_reps <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>estim <span class="ot">&lt;-</span> <span class="fu">sapply</span>(n_reps, <span class="cf">function</span>(n) {</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="fu">replicate</span>(n, <span class="fu">sum</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dv">10</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)) <span class="sc">&gt;=</span> <span class="dv">6</span>))</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(n_reps, estim, <span class="at">log =</span> <span class="st">"x"</span>, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"n_rep (escala log)"</span>, <span class="at">ylab =</span> <span class="st">"estimacion"</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fl">0.30</span>, <span class="fl">0.45</span>))</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbinom</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="fl">0.5</span>), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Tasa de convergencia Monte Carlo:</strong> el error es <code>O(1/sqrt(n))</code>. Para reducir el error a la mitad, hay que <strong>cuadruplicar</strong> las réplicas. Por eso pasar de 10000 a 100000 mejora poco; pasar de 100 a 1000 mejora mucho. Lo verás en el gráfico.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-4-bootstrap_estimador-generalizado" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-4-bootstrap_estimador-generalizado">Ejercicio 4: <code>bootstrap_estimador</code> generalizado</h2>
@@ -296,6 +406,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Probala con <code>mean</code>, <code>median</code> y <code>sd</code> sobre <code>airquality$Wind</code>. Calculá un IC del 95% en cada caso.</p></li>
 <li><p>Reescribí <code>bootstrap_media</code> como un wrapper de <code>bootstrap_estimador</code> con <code>estimador = mean</code> por defecto.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bootstrap_estimador <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">estimador =</span> mean, <span class="at">n_rep =</span> <span class="dv">1000</span>) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replicate</span>(n_rep, <span class="fu">estimador</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>boot_mean   <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(airquality<span class="sc">$</span>Wind, mean, <span class="dv">1000</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>boot_median <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(airquality<span class="sc">$</span>Wind, median, <span class="dv">1000</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>boot_sd     <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(airquality<span class="sc">$</span>Wind, sd, <span class="dv">1000</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_mean,   <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))   <span class="co"># ~ (9.40, 10.50)</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_median, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))   <span class="co"># ~ (8.6, 10.0)</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_sd,     <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))   <span class="co"># ~ (3.0, 3.9)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>bootstrap_media <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">n_rep =</span> <span class="dv">1000</span>) {</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bootstrap_estimador</span>(x, <span class="at">estimador =</span> mean, <span class="at">n_rep =</span> n_rep)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Por qué generalizar:</strong> el patrón “muestreá con reemplazo, aplicá el estadístico, repetí” es siempre el mismo. Generalizarlo evita repetir código y abre la puerta a usar <strong>cualquier</strong> estadístico (kurtosis, mediana, percentiles, coeficientes de regresión). El bootstrap es un método extremadamente flexible justamente por esto.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-5-bootstrap-con-na" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-5-bootstrap-con-na">Ejercicio 5: bootstrap con NA</h2>
@@ -304,6 +448,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Modificá <code>bootstrap_estimador</code> para que filtre <code>NA</code> al inicio y avise con <code>message()</code>.</p></li>
 <li><p>Compará el IC del 95% para la mediana de <code>Ozone</code> con <code>quantile(airquality$Ozone, c(0.025, 0.975), na.rm = TRUE)</code>. ¿Por qué difieren?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(airquality<span class="sc">$</span>Ozone, mean, <span class="dv">100</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Devuelve muchos NA porque sample puede caer en filas con NA,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># y mean sin na.rm propaga el NA.</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>bootstrap_estimador <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">estimador =</span> mean, <span class="at">n_rep =</span> <span class="dv">1000</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  n_na <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(x))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (n_na <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"bootstrap_estimador: ignorando "</span>, n_na, <span class="st">" NA"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> x[<span class="sc">!</span><span class="fu">is.na</span>(x)]</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replicate</span>(n_rep, <span class="fu">estimador</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>boot_med <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(airquality<span class="sc">$</span>Ozone, median, <span class="dv">1000</span>)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_med, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co"># IC del 95% para la MEDIANA: ~ (24, 35)</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(airquality<span class="sc">$</span>Ozone, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Percentiles 2.5% y 97.5% de los DATOS: ~ (3, 110)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Diferencia conceptual:</strong> el primer IC es para la <strong>mediana</strong> (un parámetro fijo de la población), el segundo es el rango donde cae el 95% de los <strong>datos</strong>. Son cosas distintas: el primero refleja <strong>incertidumbre del estimador</strong>, el segundo describe la <strong>variabilidad de los datos</strong>. Confundirlos es uno de los errores más comunes.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-6-paradoja-del-cumpleaños" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-6-paradoja-del-cumpleaños">Ejercicio 6: paradoja del cumpleaños</h2>
@@ -312,6 +495,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicala a <code>n = c(5, 10, 15, 20, 23, 30, 50)</code> y graficá los resultados con <code>plot(n, p, type = "b")</code>.</p></li>
 <li><p>Encontrá el <code>n</code> mínimo para <code>P &gt; 0.5</code> recorriendo de uno en uno con un <code>while</code>. Compará con la respuesta clásica (<code>n = 23</code>).</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>prob_coincidencia <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">n_sim =</span> <span class="dv">10000</span>) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(<span class="fu">replicate</span>(n_sim, <span class="fu">any</span>(<span class="fu">duplicated</span>(<span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">365</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)))))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">23</span>, <span class="dv">30</span>, <span class="dv">50</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>ps <span class="ot">&lt;-</span> <span class="fu">sapply</span>(ns, prob_coincidencia)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(ns, ps, <span class="at">type =</span> <span class="st">"b"</span>, <span class="at">pch =</span> <span class="dv">19</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"n personas"</span>, <span class="at">ylab =</span> <span class="st">"P(al menos una coincidencia)"</span>)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.5</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="fu">prob_coincidencia</span>(n) <span class="sc">&lt;</span> <span class="fl">0.5</span>) {</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> n <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>n   <span class="co"># ~22-24, depende del seed (sale con ruido por simulacion)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Por qué 23:</strong> la probabilidad analítica es <code>1 - prod((365:343) / 365)</code>, que cruza 0.5 en <code>n = 23</code>. Es contraintuitiva porque comparamos con cuántos pares hay (<code>n*(n-1)/2</code>), no con <code>n</code> solo. Con 23 personas hay 253 pares, muchos más de los que parece.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-7-bisección" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-7-bisección">Ejercicio 7: bisección</h2>
@@ -320,6 +536,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Encontrá la raíz de <code>f(x) = cos(x) - x</code> en <code>[0, 1]</code>. Compará con <code>uniroot(f, c(0, 1))$root</code> (la implementación robusta que trae R).</p></li>
 <li><p>Modificá <code>biseccion</code> para que devuelva una lista con <code>raiz</code>, <code>iteraciones</code> y <code>tolerancia_final</code>.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>biseccion <span class="ot">&lt;-</span> <span class="cf">function</span>(f, a, b, <span class="at">tol =</span> <span class="fl">1e-6</span>) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stopifnot</span>(<span class="fu">f</span>(a) <span class="sc">*</span> <span class="fu">f</span>(b) <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  iter <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> ((b <span class="sc">-</span> a) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">&gt;</span> tol) {</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    m <span class="ot">&lt;-</span> (a <span class="sc">+</span> b) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">f</span>(a) <span class="sc">*</span> <span class="fu">f</span>(m) <span class="sc">&lt;</span> <span class="dv">0</span>) b <span class="ot">&lt;-</span> m <span class="cf">else</span> a <span class="ot">&lt;-</span> m</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    iter <span class="ot">&lt;-</span> iter <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">raiz =</span> (a <span class="sc">+</span> b) <span class="sc">/</span> <span class="dv">2</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">iteraciones =</span> iter,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">tolerancia_final =</span> (b <span class="sc">-</span> a) <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">biseccion</span>(<span class="cf">function</span>(x) <span class="fu">cos</span>(x) <span class="sc">-</span> x, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co"># raiz: 0.7390851, iter: ~20</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">uniroot</span>(<span class="cf">function</span>(x) <span class="fu">cos</span>(x) <span class="sc">-</span> x, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="sc">$</span>root</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 0.7390851 (mismo resultado)</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="fu">uniroot</span>(<span class="cf">function</span>(x) <span class="fu">cos</span>(x) <span class="sc">-</span> x, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))<span class="sc">$</span>iter</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="co"># ~7 (mucho menos: uniroot usa Brent, mas inteligente)</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="co"># c) ya esta arriba</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Comparación bisección vs Brent (uniroot):</strong> bisección converge linealmente; el método de Brent (que combina bisección, secante e interpolación) suele ser <strong>superlineal</strong> y converge en menos iteraciones. Para problemas reales conviene usar <code>uniroot</code>. Bisección sigue siendo útil para entender el principio y como fallback robusto.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-8-bisección-y-la-paradoja" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-8-bisección-y-la-paradoja">Ejercicio 8: bisección y la paradoja</h2>
@@ -328,6 +583,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Probala con <code>n</code> en el intervalo <code>[5, 50]</code>.</p></li>
 <li><p>¿Por qué la simulación introduce ruido? ¿Cómo afecta a la bisección?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a, b)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="cf">function</span>(n) <span class="fu">prob_coincidencia</span>(<span class="fu">round</span>(n), <span class="at">n_sim =</span> <span class="dv">10000</span>) <span class="sc">-</span> <span class="fl">0.5</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">biseccion</span>(g, <span class="dv">5</span>, <span class="dv">50</span>, <span class="at">tol =</span> <span class="fl">0.5</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># raiz: ~22.5, sale cerca del clasico 23 pero con ruido</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># La probabilidad estimada por Monte Carlo tiene error ~1/sqrt(n_sim).</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Para n_sim = 10000, el error tipico es ~0.005.</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Cerca del 0.5, eso puede cambiar el signo de g(n) en distintas</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="co"># corridas. La biseccion "ve" una funcion ruidosa y puede oscilar.</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Solucion: aumentar n_sim cerca del cruce, o promediar varias simulaciones.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Cuándo importa el ruido:</strong> acá la respuesta es entera (n personas), así que el error de ±1 no es grave. Pero si la función real tuviera una raíz “exacta” en un valor real, la bisección sobre Monte Carlo sería poco confiable. En esos casos se usan métodos de optimización estocástica (SGD, Robbins-Monro).</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-9-bootstrap-del-coeficiente-de-regresión" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-9-bootstrap-del-coeficiente-de-regresión">Ejercicio 9: bootstrap del coeficiente de regresión</h2>
@@ -336,6 +619,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicá la función auxiliar <code>bootstrap_coef(formula, data, variable, n_rep)</code> (de <code>auxiliares.R</code>) sobre <code>bikers ~ temp</code>, con <code>variable = "temp"</code> y 500 réplicas. Mirá su código: muestrea filas con reemplazo, reajusta el <code>lm</code>, extrae el coeficiente. Lo encapsulamos para no repetir el patrón.</p></li>
 <li><p>Calculá el IC del 95% por percentiles del vector que devuelve <code>bootstrap_coef</code>. Compará con <code>confint(mod)</code>.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(bikers <span class="sc">~</span> temp, <span class="at">data =</span> bicis)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept), temp</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># IC del 95% para cada coeficiente</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">bootstrap_coef</span>(bikers <span class="sc">~</span> temp, <span class="at">data =</span> bicis,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">variable =</span> <span class="st">"temp"</span>, <span class="at">n_rep =</span> <span class="dv">500</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(boot)   <span class="co"># 500</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># IC bootstrap</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod)[<span class="st">"temp"</span>, ]</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co"># IC analitico</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Suelen ser parecidos cuando los supuestos del modelo se cumplen.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Por qué difieren a veces:</strong> el <code>confint</code> analítico asume <strong>normalidad de los residuos</strong> y <strong>homoscedasticidad</strong> (varianza constante). El bootstrap no asume nada de eso. Si los supuestos fallan (por ejemplo, los residuos están sesgados), el IC bootstrap es más confiable. Para <code>bikers</code> (conteos), los supuestos no se cumplen exactamente, así que vale la pena comparar.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-10-uso-de-bicicletas-como-variable-de-interés" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-10-uso-de-bicicletas-como-variable-de-interés">Ejercicio 10: uso de bicicletas como variable de interés</h2>
@@ -344,6 +661,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Calculá un IC del 95% para la mediana.</p></li>
 <li><p>Compará la mediana puntual con el IC. ¿Por qué el IC del bootstrap es informativo cuando la distribución es asimétrica?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>boot_med <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(bicis<span class="sc">$</span>bikers, median, <span class="dv">1000</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>(bicis<span class="sc">$</span>bikers)              <span class="co"># ~95</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_med, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))   <span class="co"># ~ (90, 102)</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Con n = 8645, el IC es muy chico (ancho ~12 alrededor de la mediana 95).</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Para distribuciones asimetricas la formula clasica (mediana +- z * sd / sqrt(n))</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># no aplica. Bootstrap funciona sin asumir simetria.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Bootstrap de la mediana vs media:</strong> la varianza de la mediana muestral depende de la <strong>densidad</strong> alrededor de la mediana de la población, no solo de la varianza global. La fórmula analítica involucra esa densidad, que rara vez se conoce. Bootstrap evita ese cálculo.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-11-graficar_bootstrap" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-11-graficar_bootstrap">Ejercicio 11: <code>graficar_bootstrap</code></h2>
@@ -352,6 +697,46 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicala al bootstrap del coeficiente del ejercicio 9.</p></li>
 <li><p>Modificala (haciendo una copia local) para que también muestre el cuantil 50% (mediana) con una línea verde.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">graficar_bootstrap</span>(boot_med, <span class="st">"Mediana bootstrap de bikers"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">graficar_bootstrap</span>(boot, <span class="st">"Coeficiente bootstrap de temp"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>graficar_bootstrap_v2 <span class="ot">&lt;-</span> <span class="cf">function</span>(boot, <span class="at">etiqueta =</span> <span class="st">"estadistico bootstrap"</span>) {</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  ic <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  med <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot, <span class="fl">0.5</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hist</span>(boot, <span class="at">breaks =</span> <span class="dv">30</span>, <span class="at">main =</span> etiqueta, <span class="at">xlab =</span> etiqueta,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="st">"gray85"</span>, <span class="at">border =</span> <span class="st">"white"</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">mean</span>(boot), <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> med, <span class="at">col =</span> <span class="st">"green3"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">v =</span> ic, <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"topright"</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"media"</span>, <span class="st">"mediana"</span>, <span class="st">"IC 95%"</span>),</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">col    =</span> <span class="fu">c</span>(<span class="st">"red"</span>, <span class="st">"green3"</span>, <span class="st">"blue"</span>),</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>         <span class="at">lwd    =</span> <span class="dv">2</span>,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">lty    =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">bty    =</span> <span class="st">"n"</span>)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a><span class="fu">graficar_bootstrap_v2</span>(boot_med, <span class="st">"Mediana bootstrap"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Cuándo media != mediana del bootstrap:</strong> si la distribución del bootstrap es asimétrica (caso típico para varianza, sd, mediana en muestras chicas), media y mediana del vector bootstrap difieren. La mediana suele ser un mejor “centro” en ese caso.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-12-simulación-de-un-experimento" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-12-simulación-de-un-experimento">Ejercicio 12: simulación de un experimento</h2>
@@ -360,6 +745,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicala a <code>n = 100</code>, <code>p = 0.3</code>. Calculá la media de éxitos.</p></li>
 <li><p>Compará con <code>n * p</code> (esperanza teórica) y <code>n * p * (1 - p)</code> (varianza teórica).</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>simular_lanzamientos <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p, <span class="at">n_sim =</span> <span class="dv">1000</span>) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">replicate</span>(n_sim, <span class="fu">sum</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">-</span> p, p))))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">simular_lanzamientos</span>(<span class="dv">100</span>, <span class="fl">0.3</span>, <span class="dv">1000</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(sim)   <span class="co"># ~30 (cerca de n*p = 30)</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="fu">var</span>(sim)    <span class="co"># ~21 (cerca de n*p*(1-p) = 21)</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span>; p <span class="ot">&lt;-</span> <span class="fl">0.3</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>n <span class="sc">*</span> p           <span class="co"># 30  (esperanza)</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>n <span class="sc">*</span> p <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="co"># 21  (varianza)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Atajo:</strong> R tiene <code>rbinom(n_sim, size = n, prob = p)</code> que hace exactamente esto pero ~100x más rápido (implementado en C). El ejercicio “a mano” sirve para entender qué hace <code>rbinom</code> debajo. En código de producción usás <code>rbinom</code>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-13-ley-de-los-grandes-números" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-13-ley-de-los-grandes-números">Ejercicio 13: ley de los grandes números</h2>
@@ -368,6 +784,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Graficá las cuatro trayectorias con <code>par(mfrow = c(2, 2))</code>.</p></li>
 <li><p>¿Qué observás cuando <code>n</code> crece? Conectalo con la ley de los grandes números.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>trayectoria_proporcion <span class="ot">&lt;-</span> <span class="cf">function</span>(n, <span class="at">p =</span> <span class="fl">0.5</span>) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  lanzamientos <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), n, <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">-</span> p, p))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cumsum</span>(lanzamientos) <span class="sc">/</span> <span class="fu">seq_len</span>(n)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># a, b)</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">100</span>, <span class="dv">1000</span>, <span class="dv">10000</span>)) {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">trayectoria_proporcion</span>(n, <span class="fl">0.5</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">seq_len</span>(n), y, <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab =</span> <span class="st">"tirada"</span>, <span class="at">ylab =</span> <span class="st">"proporcion acumulada"</span>,</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"n ="</span>, n), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">abline</span>(<span class="at">h =</span> <span class="fl">0.5</span>, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Con n chico (10), la proporcion oscila lejos de 0.5.</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="co"># A medida que n crece, la proporcion CONVERGE a 0.5.</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Es la version concreta de la ley de grandes numeros:</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co"># proporcion muestral -&gt; probabilidad real (en probabilidad).</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>LGN vs Teorema Central del Límite:</strong> la LGN dice que la proporción converge a <code>p</code>. El TCL dice <strong>cómo de rápido</strong> converge: el error tiene desviación ~<code>sqrt(p(1-p)/n)</code>. El ancho del intervalo se achica como <code>1/sqrt(n)</code>. Por eso pasar de 100 a 10000 mejora <code>sqrt(100) = 10</code> veces el ancho.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-14-monte-carlo-para-integración" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-14-monte-carlo-para-integración">Ejercicio 14: Monte Carlo para integración</h2>
@@ -376,6 +830,39 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Estimá <code>integral_0^1 sin(pi*x) dx = 2/pi</code> por Monte Carlo. Compará.</p></li>
 <li><p>Estimá <code>pi</code> mediante el método del círculo en el cuadrado: muestreá puntos <code>runif</code> en <code>[-1, 1]^2</code>, contá los que caen en el círculo unitario, y multiplicá por 4.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">runif</span>(<span class="dv">10000</span>)<span class="sc">^</span><span class="dv">2</span>)        <span class="co"># ~0.333  (cerca de 1/3 = 0.333)</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">/</span><span class="dv">3</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">sin</span>(pi <span class="sc">*</span> <span class="fu">runif</span>(<span class="dv">10000</span>)))   <span class="co"># ~0.636 (cerca de 2/pi = 0.6366)</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">/</span> pi</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100000</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">runif</span>(n, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>dentro <span class="ot">&lt;-</span> (x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> y<span class="sc">^</span><span class="dv">2</span>) <span class="sc">&lt;=</span> <span class="dv">1</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="sc">*</span> <span class="fu">mean</span>(dentro)   <span class="co"># ~3.14</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>pi</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Generalización:</strong> <code>mean(f(runif(n)))</code> estima <code>integral_0^1 f(x) dx</code>. Para integrar en <code>[a, b]</code>: <code>(b - a) * mean(f(runif(n, a, b)))</code>. Para integrales en dimensiones altas, Monte Carlo es competitivo con métodos de cuadratura: la velocidad de cuadratura empeora con la dimensión, Monte Carlo no.</p>
+<p><strong>Curiosidad:</strong> el método del círculo es muy ineficiente para estimar <code>pi</code>. Hay métodos mucho mejores (Borwein, BBP, Chudnovsky), pero como ejemplo de Monte Carlo es didáctico.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-15-newton-raphson" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-15-newton-raphson">Ejercicio 15: Newton-Raphson</h2>
@@ -384,6 +871,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Encontrá la raíz de <code>f(x) = x^2 - 2</code> con <code>df(x) = 2*x</code>, partiendo de <code>x0 = 1</code>.</p></li>
 <li><p>Compará la cantidad de iteraciones con bisección sobre el mismo problema en <code>[1, 2]</code>.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>newton <span class="ot">&lt;-</span> <span class="cf">function</span>(f, df, x0, <span class="at">tol =</span> <span class="fl">1e-6</span>, <span class="at">max_iter =</span> <span class="dv">100</span>) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> x0</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(max_iter)) {</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    paso <span class="ot">&lt;-</span> <span class="fu">f</span>(x) <span class="sc">/</span> <span class="fu">df</span>(x)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> x <span class="sc">-</span> paso</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">abs</span>(paso) <span class="sc">&lt;</span> tol) {</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">raiz =</span> x, <span class="at">iteraciones =</span> i, <span class="at">convergio =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">raiz =</span> x, <span class="at">iteraciones =</span> max_iter, <span class="at">convergio =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">newton</span>(<span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="dv">2</span><span class="sc">*</span>x, <span class="at">x0 =</span> <span class="dv">1</span>)</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>raiz          <span class="co"># 1.414214</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>iteraciones   <span class="co"># 5</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="fu">biseccion</span>(<span class="cf">function</span>(x) x<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>)<span class="sc">$</span>iteraciones   <span class="co"># ~20</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Newton: 5  vs  Biseccion: 20</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Por qué Newton es más rápido:</strong> Newton converge <strong>cuadráticamente</strong> (los dígitos correctos se duplican por iteración), bisección converge <strong>linealmente</strong> (un dígito decimal cada ~3.3 iteraciones). Pero Newton necesita la derivada y puede divergir si <code>f'(x*) = 0</code> o si <code>x0</code> está lejos. Bisección siempre funciona si los signos son distintos.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-16-t.test-y-comparación-con-bootstrap" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-16-t.test-y-comparación-con-bootstrap">Ejercicio 16: <code>t.test</code> y comparación con bootstrap</h2>
@@ -392,6 +915,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Compará el IC del <code>t.test</code> con tu IC bootstrap del ejercicio 4 sobre la misma columna.</p></li>
 <li><p>Hacé <code>t.test(airquality$Wind ~ airquality$Month %in% c(5, 6))</code> (compara dos grupos). Leé la salida.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(airquality<span class="sc">$</span>Wind)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># t = 64, df = 152, p-value &lt; 2.2e-16</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># alternative hypothesis: true mean is not equal to 0</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 95 percent confidence interval: 9.39  10.51</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mean of x: 9.96</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># El test verifica H0: media = 0 (que aca es trivial: el viento existe).</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Lo informativo es el IC para la media: (9.39, 10.51).</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(boot_mean, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))  <span class="co"># (9.40, 10.50)</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Practicamente identicos al IC del t.test.</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(airquality<span class="sc">$</span>Wind <span class="sc">~</span> airquality<span class="sc">$</span>Month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Compara la media de Wind entre los meses 5-6 (TRUE) y los demas (FALSE).</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Si p-value &lt; 0.05, hay diferencia estadisticamente significativa.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Cuándo <code>t.test</code> falla:</strong> asume que la media muestral es aproximadamente normal (Teorema Central del Límite con <code>n</code> grande, o normalidad de los datos con <code>n</code> chico). Si los datos están muy sesgados o tienen outliers extremos, el <code>t.test</code> puede dar IC poco realistas. Bootstrap tolera mejor estas violaciones.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-17-pipeline-de-análisis" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-17-pipeline-de-análisis">Ejercicio 17: pipeline de análisis</h2>
@@ -400,6 +957,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Aplicala a <code>bicis$bikers</code> con <code>estimador = median</code>.</p></li>
 <li><p>Aplicala a una columna numérica de <code>airquality</code> con <code>estimador = mean</code>. ¿Qué te informa cada salida?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>analizar_columna <span class="ot">&lt;-</span> <span class="cf">function</span>(df, columna, <span class="at">estimador =</span> mean) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- EDA del data.frame ---</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">eda_minimo</span>(df)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- Bootstrap de"</span>, <span class="fu">deparse</span>(<span class="fu">substitute</span>(estimador)),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"sobre"</span>, columna, <span class="st">"---</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  boot <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(df[[columna]], estimador, <span class="at">n_rep =</span> <span class="dv">1000</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  ic   <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">graficar_bootstrap</span>(boot, <span class="fu">paste</span>(<span class="fu">deparse</span>(<span class="fu">substitute</span>(estimador)), <span class="st">"de"</span>, columna))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">boot =</span> boot, <span class="at">ic =</span> ic,</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">puntual =</span> <span class="fu">estimador</span>(df[[columna]], <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>res_bikers <span class="ot">&lt;-</span> <span class="fu">analizar_columna</span>(bicis, <span class="st">"bikers"</span>, median)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>res_bikers<span class="sc">$</span>ic       <span class="co"># IC bootstrap de la mediana</span></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>res_bikers<span class="sc">$</span>puntual  <span class="co"># mediana puntual</span></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>res_wind <span class="ot">&lt;-</span> <span class="fu">analizar_columna</span>(airquality, <span class="st">"Wind"</span>, mean)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>res_wind<span class="sc">$</span>ic       <span class="co"># IC bootstrap de la media de Wind</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>res_wind<span class="sc">$</span>puntual  <span class="co"># media puntual</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong><code>deparse(substitute(...))</code>:</strong> truco para capturar el <strong>nombre</strong> de un argumento como string. Útil para etiquetas en gráficos. Si pasás <code>estimador = median</code>, devuelve <code>"median"</code>. Es metaprogramación básica de R.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-18-comparar-dos-pipelines" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-18-comparar-dos-pipelines">Ejercicio 18: comparar dos pipelines</h2>
@@ -408,6 +1004,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Mostrá los dos IC bootstrap. ¿Hay solapamiento?</p></li>
 <li><p>¿Qué conclusión preliminar podés sacar sobre el efecto del día hábil?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a)</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>habil  <span class="ot">&lt;-</span> <span class="fu">analizar_columna</span>(bicis[bicis<span class="sc">$</span>workingday, ],   <span class="st">"bikers"</span>, mean)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>fde    <span class="ot">&lt;-</span> <span class="fu">analizar_columna</span>(bicis[<span class="sc">!</span>bicis<span class="sc">$</span>workingday, ],  <span class="st">"bikers"</span>, mean)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>habil<span class="sc">$</span>ic    <span class="co"># ~ (155, 165)</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>fde<span class="sc">$</span>ic      <span class="co"># ~ (118, 132)</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Los IC NO se solapan: la media de bikers es claramente mayor en</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co"># dias habiles (~160) que en fines de semana / feriados (~125).</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Conclusion: el dia habil aumenta el uso medio en ~30 viajes/hora.</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Limitacion: comparamos medias por hora ignorando la hora del dia,</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co"># que sabemos que tiene un efecto enorme. Para una conclusion mas</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co"># solida habria que estratificar por hora o usar un modelo.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>El no-solapamiento NO es un test:</strong> que dos IC no se superpongan <strong>sugiere</strong> una diferencia significativa, pero no es lo mismo que un test formal. La razón es que el IC para la diferencia de medias suele ser <strong>más angosto</strong> que la suma de los IC individuales. Para concluir formalmente, usá <code>t.test(grupo_a, grupo_b)</code>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-19-tu-propio-mini-experimento" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-19-tu-propio-mini-experimento">Ejercicio 19: tu propio mini-experimento</h2>
@@ -416,6 +1043,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Diseñá el experimento: definí <code>X</code> y <code>Y</code>, calculá la mediana en cada uno, hacé bootstrap del estimador en cada subset.</p></li>
 <li><p>Concluí: ¿los IC se solapan? Anotá la conclusión con sus limitaciones.</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución (un ejemplo)">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución (un ejemplo)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pregunta: ¿se usan mas las bicis en horas pico (8h o 17h)</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#            que en otras horas?</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>horas_pico <span class="ot">&lt;-</span> bicis[bicis<span class="sc">$</span>hr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">17</span>), ]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>horas_otras <span class="ot">&lt;-</span> bicis[<span class="sc">!</span>(bicis<span class="sc">$</span>hr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">17</span>)), ]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>boot_pico  <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(horas_pico<span class="sc">$</span>bikers,   median, <span class="dv">1000</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>boot_otras <span class="ot">&lt;-</span> <span class="fu">bootstrap_estimador</span>(horas_otras<span class="sc">$</span>bikers,  median, <span class="dv">1000</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>ic_pico  <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot_pico,  <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>ic_otras <span class="ot">&lt;-</span> <span class="fu">quantile</span>(boot_otras, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>ic_pico    <span class="co"># mediana ~440, IC ~(420, 460)</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>ic_otras   <span class="co"># mediana ~80,  IC ~(76, 84)</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Los IC son disjuntos por un factor de ~5x.</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Conclusion: las horas pico tienen MUCHO mas uso que el resto.</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Limitaciones:</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a><span class="co"># - mezclamos dias habiles y no habiles; el efecto puede ser distinto en cada uno</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a><span class="co"># - "horas pico" definidas a ojo (8h y 17h); deberiamos verlo en los datos</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a><span class="co"># - no controlamos por estacion o clima</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Diseño de experimento:</strong> lo más importante es <strong>formular la pregunta antes</strong> de ver los datos. Si elegís el corte después de ver los datos (“vamos a comparar el grupo que se ve distinto”), el resultado tiene sesgo de selección y los IC son demasiado optimistas.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="ejercicio-20-control-de-versiones" class="level2">
 <h2 class="anchored" data-anchor-id="ejercicio-20-control-de-versiones">Ejercicio 20: control de versiones</h2>
@@ -429,6 +1095,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><p>Mirá <code>git log --oneline</code>. ¿El historial cuenta una historia clara? ¿Qué cambiarías?</p></li>
 </ol>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solución">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a) En la terminal, dentro de la carpeta del proyecto</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status   <span class="co"># muestra los archivos .R como "untracked"</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># b)</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add clase1.R clase2.R</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: agregar herramientas basicas de tipos y bucles</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="st">Funciones para describir autos (mtcars) y para hacer</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="st">boostrap simple sobre airquality. Punto de partida del curso."</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add clase3.R clase4.R</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: estructuras compuestas y EDA</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="st">medias_por_grupo, cargar_y_describir, graficar_distribucion,</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="st">eda_minimo, normalizar. Cubren clases 3 y 4 del nivelador."</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add clase5.R</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"feat: simulacion y algoritmos iterativos</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="st">bootstrap_estimador (generalizacion), biseccion, newton,</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="st">analizar_columna (pipeline). Cierre del nivelador."</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a><span class="co"># c)</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> log <span class="at">--oneline</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Tres lineas, cada una con prefijo feat: y un titulo breve.</span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a><span class="co"># El log cuenta la trayectoria: tipos -&gt; estructuras -&gt; simulacion.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Convenciones de commit:</strong> los prefijos (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>, <code>refactor:</code>, <code>chore:</code>) son del estándar <a href="https://www.conventionalcommits.org/">Conventional Commits</a>. No son obligatorios pero ayudan a leer el historial. Para proyectos personales chicos podés omitirlos.</p>
+<p><strong>Mensaje de commit que sirve:</strong> primera línea ~50 caracteres con el qué. Línea en blanco. Cuerpo con el porqué (qué problema soluciona, qué decisión tomaste, qué alternativas descartaste). Lo que NO debería decir: “actualicé el archivo”.</p>
+</div>
+</div>
+</div>
 
 
 </section>
