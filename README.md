@@ -1,6 +1,8 @@
 # Módulo nivelador de programación
 
-Material del módulo nivelador de programación en R para la Maestría en Estadística Matemática (UBA). Claude's reversion based on the 2022 course.
+> **Nota:** versión revisada por Claude (Anthropic) a partir del material original del curso de 2022.
+
+Material del módulo nivelador de programación en R para la Maestría en Estadística Matemática (UBA).
 
 Sitio: https://anevolbap.github.io/modulo-nivelador-programacion/
 
